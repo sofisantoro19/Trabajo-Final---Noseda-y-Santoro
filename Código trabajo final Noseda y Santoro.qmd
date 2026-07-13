@@ -1,0 +1,250 @@
+---
+title: "Trabajjo final"
+author: "Inés Noseda y Sofía Santoro"
+format: html
+editor: visual
+---
+
+## EL TURISOMO RECEPTIVO EN URUGUAY
+
+El trabajo a continuación trata acerca de un análisis exploratorio de datos en el que se pretende investigar sobre el Turismo Receptivo en Uruguay durante 2016 al 2024. El conjunto de datos fue abstraído del Catálogo Nacional de Datos Abiertos de Uruguay. De acuerdo con la fuente mencionada, los mismos fueron obtenidos a través de una encuesta de Turismo Receptivo y contiene la información desagregada acerca de los visitantes y el gasto de los mismos referente a cada trimestre desde el año 2016 hasta el 2024.
+
+Al momento de elegir el conjunto de datos que se iba a utilizar el grupo decidió que podía ser pertinente investigar acerca del Turismo Receptivo en Uruguay dado que es un factor de gran incidencia en el PBI en el país y porque, además de que al grupo le pareció un tema atractivo y de interés personal, puede ser útil a nivel económico.
+
+En la misma línea, al realizar un análisis exploratorio de estos datos, se puede obtener información acerca del flujo de visitantes ingresados al país, de dónde provienen, cuál es el motivo del viaje, cuál es el destino de preferencia de la mayoría, el tipo de alojamiento de la estadía y la principal fuente de gasto de los turistas entre otros aspectos.
+
+El análisis a continuación se desarrollará mediante técnicas de análisis exploratorio de datos. En primer lugar se realizará una descripción del conunto de datos, examinando la fuente, el tipo de variables que se utilizarán, la cantidad de observaciones y la presencia de datos faltantes. En segundo lugar, se aplicarán medidas de resumen para las variabels numéricas, tales como, media, mediana, desviación estandar, el rango intercuartílico y los percentiles. En tercer lugar, para las variables categóricas se analiarán las frecuencias relativas y absolutas. Por su parte, también se realizarán visualizaciones gráficas como histogramas, gráficos de barra y de dispersión para explorar la distribución de las variables y relacioes entre ellas.
+
+**Exploración del conjunto de datos**
+
+Una vez presentado el fenómeno de interés, su relevancia y una breve descripción de los métodos que se aplicarán, pasaremos a realizar una exploración inicial del conjunto de datos con el objetivo de conocer su estructura. Para ello debemos cargar el dataset que se va a utilizar y guardarlo en un objeto que llamaremos df utilizando la función *readxl.*
+
+```{r}
+#Cargamos el dataset que se va a utilizar
+df = readxl::read_xlsx('receptivo.xlsx')
+```
+
+Una vez cargado el dataset se debe analizar su estructura es decir, cantidad de observaciones, columnas, tipo de variables: categóricas o numéricas. Para ello utilizaremos la función *glimpse.* Pero antes, se deberán cargar las librerías que vamos a utilizar.
+
+```{r}
+#Cargamos las librerías
+library(tidyverse)
+```
+
+```{r}
+#Estructura del df
+df |> glimpse()
+```
+
+Al examinar la estructura, se visualiza un total de 65,333 observaciones y 48 variables. Es de interés conocer esas 48 variables, y saber cuáles son variables categóricas y cuáles numéricas. Utilizamos la función *sapply* dado que permite conocer el nombre de las variables y cuáles son consideradas categóricas y cuáles numericas.
+
+```{r}
+#Variables categóricas y variables numéricas
+sapply(df, class)
+```
+
+A partir de la función glimpse() y del tipo de dato asignado por R, se observa que le conjunto de datos contiene variables de distinta naturaleza. Entre las variables cualitativas se encuentra se encuentran la nacionalidad de quién ingresó, el lugar de residencia, el destino, el departamento y la lzona de destino, la ocupación, el nivel educativo, el motivo del viaje, el tipo de alojamiento, el destino y el medio de transporte utilizado (para ingresar, para salir y durante la estadía). Por su parte, entre las variables cuantitativas se encuentran la estadía, la cantidad de personas del grupo encuestado, el gasto total y los distintos componentes del gasto desagregados. Finalmente, también se dispone de variabels correspondiente a fechas de ingreso y egreso al país
+
+Con el objetivo de conocer la composición del conjunto de datos, se contabilizó la cantidad de variables según el tipo de dato reconocido por R: 'numeric' para variables numéricas, 'character' para variabels categórica y 'POSIXct' 'POSIXt' para variables que corresponden a fechas. Para ello usamos le asignamos un nombre a cada uno de los tres tipos de variables clasificados y usamos la función *sum.*
+
+```{r}
+data.frame(
+  Tipo = c('Numéricas', 'Categóricas', 'Fechas'),
+Cantidad = c(
+    sum(sapply(df, is.numeric)),
+    sum(sapply(df, is.character)),
+    sum(sapply(df, inherits, "POSIXct"))
+  )
+)
+
+```
+
+Al observar los datos podemos visualizar que se reconocen 30 variables numéricas, 16 variables categóricas y 2 fechas. Sin embargo, dentro de las variables clasificadas como numéricas, existen varias cuyo nombre comienza con el prefijo 'Id' o 'Is'. Esas variables corresponden a códigos identificadores de categorías y no representan variables cuantitativas de interés para este análisis. Un ejemplo de ello es 'IdMotivo' que refiere al código del motivo de ingreso. Por esta razó,n se decidió excluirlas del conteo y del análisis exploratorio posterior.
+
+Para ello, crearemos un nuevo data frame: 'df1' excluyendo las variable mencionadas utilizando de la función *select* y *start_with* para seleccionar todas las variables del dataset excepto las que comienzan con 'Id'. Una vez teniendo el nuevo dataframe, realizamos el conteo con el mismo.
+
+```{r}
+df1 = df |> 
+  select(-starts_with('Id'), -starts_with('Is'))
+
+data.frame(
+  Tipo = c('Numéricas', 'Categóricas', 'Fechas'),
+Cantidad = c(
+    sum(sapply(df1, is.numeric)),
+    sum(sapply(df1, is.character)),
+    sum(sapply(df1, inherits, "POSIXct"))
+  )
+)
+
+```
+
+Finalmente observamos que dentro de las 48 variables inicialmente mencionadas, son de nuestro interés 30. De ellas, 12 corresponden a variables cuantitativas, 16 cualitativas y 2 son variables de fechas.
+
+Luego verificamos la presencia de datos faltantes en las variables del conjunto de datos. Para ello se utilizó summarise() junto con across(), lo que permite aplicar una misma operación a múltiples variables de forma simultánea. Se aplicó la función sum(is..na(.)) a todas las variables mediante el selector everithing(). Es decir, se buscó sumar para cada variable los datos faltantes y así poder corroborar para cada variable cuantos datos faltaban.
+
+```{r}
+df1 |>
+  summarise(across(everything(), ~sum(is.na(.))))
+```
+
+Es posible afirmar que las variabels que presentan datos faltantes son una minoría de cuatro: estudio, localidad, departamento, otro departamento y otra localidad. No obstante,es un buen indicio debido a que para las variables de mayor interés en nuestro análisis exploratorio no incide de forma significativa la falta de estos datos.
+
+Una vez realizado un análisis descriprivo del conjunto de los datos, donde se examinó la cantidad de observaciones y variables, el tipo de variables y la presencia de datos faltantes es posible continuar al análisis exploratorio con resumenes estadísticos y visualizaciones para explorar los datos.
+
+**Análisis exploratorio**
+
+Como fue meniconado anteriormente, el objetivo de este trabajo es realizar un análisis exploratorio del conjunto de datos correspondiente al Turismo Receptivo en Uruguay. En eeste contexto, resulta pertinente definir las preguntras que orientarán el análisis En particular, se busca responder la siguiente pregunta principal: *¿Cuáles son las principales características de los visitantes que ingresan a Uruguay y cuáles son sus destinos de preferencia? Asimismo, ¿en qué rubro realizan los mayores gastos durante su estadía?*
+
+En esta línea, resulta pertinente plantear una serie de preguntas secundarias que orienten el análisis exploratorio del conjunto de datos. A continuaión se presentan las preguntas que guiarán el estudio:
+
+1.  [Características generales de los visitantes:]{.underline}
+
+1.1 ¿Cuáles son los principales países o regiones de residencia de los visitantes?
+
+1.2 Considerando la residencia de los visitantes por continente, ¿de qué continente provienen la mayoría de los visitantes?
+
+1.3 ¿En qué meses del año ingresan más turistas?
+
+2.  [Características del viaje:]{.underline}
+
+2.1 ¿Cuál es el destino más visitado dentro de Uruguay?
+
+2.2 ¿Cuál es el principal motivo del viaje?
+
+2.3 ¿Cómo varían el destino y motivo de viaje según el país o continente de residencia?
+
+2.4 ¿Los visitantes suelen viajar solas, en pareja o en grupos? ¿Existe alguna relación entre el tamaño del grupo, el motivo del viaje, el destino elegido?
+
+3.  [Estadía]{.underline}
+
+3.1 ¿Cuál es la duración promedio de la estadía?
+
+3.2 ¿Varía la duración de la estadía según la época del año?
+
+3.3 ¿Existe relación entre la duración de la estadía y el destino elegido?
+
+4.  [Gastos turísticos]{.underline}
+
+4.1 ¿Cuál es el gasto promedio diario de los visitantes?
+
+4.2 ¿Qué rubros concentran la mayor parte del gasto?
+
+4.3 ¿El gasto promedio varía según destino o motivo del viaje?
+
+4.4 ¿Existe relación entre la duración de la estadía y el gasto total?
+
+1.1 ¿Cuáles son los principales países o regiones de residencia de los visitantes?
+
+La variable *Pais* corresponde a la nacionalidad de quién ingresó y no necesariamente a su lugar de residencia habitual. Al explorar esta variable se observa que una proporción importante de los visitantes posee nacionalidad uruguaya. Sin embargo, esto no implica que residan en Uruguay, ya que una persona puede de nacionalidad uruguaya puede vivir en el exterior y ser considerada visitante al ingresar al país. Esto puede observarse mediante una tabla de frecuencias absolutas y relativas de la variable *Pais*, donde se aprecia que el 15,9% de los visitantes tienen nacionalidad uruguaya.
+
+```{r}
+df1 |> 
+  count(Pais, sort = TRUE) |> 
+  mutate(porcentaje = (n/ sum(n))* 100)
+```
+
+Dado que el objetivo es analizar el lugar de residencia de los visitantes y no su nacionalidad, se construyó una nueva variable nombrada *'Pais_residencia'* a partir de la variable *Residencia* agrupando las ciudades, provincias y estados de acuerdo al país que corresponda. Previo a elllo, se utilizaron los valores únicos de la variable Residencia mediante la función *unique,* con el fin de identificar las categorías presentes y definir los agrupamientos necesarios.
+
+```{r}
+unique(df1$Residencia)
+```
+
+Se observó que, mientras la mayoría de las categorías ya refieren a países o regiones, en los casos de Argentina y Brasil, la información se encuentra desagregada por ciudades, provincias y estados. Por lo tanto, se utilizó la función *case_when* para agrupar dichs categorías bajo un mismo país. En el resto de los casos se conservó el valor original mediante la condición *TRUE \~ Residencia.*
+
+Por otra parte, se observa una categoría denominada 'Sin datos', por lo tanto converitemos esa variable en na para facilitar el trabajo posterior al filtrar las obervaciones exclyendo los datos faltantes con la función *filter(!is.na())*.
+
+```{r}
+df1 = df1 |> mutate(
+  Pais_residencia = case_when(
+    Residencia %in% c(
+      'Buenos Aires', 'Rosario', 'Pcia. Enre Rios', 'Otras Pcias. Argentinas', 'Cordoba', 'Otros Pcia. Santa Fe', 'Otras Pcia Cordoba', 'Otros Pcia. Bs. As.', 'Corrientes') ~ 'Argentina',
+    
+    Residencia %in% c(
+      'Santa Catarina', 'Otra  ciudades de Brasil', 'San Pablo', 'Rio Grande', 'Porto Alegre', 'Rio de Janeiro', 'Pelotas - Rio Grande', 'Otros San Pablo') ~ 'Brasil', 
+    
+    Residencia == 'Sin Datos' ~ NA_character_,
+    
+    TRUE ~ Residencia
+  )
+)
+```
+
+Una vez que fue creada la variable País residencia, será posible analiar cuáles son los principales países o regiones de residencia de los visitantes a través del comando *count.* Se crea una nueva columna con el valor expresado en porcentaje para facilitar la visualización.
+
+```{r}
+df1 |> 
+  filter(!is.na(Pais_residencia)) |> 
+  count(Pais_residencia, sort = TRUE) |> 
+  mutate(porcentaje = (n/ sum(n)) *100)
+```
+
+A partir de la nueva variable construída, se observa que aproximadamente el 61% de los visitantes residen en Argentina, seguido por Brasil con alrededor de 21%. En proporciones considerablemente menores aparecen Europa (3,1%) y Chile (3,0%). Estos resultados muestran que el Turismo receptivo en Uruguay proviene principalmente de Argentina y Brasil.
+
+A modo de visualización, se construyó un gráfico de barrras con la función *ggplot* y *geom_col()*. El mismo representa la proporción de visitantes provenientes de cada país o región. En cuanto a la construcción del gráfico, el *Pais_residencia* corresponde a la abscisa y el *porcentaje de visitantes* corresponde a la ordenada.
+
+```{r}
+#Gráfico de barras prinipales países o regiones de residencia
+df1 |> 
+  filter(!is.na(Pais_residencia)) |> 
+  count(Pais_residencia) |> 
+  mutate(porcentaje = (n/ sum(n)) *100) |> 
+  ggplot(aes(x=reorder(Pais_residencia, porcentaje), y = porcentaje))+
+  geom_col(fill='steelblue')+ coord_flip()+
+  labs(title = 'Pricipales países o regiones de residencia de los visitantes', x= 'País o Región', y='Cantidad de visitantes')+
+  theme(plot.title = element_text(face = 'bold', size =12), legend.position = 'bottom')+
+  theme_minimal()
+```
+
+1.2 Considerando la residencia de los visitantes por continente, ¿de qué continente provienen la mayoría de los visitantes?
+
+Los pasos para resolver esta pregunta son similares al caso anterior. En primer lugar se debe crear una nueva variable *Continente* donde se agruparán los países por continente. Al igual que en el caso previo, se utiliza la función *case_when* para agrupar los países en la categoría corespondiente: Europa, Asia, América del Sur, América del Norte, América Central, Oceanía, Africa.
+
+En primer lugar, visualizamos los valores únicos de la variable Pais_residencia mediante la función *unique,* con el fin de identificar las categorías presentes y definir los agrupamientos necesarios.
+
+```{r}
+unique(df1$Pais_residencia)
+```
+
+Una vez que tenemos todas las categorías posibles, creamos la variable continente
+
+```{r}
+df1 = df1 |> 
+  mutate(
+    Continente = case_when(
+      Pais_residencia %in% c('Otras ciudades Sudamerica', 'Brasil','Paraguay','Argentina', 'Chile', 'Otras ciudades America', 'Colombia','Peru') ~ 'América del Sur y Central',
+      
+      Pais_residencia %in% c('EEUU - Canada', 'Mexico') ~ 'América del Norte',
+      
+      Pais_residencia %in% c('Europa', 'Alemanai', 'España', 'Reino Unido') ~ 'Europa' ,
+      
+      Pais_residencia == 'Ciudades de Asia' ~'Asia',
+      Pais_residencia == 'Ciudades Africa y Oceania' ~'África y Oceanía'
+      )
+  )
+```
+
+Una vez que fue creada la variable Continente, será posible analizar de qué continente provienen la mayoría de los visitantes a través del comando *count.* Se crea una nueva columna con el valor expresado en porcentaje para facilitar la visualización.
+
+```{r}
+df1 |> 
+  filter(!is.na(Continente)) |> 
+  count(Continente, sort = TRUE) |> 
+  mutate(porcentaje = (n/ sum(n)) *100)
+```
+
+Frente a estos datos, puede observarse que una gran mayoría de 92% de los visitantes que ingresan a Uruguay, provienen de América del Sur y Central,. Luego, en una proporción significativamente menor provienen de Europa y América del Norte representando un 3,8% y 2,76% de los visitantes respectivamente.
+
+Finalmente creamos un gráfico representativo de la Proporción de visitantes por continente
+
+```{r}
+#Gráfico proporción de visitantes por Continente
+df1 |> 
+  filter(!is.na(Continente)) |> 
+  count(Continente) |> 
+  mutate(porcentaje = (n/ sum(n)) *100) |> 
+  ggplot(aes(x=reorder(Continente, porcentaje), y = porcentaje))+
+  geom_col(fill='steelblue')+ coord_flip()+
+  labs(title = 'Proporción de visitantes por continente', x= 'Continente', y='Porcentaje de visitantes')+
+  theme(plot.title = element_text(face = 'bold', size =12), legend.position = 'bottom')+
+  theme_minimal()
+```
