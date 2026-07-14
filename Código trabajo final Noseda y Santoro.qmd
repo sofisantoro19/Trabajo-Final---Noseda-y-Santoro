@@ -29,6 +29,7 @@ Una vez cargado el dataset se debe analizar su estructura es decir, cantidad de 
 ```{r}
 #Cargamos las librerías
 library(tidyverse)
+library(lubridate)
 ```
 
 ```{r}
@@ -103,25 +104,25 @@ En esta línea, resulta pertinente plantear una serie de preguntas secundarias q
 
 1.2 Considerando la residencia de los visitantes por continente, ¿de qué continente provienen la mayoría de los visitantes?
 
-1.3 ¿En qué meses del año ingresan más turistas?
+1.3 ¿En qué meses del año ingresan más turistas? ¿Existen patrones estacionales en el ingreso de turistas?
 
 2.  [Características del viaje:]{.underline}
 
-2.1 ¿Cuál es el destino más visitado dentro de Uruguay?
+2.1 ¿Cuál es el principal motivo del viaje?
 
-2.2 ¿Cuál es el principal motivo del viaje?
+2.2 ¿Cómo varía el motivo del viaje según el destino elegido?
 
-2.3 ¿Cómo varían el destino y motivo de viaje según el país o continente de residencia?
+2.3 ¿Cómo varía el destino elegido según la región de residencia del visitante?
 
-2.4 ¿Los visitantes suelen viajar solas, en pareja o en grupos? ¿Existe alguna relación entre el tamaño del grupo, el motivo del viaje, el destino elegido?
+2.5 ¿Existe alguna relación entre el tamaño del grupo, el motivo del viaje y el destino elegido?
 
 3.  [Estadía]{.underline}
 
 3.1 ¿Cuál es la duración promedio de la estadía?
 
-3.2 ¿Varía la duración de la estadía según la época del año?
+3.2 ¿La duración de la estadía varía según lel destiono?
 
-3.3 ¿Existe relación entre la duración de la estadía y el destino elegido?
+3.3 ¿La duración de la estadía varía según el motivo del viaje?
 
 4.  [Gastos turísticos]{.underline}
 
@@ -129,9 +130,13 @@ En esta línea, resulta pertinente plantear una serie de preguntas secundarias q
 
 4.2 ¿Qué rubros concentran la mayor parte del gasto?
 
-4.3 ¿El gasto promedio varía según destino o motivo del viaje?
+4.3 ¿El gasto diario varía según destino o motivo del viaje?
 
 4.4 ¿Existe relación entre la duración de la estadía y el gasto total?
+
+*¿Qué características presentan los visitantes con mayor gasto diario? -pregunta dificil pero interesante para Shiny*
+
+4.5 ¿Cómo evolucionaron la cantidad de visitantes y el gasto turístico entre 2016 y 2024? ¿Qué impacto tuvo la pandemia en estas variables?
 
 1.1 ¿Cuáles son los principales países o regiones de residencia de los visitantes?
 
@@ -154,6 +159,7 @@ Se observó que, mientras la mayoría de las categorías ya refieren a países o
 Por otra parte, se observa una categoría denominada 'Sin datos', por lo tanto converitemos esa variable en na para facilitar el trabajo posterior al filtrar las obervaciones exclyendo los datos faltantes con la función *filter(!is.na())*.
 
 ```{r}
+#Creamos la varible Pais_residencia
 df1 = df1 |> mutate(
   Pais_residencia = case_when(
     Residencia %in% c(
@@ -172,6 +178,7 @@ df1 = df1 |> mutate(
 Una vez que fue creada la variable País residencia, será posible analiar cuáles son los principales países o regiones de residencia de los visitantes a través del comando *count.* Se crea una nueva columna con el valor expresado en porcentaje para facilitar la visualización.
 
 ```{r}
+#Tabla de frecuencia de la variable Pais_residencia
 df1 |> 
   filter(!is.na(Pais_residencia)) |> 
   count(Pais_residencia, sort = TRUE) |> 
@@ -202,12 +209,14 @@ Los pasos para resolver esta pregunta son similares al caso anterior. En primer 
 En primer lugar, visualizamos los valores únicos de la variable Pais_residencia mediante la función *unique,* con el fin de identificar las categorías presentes y definir los agrupamientos necesarios.
 
 ```{r}
+#Valores únicos de las categorías presentes en variable Pais_residencia
 unique(df1$Pais_residencia)
 ```
 
 Una vez que tenemos todas las categorías posibles, creamos la variable continente
 
 ```{r}
+#Creamos variable continente
 df1 = df1 |> 
   mutate(
     Continente = case_when(
@@ -226,6 +235,7 @@ df1 = df1 |>
 Una vez que fue creada la variable Continente, será posible analizar de qué continente provienen la mayoría de los visitantes a través del comando *count.* Se crea una nueva columna con el valor expresado en porcentaje para facilitar la visualización.
 
 ```{r}
+#Tabla de frecuencia de variable Continente
 df1 |> 
   filter(!is.na(Continente)) |> 
   count(Continente, sort = TRUE) |> 
@@ -248,3 +258,100 @@ df1 |>
   theme(plot.title = element_text(face = 'bold', size =12), legend.position = 'bottom')+
   theme_minimal()
 ```
+
+1.3 Durante 2016 a 2024, ¿en qué meses del año ingresaron más turistas?
+
+Teniendo en cuenta que se pretende analizar los meses del año en los que ingresan más turistas, se deberá trabajar con la variable *FechaIngreso* que refiere a la fecha de Ingreso al país. Como fue mencionado en la sección anterio, la informacion está expresada en formato fecha, por lo que no es necesario convertir la variable y se puede extraer el mes directamente. Para extraer el mes de la fecha, se creará una nueva variable con los meses: 12 niveles con sus respectivos nombres (labels). Previo a ello, es necesario convertir la variable a factor.
+
+```{r}
+#Creamos variable Meses
+df1 = df1 |> 
+  mutate(
+    Mes = factor(
+      month(FechaIngreso),
+      levels = 1:12,
+      labels = c(
+        'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
+        'Julio', 'Agosto', 'Setiembre', 'Octubre', 'Noviembre', 'Diciembre')
+      
+    )
+  )
+```
+
+Una vez que fue creada la nueva variable *Mes*, es posible analizar el flujo de visitantes que ingresaron al país durante 2016-2024, dependiendo del mes, a través del comando *count.* Se crea una nueva columna con el valor expresado en porcentaje para facilitar la visualización.
+
+```{r}
+#Cantidad de visitantes que Ingresan al país por mes 
+df1 |> 
+  count(Mes) |> 
+  mutate(porcentaje = n / sum(n)* 100)
+```
+
+Y luego construímos un gráfico de barras para visualizar los datos
+
+```{r}
+#Gráfico de barras de la cantidad promedio de visitantes que ingresaron al país desagregada por mes durante el período 2016-2024 
+df1 |> 
+  count(Mes) |> 
+  mutate(porcentaje = n / sum(n)* 100) |>
+  ggplot(aes(x=Mes, y = porcentaje))+
+  geom_col(fill='steelblue')+
+  labs(title = 'Cantidad promedio de visitantes que ingresaron al país por mes durante 2016-2024', x= 'Mes', y='Porcentaje de visitantes')+
+  theme(plot.title = element_text(face = 'bold', size =12), legend.position = 'bottom')+
+  theme_minimal()
+  
+```
+
+Al observar la tabla de frecuencias absoluta y relativa y el gráfico de barras referido a la cantidad de visitantes que ingresaron al país desagregado por mes, es posible extraer ciertas conclusiones. Durante el período 2016-2024, la mayoría de los visitantes ingresaron al país durante el verano, es decir: DIciembre, Enero y Febrero. Los mayores ingresos se concentran en Enero mientras que Mayo y Octubre fueron los meses con menor entrada de visitantes al Uurguay. Mientras que el mes de Diciembre y el primer trimestre del año concentran el mayor flujo de entradas, el resto dl año es relativamente constante.
+
+Por su parte, si se quiere analizar si existe un mismo patron en el flujo de entrada de los visitantes a lo largo de los años 2016-2024, se puede desagregar por año. Para ello primero debemos crear una variable Año extrayendo el año de la variable *FechaIngreso.*
+
+```{r}
+#Creamos la variable año
+df1 = df1 |> 
+  mutate(
+    Año = year(FechaIngreso)
+  )
+```
+
+Una vez que se creó la variable año, será posible realizar un gráfico de líneas por cada año para visualizar cómo varía la entrada de visitantes al país por mes dependiendo de cada año. Para ello utilizaremos la función *geom_point* y *geom_line* ya que es una variable continua.
+
+```{r}
+#Visualización de la entrada de visitantes al país durante cada año del 2016-2024
+df1 |> 
+  count(Año, Mes) |> 
+  mutate(porcentaje=n/sum(n)*100) |> 
+  ggplot(aes(x=Mes, y=porcentaje, color=factor(Año), group=Año))+ geom_line()+ geom_point()+
+  labs(title = 'Proporción de visitantes que ingresaron al país por mes durante 2016-2024', x= 'Mes', y='Porcentaje de visitantes', color= 'Año')+
+  theme(plot.title = element_text(face = 'bold', size =12), legend.position = 'bottom')+
+  theme_minimal()
+```
+
+A partir de este gráfico se puedde concluir que, a pesar de que los datos varían año a año, existe cierta estacionalidad. Es notorio que los mesescon mayor ingreso de visitantes son Diciembre, Enero, Febrero. Por su parte, a partir de marzo 2020 a octubre 2021 no hubo entrada de visitantes debido a la pandemia por el COVID-19.
+
+2.1 ¿Cuál es el principal motivo del viaje?
+
+Para analizar cuál es el principal motivo del viaje se puede realizar una tabla de frecuencias relativas y absolutas como en los casos anteriores y luego vizualizar los resultados mediante un gráfico de barras.
+
+```{r}
+#Tabla de frecuencias relativas y absolutas del motivo del viaje
+df1 |> 
+  count(Motivo, sort = TRUE) |> 
+  mutate(porcentaje = n/sum(n)* 100)
+```
+
+```{r}
+#Gráfico motivo de viaje de los visitantes
+df1 |> 
+  count(Motivo, sort = TRUE) |> 
+  mutate(porcentaje = (n/ sum(n)) *100) |> 
+  ggplot(aes(x=reorder(Motivo, porcentaje), y = porcentaje))+
+  geom_col(fill='steelblue')+ coord_flip()+
+  labs(title = 'Motivo de viaje de los visitantes durante 2016-2024', x= 'Motivo del viaje', y='Porcentaje de visitantes')+
+  theme(plot.title = element_text(face = 'bold', size =12), legend.position = 'bottom')+
+  theme_minimal()
+```
+
+Al observar los resultados, es posible concluir que el principal motivo del viaje es por ocio y vacaciones y más de la mitad de los visitantes han ingresado al país por este motivo. Por su parte, la visita a familiares y amigos es el segundo motivo más importante, lo cual tiene lógica porque comose vio anteriormente, una gran proporcion de los visitantes son de nacionalidad uruguaya. Seguido a esto pero en una menor proporción, el trabajo es un motivo recurrente entre los visitantes dado que mas de 9% de los visitantes entran al país por dicho motivo. Finalmente, una mínima, proporción de visitantes (menor al 0.5% en cada caso) ingresan por estudios, compras, por motivos de salud, religiosos o de MICE (Meetings, Incentives, Conferences and Exhibitions).
+
+2.2 ¿Cómo varía el motivo del viaje según el destino elegido?
