@@ -431,13 +431,36 @@ En primer lugar, sabemos que la variable "Continente" tiene datos faltantes, por
 
 Al igual que en el caso anterior, construimos una tabla de frecuencias relativas, para conocer cómo se distribuyen las observaciones según las distintas combinaciones de continente y destino. Para esto, se agruparon las observaciones según la variable "Continente" y se creó la columna de "porcentaje", para poder observar qué parte del total de las observaciones por continente corresponde a cada destino.
 
-`{r} tabla_continente_destino = df1 %>%    filter( !is.na(Continente) ) %>%    count(Continente, Destino, name = "cantidad") %>%    group_by(Continente) %>%    mutate( total_continente = sum(cantidad), porcentaje = cantidad / total_continente * 100 ) %>%    ungroup() %>%    arrange(Continente, desc(porcentaje)) tabla_continente_destino}`
+```{r}
+tabla_continente_destino = df1  |> 
+  filter(!is.na(Continente) )  |>     
+  count(Continente, Destino, name = "cantidad")  |>     
+  group_by(Continente)  |> 
+  mutate( 
+    total_continente = sum(cantidad), 
+    porcentaje = cantidad / total_continente * 100 )  |> 
+  ungroup()  |> 
+  arrange(Continente, desc(porcentaje)) 
+
+tabla_continente_destino
+```
 
 Como se puede observar, la gran mayoría de los turistas provienen de América del Sur y Central (93%), y el resto de los continentes componen el 7% de las observaciones. A grandes rasgos, podemos afirmar que el destino visitado en Uruguay no cambia sustancialmente según el continente de proveniencia: la mayoría visitan Montevideo y luego Colonia o Punta del Este.
 
 Para visualizar la distribución, se construyó un gráfico de barras apiladas al 100%, tal y como se realizó en el punto anterior:
 
-`{r} # Gráfico de barras apiladas al 100%  df1 %>%  filter( !is.na(Continente), !is.na(Destino) ) %>%    ggplot(aes(x = Continente, fill = Destino))+   geom_bar(position = "fill") + coord_flip() +   scale_y_continuous( labels = scales::percent_format(accuracy = 1) ) +   labs( title = "Destino elegido según la región de residencia", subtitle = "Distribución porcentual de los destinos dentro de cada región, 2016-2024", x = "Región de residencia", y = "Porcentaje de visitantes", fill = "Destino" ) +   theme_minimal() +   theme( plot.title = element_text(face = "bold", size = 12), legend.position = "bottom" )}`
+```{r}
+# Gráfico de barras apiladas al 100%  
+df1  |> 
+  filter( !is.na(Continente), !is.na(Destino) )  |> 
+  ggplot(aes(x = Continente, fill = Destino))+   
+  geom_bar(position = "fill") + 
+  coord_flip() +   
+  scale_y_continuous( labels = scales::percent_format(accuracy = 1) ) +   
+  labs( title = "Destino elegido según la región de residencia", subtitle = "Distribución porcentual de los destinos dentro de cada región, 2016-2024", x = "Región de residencia", y = "Porcentaje de visitantes", fill = "Destino" ) +   
+  theme_minimal() +   
+  theme( plot.title = element_text(face = "bold", size = 12), legend.position = "bottom" )
+```
 
 Lo observado en el gráfico coincide con el análisis: la amplia mayoría de turistas, independientemente de su proveniencia, viajan a Montevideo, y dependiendo del continente, el segundo lugar más visitado es Punta del Este (América del Sur y Central, África y Oceanía) o Colonia (Europa, Asia, América del Norte).
 
@@ -447,63 +470,158 @@ Lo observado en el gráfico coincide con el análisis: la amplia mayoría de tur
 
 Para analizar la distribución de la duración de la estadía, se calcularán medidas de resumen como la media, la mediana, el desvío estándar,los cuartiles, el máximo y el mínimo, utilizando el verbo *summarise()*. Posteriormente, el análisis se complementará con visualizaciones que permitan estudiar la forma de la distribución y detectar posible presencia de valores atípicos.
 
-Dado que ya existe una variable llamada *Estadía* que corresponde a los días que permanecen los visitantes en nuestro país, las medidas de resumen se calcularán sobre dicha variable.
+Dado que ya existe una variable llamada *Estadía* que corresponde a los días que permanecen los visitantes en nuestro país, las medidas de resumen se calcularon sobre dicha variable.
 
-`{r} #Caluclamos la distribución de la duración de la estadía dist_estadia = df1 |>    summarise(     estadia_promedio=mean(Estadia, na.rm=TRUE),     mediana_estadia = median(Estadia, na.rm = TRUE),     desvio_estadia= sd(Estadia, na.rm = TRUE),     q1_estadia= quantile(Estadia, 0.25, na.rm = TRUE),     q3_estadia= quantile(Estadia, 0.75, na.rm = TRUE),     min_estadia= min(Estadia, na.rm = TRUE),     max_estadia= max(Estadia, na.rm = TRUE)   ) dist_estadia}`
+```{r}
+#Caluclamos la distribución de la duración de la estadía 
+dist_estadia = df1 |>    
+  summarise(     
+    estadia_promedio=mean(Estadia, na.rm=TRUE),     
+    mediana_estadia = median(Estadia, na.rm = TRUE),     
+    desvio_estadia= sd(Estadia, na.rm = TRUE),     
+    q1_estadia= quantile(Estadia, 0.25, na.rm = TRUE),     
+    q3_estadia= quantile(Estadia, 0.75, na.rm = TRUE),     
+    min_estadia= min(Estadia, na.rm = TRUE),     
+    max_estadia= max(Estadia, na.rm = TRUE)   ) 
 
-Las medidas de resumen muestran que la estadía promedio de los visitantes es de 5,7 días mientras que la mediana es de 4 días. Asimismo, el 50% de los visitantes permanece en el país entre 3 y 7 días de acuerdo con el primer y tercer cuartil. La estadía mínima registrada es de medio día y la máxima alcanza los 365 días.
+dist_estadia
+```
+
+Las medidas de resumen muestran que la estadía promedio de los visitantes es de 5,7 días mientras que la mediana es de 4 días. Asimismo, el 50% central de los visitantes permanece en el país entre 3 y 7 días de acuerdo con el primer y tercer cuartil. La estadía mínima registrada es de medio día y la máxima alcanza los 365 días.
 
 Por otra parte, la media es superior a la mediana, lo que indica una distribución con asimetría positiva. Esto sugiere un número reducido de visitantes con estadías considerablemente más largas que el resto, elevando el promedio.
 
 Para visualizar la distribuición de la duración de la estadía se construye un gráfico de barras, donde cada barra represente el número de visitantes para cada número de días de permanencia. Sin embargo, el gráfico resulta poco informativo debido a la existencia de algunas estadías muy prolongadas que expanden la escala del eje horizontal y dificultan la visualización de la distribución para la mayoría de los visitantes:
 
-`{r} df1 |>    count(Estadia) |>    ggplot(aes(x=factor(Estadia), y=n))+ geom_col(fill='steelblue')+   labs(title = 'Distribucipon de la estadía de los visitantes', x='Días de estadía', y='Cantidad de visitantes')+ theme(plot.title = element_text(face='bold', size=12), legend.position = 'bottom')+ theme_minimal()}`
+```{r}
+#Construimos gráfico de barras de la distribución de la estadía de los visitantes
+ df1 |>    
+   count(Estadia) |>    
+   ggplot(aes(x=factor(Estadia), y=n))+ 
+   geom_col(fill='steelblue')+   
+   labs(title = 'Distribución de la estadía de los visitantes', x='Días de estadía', y='Cantidad de visitantes')+ 
+   theme(plot.title = element_text(face='bold', size=12), legend.position = 'bottom')+ 
+   theme_minimal()
+```
 
-Con el objetivo de facilitar la interpretación del gráfico, se decide acortar la estadía a un máximo de 20 días. Esta decisión no implica eliminar observaciones del análisis, sino únicamente restringir la escala del eje horizontal mediante *coord_cartesian().*
+Con el objetivo de facilitar la interpretación del gráfico, consideramos pertinente limitar la escala a un máximo de 20 días. Esta decisión no implica eliminar observaciones del análisis, sino únicamente restringir la escala del eje horizontal mediante *coord_cartesian().*
 
 Antes de limitar la escala del gráfico se verificó que solamente un 1,7% de los visitantes permanecen en el país por un período mayor a 20 días.
 
-`{r} #Proporción de visitantes con estadías mayores a 20 días df1 |>    summarise(     total = sum(!is.na(Estadia)),     masde20 = sum(Estadia > 20, na.rm = TRUE),     prop_masde20 = masde20 / total   )}`
+```{r}
+#Proporción de visitantes con estadías mayores a 20 días 
+df1 |>    
+  summarise(     
+    total = sum(!is.na(Estadia)),     
+    masde20 = sum(Estadia > 20, na.rm = TRUE),     
+    prop_masde20 = masde20 / total   
+    )
+```
 
 Por lo tanto el gráfico acotado representa aproximadamente el 98,3% de las observaciones y permite apreciar con mayor claridad la distribución de la variable.
 
-`{r} df1 |>    count(Estadia) |>    ggplot(aes(x=factor(Estadia), y =n))+    geom_col(fill = 'steelblue')+   coord_cartesian(xlim = c(0,20))+   labs(title = 'Distribución de la duración de la estadía', x='Días de estadía', y='Cantidad de visitantes')+ theme(plot.title = element_text(face='bold', size=12), legend.position = 'bottom')+ theme_minimal()}`
+```{r}
+#Gráfico de la distribución de la duración de la estadía con escala acotada
+df1 |>    
+  count(Estadia) |>    
+  ggplot(aes(x=factor(Estadia), y =n))+    
+  geom_col(fill = 'steelblue')+   
+  coord_cartesian(xlim = c(0,20))+   
+  labs(title = 'Distribución de la duración de la estadía', x='Días de estadía', y='Cantidad de visitantes')+ 
+  theme(plot.title = element_text(face='bold', size=12), legend.position ='bottom')+ 
+  theme_minimal()
+```
 
-Finalmente se presenta un diagrama de caja que resume la distribución de la duración de la estadía y permite identificar la presencia de valores atípicos, confirmando la existencia de algunas estadías significativamente superiores al resto de las observaciones. puede plantear un Diagrama de caja, limitando la escala a una estadía menor a 20 días mediante *coord_cartesiano* para que sea más informatvo:
+Finalmente se presenta un diagrama de caja que resume la distribución de la duración de la estadía y permite identificar la presencia de valores atípicos, confirmando la existencia de algunas estadías significativamente superiores al resto de las observaciones. Para la construcción del Diagrama de caja, también se limitó la escala a una estadía menor a 20 días mediante *coord_cartesiano* para que sea más informatvo:
 
-`{r} df1 |>    ggplot(aes(y=Estadia))+    geom_boxplot()+     coord_cartesian(ylim = c(0,20))+   labs(title = 'Diagrama de caja de la duración de la estadía', x=NULL, y='Días de estadía')+    theme_minimal()+   theme(plot.title = element_text(face='bold', size=12), legend.position = 'bottom')}`
+```{r}
+#Diagrama de caja de la duración de la estadía
+df1 |>    
+  ggplot(aes(y=Estadia))+    
+  geom_boxplot()+    
+  coord_cartesian(ylim = c(0,20))+   
+  labs(title = 'Diagrama de caja de la duración de la estadía', x=NULL, y='Días de estadía')+    
+  theme_minimal()+   
+  theme(plot.title = element_text(face='bold', size=12), legend.position = 'bottom')
+```
 
-En suma, el diagram de caja reafirma las conclusiones previas. La mediana se ubica en 4 días y el 50% de los visitantes permanecen en el país entre 3 y 7 días. Por su parte, se confirma una asimetría positiva con numerosos valores atípicos por encima del bigote superior, alcanzando una estadía máxima de 365 días. En consecuencia, si bien la mayoría de los visitantes permanecen en el país unos pocos días, existe un grupo reducido con estadías considerablemente más prolongadas que elevan el promedio a 5,7 días.
+En conclusión, el Diagrama de Caja reafirma las conclusiones previas. La mediana se ubica en 4 días y el 50% de los visitantes permanecen en el país entre 3 y 7 días. Por su parte, se confirma una asimetría positiva con numerosos valores atípicos por encima del bigote superior, alcanzando una estadía máxima de 365 días. En consecuencia, si bien la mayoría de los visitantes permanecen en el país unos pocos días, existe un grupo reducido con estadías considerablemente más prolongadas que elevan el promedio a 5,7 días.
 
 3.2 ¿La duración de la estadía varía según lel destion?
 
 Con el fin de analizar si varía la la duración de la estadía dependiendo del destino elegido por los visitantes, se calculan las mismas medidas de resumen presentadas en la sección anterior agrupando las observaciones por destino mediante el verbo *group_by().* Luego los destinos se ordenan de forma descendiente según la la duración promedio de la estadía .
 
-`{r} #Calculamos distribución de la estadía por destino df1 |> group_by(Destino) |>    summarise(     estadia_promedio=mean(Estadia, na.rm=TRUE),     mediana_estadia = median(Estadia, na.rm = TRUE),     desvio_estadia= sd(Estadia, na.rm = TRUE),     q1_estadia= quantile(Estadia, 0.25, na.rm = TRUE),     q3_estadia= quantile(Estadia, 0.75, na.rm = TRUE),     min_estadia= min(Estadia, na.rm = TRUE),     max_estadia= max(Estadia, na.rm = TRUE)   ) |>    arrange(desc(estadia_promedio))}`
+```{r}
+#Calculamos distribución de la estadía por destino 
+df1 |> 
+  group_by(Destino) |>
+  summarise(     
+    estadia_promedio=mean(Estadia, na.rm=TRUE),    
+    mediana_estadia = median(Estadia, na.rm = TRUE),     
+    desvio_estadia= sd(Estadia, na.rm = TRUE),     
+    q1_estadia= quantile(Estadia, 0.25, na.rm = TRUE),     
+    q3_estadia= quantile(Estadia, 0.75, na.rm = TRUE),     
+    min_estadia= min(Estadia, na.rm = TRUE),     
+    max_estadia= max(Estadia, na.rm = TRUE)   ) |>    
+  
+  arrange(desc(estadia_promedio))
+```
 
 Las medidas de resumen muestran que la duración de la estadía varía según el destino elegido. En particular, los visitantes que tienen como destino las Costas Oceánicas, Piriápolis, Punta del Este y la Costa de Oro presentan las mayores estadías promedio, comprendidas entre 7,7 y 8,9 días. En contraste, Montevideo registra una estadía promedio de 5,8 días, mientras que Colonia y el Litoral Termal presentan permanencias considerablemente menores, de 3,1 y 3,9 días, respectivamente. Finalmente, los visitantes en tránsito permanecen en el país menos de un día en promedio, lo cual resulta consistente con la naturaleza de este tipo de viaje..
 
 Los cuartiles muestran que la dispersión también difiere entre destinos. En las Costas Oceánicas, Piriápolis, Punta del Este y la Costa de Oro, el 50% central de las estadías se ubica aproximadamente entre 5 y 9-11 días. En Montevideo, dicho intervalo se reduce a entre 3 y 7 días, mientras que en Colonia y el Litoral Termal las estadías son aún más cortas.
 
-En todos los destinos la media supera a la mediana, lo que indica una distribución con asimetría positiva. Esto sugiere la existencia de algunas estadías considerablemente más largas que la mayoría de las observaciones, las cuales incrementan el valor del promedio.
+En todos los destinos la media supera a la mediana, lo que indica una distribución con asimetría positiva. Esto sugiere la existencia de algunas estadías con duración considerablemente más prolongada que la mayoría, las cuales incrementan el valor del promedio.
 
 Estas interpretaciones también se pueden visualizar en un diagrama de caja:
 
-`{r} df1 |>    ggplot(aes(x=Destino, y=Estadia))+    geom_boxplot()+     labs(title = 'Diagrama de caja de la duración de la estadía según el destino', x='Destino', y='Días de estadía')+ theme(plot.title = element_text(face='bold', size=12), legend.position = 'bottom')+ theme_minimal()}`
+```{r}
+#Diagrama de caja duración de la estadía según el destino
+ df1 |>    
+   ggplot(aes(x=Destino, y=Estadia))+    
+   geom_boxplot()+     
+   labs(title = 'Diagrama de caja de la duración de la estadía según el destino', x='Destino', y='Días de estadía')+ 
+   theme(plot.title = element_text(face='bold', size=12), legend.position = 'bottom')+ 
+   theme_minimal()
+```
 
 Dado que sucede lo msimo que en la sección anterior, limitamos la escala a una estadía menor a 20 días:
 
-`{r} #Diagrama de caja de la duración de la estadía por Destino df1 |>    ggplot(aes(x=Destino, y=Estadia, fill=Destino))+    geom_boxplot()+     coord_cartesian(ylim = c(0,20))+   labs(title = 'Diagrama de caja de la duración de la estadía según el destino', x='Destino', y='Días de estadía')+    theme_minimal()+   theme(     plot.title = element_text(face='bold', size=12),      axis.text.x = element_text(angle = 45, hjust = 1),     legend.position = 'none')}`
+```{r}
+#Diagrama de caja de la duración de la estadía por Destino 
+df1 |>    
+  ggplot(aes(x=Destino, y=Estadia, fill=Destino))+    
+  geom_boxplot()+     coord_cartesian(ylim = c(0,20))+   
+  labs(title = 'Diagrama de caja de la duración de la estadía según el destino', x='Destino', y='Días de estadía')+    
+  theme_minimal()+   
+  theme(     
+    plot.title = element_text(face='bold', size=12),      
+    axis.text.x = element_text(angle = 45, hjust = 1),     
+    legend.position = 'none')
+```
 
 El diagrama de caja confirma estas conclusiones. Se observa que los destinos con mayor duración promedio también presentan medianas más elevadas y una mayor dispersión en la duración de la estadía. Asimismo, en todos los destinos se identifican valores atípicos correspondientes a estadías prolongadas, lo que resulta consistente con la asimetría positiva observada en las medidas de resumen.
 
-En suma, las medidas de resumen y el diagrama de caja muestran que la duración de la estadía varía según el destino elegido. Los destinos Costas Oceánicas, Piriápolis, Punta del Este y Costa de Oro presentan las mayores duraciones promedio de estadía y, especialmente, los visitantes en tránsito registran permanencias considerablemente menores. Asimismo, en todos los destinos se observa una distribución asimétrica hacia la derecha, consistente con la existencia de algunas estadías excepcionalmente largas.
+En conclusión, las medidas de resumen y el diagrama de caja muestran que la duración de la estadía varía según el destino elegido. Los destinos Costas Oceánicas, Piriápolis, Punta del Este y Costa de Oro presentan las mayores duraciones promedio de estadía y, especialmente, los visitantes en tránsito registran estadías considerablemente menores. Asimismo, en todos los destinos se observa una distribución asimétrica hacia la derecha, consistente con la existencia de algunas estadías excepcionalmente largas.
 
 3.3 ¿La duración de la estadía varía según el motivo del viaje?
 
 Con el fin de analizar si varía la la duración de la estadía dependiendo del motivo del viaje, se calculan las mismas medidas de resumen presentadas en la sección anterior agrupando las observaciones por motivo mediante el verbo *group_by().* Luego la tabla de resultados se ordena de forma descendiente según la la duración promedio de la estadía .
 
-`{r} #Calculamos distribución de la estadía según el motivo df1 |> group_by(Motivo) |>    summarise(     estadia_promedio=mean(Estadia, na.rm=TRUE),     mediana_estadia = median(Estadia, na.rm = TRUE),     desvio_estadia= sd(Estadia, na.rm = TRUE),     q1_estadia= quantile(Estadia, 0.25, na.rm = TRUE),     q3_estadia= quantile(Estadia, 0.75, na.rm = TRUE),     min_estadia= min(Estadia, na.rm = TRUE),     max_estadia= max(Estadia, na.rm = TRUE)   ) |>    arrange(desc(estadia_promedio))}`
+```{r}
+#Calculamos distribución de la estadía según el motivo 
+df1 |> 
+  group_by(Motivo) |>    
+  summarise(     
+    estadia_promedio=mean(Estadia, na.rm=TRUE),     
+    mediana_estadia = median(Estadia, na.rm = TRUE),     
+    desvio_estadia= sd(Estadia, na.rm = TRUE),     
+    q1_estadia= quantile(Estadia, 0.25, na.rm = TRUE),     
+    q3_estadia= quantile(Estadia, 0.75, na.rm = TRUE),     
+    min_estadia= min(Estadia, na.rm = TRUE),     
+    max_estadia= max(Estadia, na.rm = TRUE)   ) |>    
+  arrange(desc(estadia_promedio))
+```
 
 Al agrupar las observaciones según el motivo del viaje, se observa que la duración promedio de la estadía difiere considerablemente entre categorías. Los visitantes cuyo motivo del viaje son estudios presentan la mayor estadía promedio, con 17,6 días, seguidos por quienes viajan por segunda residencia, con una permanencia promedio de 10,2 días. Estos resultados son esperables, ya que este tipo de viajes suele implicar estadías prolongadas.
 
@@ -515,7 +633,19 @@ Cabe destacar que, en la categoría Estudios, la media (17,6 días) es considera
 
 Se presenta a continuación un Diagrama de Cajas de la duración de la estadía dependiendo del motivo, al igual que en las secciones anteriores, se limitó la escala a 20 días de estadía.
 
-`{r} #Diagrama de caja de la duración de la estadía por Destino df1 |>    ggplot(aes(x=Motivo, y=Estadia, fill=Motivo))+    geom_boxplot()+     coord_cartesian(ylim = c(0,20))+   labs(title = 'Diagrama de caja de la duración de la estadía según el Motivo', x='Motivo del viaje', y='Días de estadía')+    theme_minimal()+   theme(     plot.title = element_text(face='bold', size=12),      axis.text.x = element_text(angle = 45, hjust = 1),     legend.position = 'none')}`
+```{r}
+ #Diagrama de caja de la duración de la estadía por Destino 
+df1 |>    
+  ggplot(aes(x=Motivo, y=Estadia, fill=Motivo))+    
+  geom_boxplot()+     
+  coord_cartesian(ylim = c(0,20))+   
+  labs(title = 'Diagrama de caja de la duración de la estadía según el Motivo', x='Motivo del viaje', y='Días de estadía')+    
+  theme_minimal()+   
+  theme(     
+    plot.title = element_text(face='bold', size=12),      
+    axis.text.x = element_text(angle = 45, hjust = 1),     
+    legend.position = 'none')
+```
 
 4.  [Gastos turísticos]{.underline}
 
@@ -523,11 +653,12 @@ Se presenta a continuación un Diagrama de Cajas de la duración de la estadía 
 
 Para analizar el gasto diario, creamos un nuevo objeto "df_gasto" que contenga las columnas del gasto diario y de los días de estadía, y se le agrega una tercer columna, que es el gasto promedio por día, llamado "GastoDiario". En esta parte se excluyen del análisis las otras variables, que no son necesarias.
 
-`{r} df_gasto <- df1 %>%   transmute(GastoTotal, Estadia) %>%    mutate(GastoDiario=GastoTotal/Estadia) df_gasto}`
-
-Para calcular el promedio diario, obtenemos la media del gasto:
-
-`{r} df_gasto %>%   summarise(     gasto_promedio_diario = mean(GastoDiario)   )}`
+```{r}
+ df_gasto <- df1 |> 
+   transmute(GastoTotal, Estadia)|> 
+   mutate(GastoDiario=GastoTotal/Estadia) 
+ df_gasto
+```
 
 El promedio diario de gasto por turista es de aproximadamente USD 240.
 
@@ -535,46 +666,148 @@ El promedio diario de gasto por turista es de aproximadamente USD 240.
 
 En primer lugar, creamos un objeto que conserva los componentes desagregados del gasto y excluye GastoTotal
 
-`{r} rubros_gasto <- df1 %>%   select(starts_with("Gasto"), -GastoTotal) rubros_gasto}`
+```{r}
+ rubros_gasto <- df1  |> 
+   select(starts_with("Gasto"), -GastoTotal) 
+ rubros_gasto
+```
 
 Como los rubros están distribuidos en distintas columnas, conviene transformar la base de ancho a largo. Esto lo hacemos mediante pivot_longer(). En esta tabla tenemos dos columnas: "Rubro", que identifica el componente del gasto y "Gasto" que indica el valor registrado para ese rubro.
 
-`{r} tabla_rubros <- rubros_gasto %>%   pivot_longer(     cols = everything(),     names_to = "Rubro",     values_to = "Gasto"   ) tabla_rubros}`
+```{r}
+tabla_rubros <- rubros_gasto |> 
+  pivot_longer(     
+    cols = everything(),     
+    names_to = "Rubro",    
+    values_to = "Gasto"   
+  ) 
+tabla_rubros
+```
 
 En segundo lugar, se suma el total correspondiente a cada rubro, para luego poder calcular la participación porcentual. Se crea una nueva variable llamada "GastoAcumulado" que representa la suma total de los gastos registrados en cada rubro. La variable "Porcentaje" indica qué proporción del gasto total desagregado corresponde a cada uno.
 
-`{r} resumen_rubros <- tabla_rubros %>%   group_by(Rubro) %>%   summarise(     GastoAcumulado = sum(Gasto),     .groups = "drop"   ) %>%   mutate(     Porcentaje = GastoAcumulado / sum(GastoAcumulado) * 100   ) %>%   arrange(desc(GastoAcumulado))  resumen_rubros}`
+```{r}
+resumen_rubros <- 
+  tabla_rubros  |> 
+  group_by(Rubro)  |> 
+  summarise(     
+    GastoAcumulado = sum(Gasto),
+    groups = "drop")  |> 
+  mutate(     
+    Porcentaje = GastoAcumulado / sum(GastoAcumulado) * 100   ) |> 
+  arrange(desc(GastoAcumulado))  
+resumen_rubros
+```
 
 El dataframe creado permite observar que casi un 60% del gasto se reparte entre alojamiento (32%) y alimentación (27,4%). Si además consideramos el gasto asociado a compras y temas culturales, el porcentaje asciende al 84% del total. Por tanto, puede afirmarse que el gasto turístico se encuentra principalmente orientado hacia estas categorías, mientras que los rubros restantes presentan una participación menor.
 
 Para visualizar este resultado, creamos un gráfico de barras, en donde se ordenan los rubros de mayor a menor, según su participación porcentual en el gasto.
 
-`{r} resumen_rubros %>%   ggplot(     aes(       x = reorder(Rubro, Porcentaje),       y = Porcentaje     )   ) +   geom_col(fill = "steelblue") +   coord_flip() +   scale_y_continuous(     labels = scales::label_percent(       scale = 1,       accuracy = 0.1,       decimal.mark = ","     )   ) +   labs(     title = "Participación de cada rubro en el gasto turístico",     subtitle = "Porcentaje sobre el gasto total desagregado, 2016-2024",     x = "Rubro",     y = "Participación en el gasto total"   ) +   theme_minimal()}`
+```{r}
+ resumen_rubros  |> 
+   ggplot(aes(      
+     x = reorder(Rubro, Porcentaje),       
+     y = Porcentaje 
+     )) +   
+   geom_col(fill = "steelblue") +   
+   coord_flip() +   
+   scale_y_continuous(     
+     labels = scales::label_percent(       
+       scale = 1,       
+       accuracy = 0.1,       
+       decimal.mark = ","    
+       )  
+     ) +   
+   labs(     
+     title = "Participación de cada rubro en el gasto turístico",     
+     subtitle = "Porcentaje sobre el gasto total desagregado, 2016-2024",     
+     x = "Rubro",     
+     y = "Participación en el gasto total"   
+     ) +   
+   theme_minimal()
+```
 
 4.3 ¿El gasto diario varía según destino o motivo del viaje?
 
 En primer lugar, se crea un nuevo dataframe con las variables de interés para el análisis, y además se crea la variable de gasto diario, que es igual a la usada anteriormente.
 
-`{r} df_gasto_destino_motivo <- df1 %>%   transmute(     Destino,     Motivo,     GastoTotal,     Estadia,     GastoDiario = GastoTotal / Estadia   )}`
+```{r}
+df_gasto_destino_motivo <- df1  |> 
+  transmute(     
+    Destino,     
+    Motivo,     
+    GastoTotal,     
+    Estadia,     
+    GastoDiario = GastoTotal / Estadia   
+    )
+```
 
 Luego, se procede al análisis del gasto diario según destino, para lo cual se calcula el promedio de gasto por destino y la cantidad de observaciones por destino.
 
-`{r} gasto_por_destino <- df_gasto_destino_motivo %>%   group_by(Destino) %>%   summarise(     observaciones = n(),     gasto_promedio_diario = mean(GastoDiario)) %>%   arrange(desc(gasto_promedio_diario))  gasto_por_destino}`
+```{r}
+gasto_por_destino <-
+  df_gasto_destino_motivo  |> 
+  group_by(Destino)  |> 
+  summarise(     
+    observaciones = n(),     
+    gasto_promedio_diario = mean(GastoDiario))  |> 
+  arrange(desc(gasto_promedio_diario))  
+gasto_por_destino
+```
 
 Podemos observar que la variación de presupuestos entre destinos es sustancial: mientras en Punta del Este el gasto promedio diario por día es de 427 dólares, en la Costa de Oro es de 147. Podemos considerar que el dato de Punta del Este es atípico, ya que el segundo destino en el que más gastan los turistas por día es Pirápolis, con USD 297 dólares, es decir, 130 dólares menos que en Punta del Este. Esto tiene sentido desde un punto de vista económico, ya que es un destino más costoso que el resto.
 
 Para poder visualizarlo gráficamente, utilizamos la herramienta del gráfico de barras:
 
-`{r} gasto_por_destino %>%   ggplot(     aes(       x = reorder(Destino, gasto_promedio_diario),       y = gasto_promedio_diario     )   ) +   geom_col(fill = "steelblue") +   coord_flip() +   labs(     title = "Gasto diario promedio según el destino",     subtitle = "Turismo receptivo en Uruguay, 2016-2024",     x = "Destino",     y = "Gasto diario promedio"   ) +   theme_minimal()}`
+```{r}
+gasto_por_destino  |> 
+  ggplot(     
+    aes(      
+      x = reorder(Destino, gasto_promedio_diario),       
+      y = gasto_promedio_diario    
+      )   
+    ) +   
+  geom_col(fill = "steelblue") +   
+  coord_flip() +   
+  labs(     
+    title = "Gasto diario promedio según el destino",     
+    subtitle = "Turismo receptivo en Uruguay, 2016-2024",     
+    x = "Destino",     
+    y = "Gasto diario promedio"   ) +   
+  theme_minimal()
+```
 
 Para analizar el gasto diario por motivo de viaje, utilizamos la misma metodología y recursos que para el caso del destino:
 
-`{r} gasto_por_motivo <- df_gasto_destino_motivo %>%   group_by(Motivo) %>%   summarise(     observaciones = n(),     gasto_promedio_diario = mean(GastoDiario),   ) %>%   arrange(desc(gasto_promedio_diario))  gasto_por_motivo}`
+```{r}
+gasto_por_motivo <- 
+  df_gasto_destino_motivo  |> 
+  group_by(Motivo)  |> 
+  summarise(     
+    observaciones = n(),     
+    gasto_promedio_diario = mean(GastoDiario),  
+    )  |> 
+  arrange(desc(gasto_promedio_diario))  
+gasto_por_motivo
+```
 
 El motivo de viaje en el cual el gasto diario es mayor es "Compras" lo cual tiene sentido, ya que los turistas afirman que el gasto será el elemento central de su viaje. Al igual que en el caso de los destinos, este valor está muy por encima del resto. En segundo lugar, el gasto diario en turistas que viajan por ocio y vacaciones y aquellos que tienen a Uruguay como segunda residencia es similar, en torno a los USD 300. Resulta interesante también destacar que el motivo de viaje en el cual el gasto promedio diario es menor es el religioso, con un gasto de 89 USD.
 
 Gráficamente, también lo visualzamos a partir de un gráfico de barras:
 
-`{r} gasto_por_motivo %>%   ggplot(     aes(       x = reorder(Motivo, gasto_promedio_diario),       y = gasto_promedio_diario     )   ) +   geom_col(fill = "steelblue") +   coord_flip() +   labs(     title = "Gasto diario promedio según el motivo del viaje",     subtitle = "Turismo receptivo en Uruguay, 2016-2024",     x = "Motivo del viaje",     y = "Gasto diario promedio"   ) +   theme_minimal()}`
-
-4.4 undefined
+```{r}
+gasto_por_motivo  |> 
+  ggplot(     
+    aes(       
+      x = reorder(Motivo, gasto_promedio_diario),       
+      y = gasto_promedio_diario     
+      )) +
+  geom_col(fill = "steelblue") +   
+  coord_flip() +   
+  labs(     
+    title = "Gasto diario promedio según el motivo del viaje",     
+    subtitle = "Turismo receptivo en Uruguay, 2016-2024",     
+    x = "Motivo del viaje",     
+    y = "Gasto diario promedio"   ) +   
+  theme_minimal()
+```
