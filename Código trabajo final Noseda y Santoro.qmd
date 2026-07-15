@@ -811,3 +811,9 @@ gasto_por_motivo  |>
     y = "Gasto diario promedio"   ) +   
   theme_minimal()
 ```
+
+**Aplicación Shiny**
+
+Una vez que fue realizado el análisis exploratorio, se desarrollará una apliacación Shiny que permita comunicar de forma interactiva los aspectos más relevantes del análisis exploratorio.
+
+Antes de comenzar con la aplicación, se deberá guardar el dataset final df1 para así usar el mismo proyecto con las variables creadas y transformaciones realizadas.
