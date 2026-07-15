@@ -5,8 +5,6 @@ format: html
 editor: visual
 ---
 
-## 
-
 ## EL TURISMO RECEPTIVO EN URUGUAY
 
 El trabajo a continuación trata acerca de un análisis exploratorio de datos en el que se pretende investigar sobre el Turismo Receptivo en Uruguay durante 2016 al 2024. El conjunto de datos fue abstraído del Catálogo Nacional de Datos Abiertos de Uruguay. De acuerdo con la fuente mencionada, los mismos fueron obtenidos a través de una encuesta de Turismo Receptivo y contiene la información desagregada acerca de los visitantes y el gasto de los mismos referente a cada trimestre desde el año 2016 hasta el 2024.
@@ -21,41 +19,70 @@ El análisis a continuación se desarrollará mediante técnicas de análisis ex
 
 Una vez presentado el fenómeno de interés, su relevancia y una breve descripción de los métodos que se aplicarán, pasaremos a realizar una exploración inicial del conjunto de datos con el objetivo de conocer su estructura. Para ello debemos cargar el dataset que se va a utilizar y guardarlo en un objeto que llamaremos df utilizando la función *readxl.*
 
-```{r} #Cargamos el dataset que se va a utilizar df = readxl::read_xlsx('receptivo.xlsx')}
+```{r}
+#Cargamos el dataset que se va a utilizar 
+df = readxl::read_xlsx('receptivo.xlsx')
 ```
 
 Una vez cargado el dataset se debe analizar su estructura es decir, cantidad de observaciones, columnas, tipo de variables: categóricas o numéricas. Para ello utilizaremos la función *glimpse.* Pero antes, se deberán cargar las librerías que vamos a utilizar.
 
-```{r} #Cargamos las librerías library(tidyverse) library(lubridate)}
+```{r}
+#Cargamos las librerías 
+library(tidyverse) 
+library(lubridate)
 ```
 
-```{r} #Estructura del df df |> glimpse()}
+`{r} #Estructura del df df |> glimpse()}`
+
+```{r}
+ #Estructura del df 
+df |> glimpse()
 ```
 
 Al examinar la estructura, se visualiza un total de 65.333 observaciones y 48 variables. Es de interés conocer esas 48 variables, y saber cuáles son variables categóricas y cuáles numéricas. Utilizamos la función *sapply* dado que permite conocer el nombre de las variables y cuáles son consideradas categóricas y cuáles numericas.
 
-```{r} #Variables categóricas y variables numéricas sapply(df, class)}
+```{r}
+#Variables categóricas y variables numéricas 
+sapply(df, class)
 ```
 
 A partir de la función glimpse() y del tipo de dato asignado por R, se observa que le conjunto de datos contiene variables de distinta naturaleza. Entre las variables cualitativas se encuentra se encuentran la nacionalidad de quién ingresó, el lugar de residencia, el destino, el departamento y la zona de destino, la ocupación, el nivel educativo, el motivo del viaje, el tipo de alojamiento, el destino y el medio de transporte utilizado (para ingresar, para salir y durante la estadía). Por su parte, entre las variables cuantitativas se encuentran la estadía, la cantidad de personas del grupo encuestado, el gasto total y los distintos componentes del gasto desagregados. Finalmente, también se dispone de variables correspondiente a fechas de ingreso y egreso al país
 
 Con el objetivo de conocer la composición del conjunto de datos, se contabilizó la cantidad de variables según el tipo de dato reconocido por R: 'numeric' para variables numéricas, 'character' para variables categórica y 'POSIXct' 'POSIXt' para variables que corresponden a fechas. Para ello usamos le asignamos un nombre a cada uno de los tres tipos de variables clasificados y usamos la función *sum.*
 
-```{r} data.frame(   Tipo = c('Numéricas', 'Categóricas', 'Fechas'), Cantidad = c(     sum(sapply(df, is.numeric)),     sum(sapply(df, is.character)),     sum(sapply(df, inherits, "POSIXct"))   ) )}
+```{r}
+data.frame(   
+  Tipo = c('Numéricas', 'Categóricas', 'Fechas'), 
+  Cantidad = c(sum(sapply(df, is.numeric)),
+               sum(sapply(df, is.character)),
+               sum(sapply(df, inherits, "POSIXct"))   ) )
 ```
 
 Al observar los datos podemos visualizar que se reconocen 30 variables numéricas, 16 variables categóricas y 2 fechas. Sin embargo, dentro de las variables clasificadas como numéricas, existen varias cuyo nombre comienza con el prefijo 'Id' o 'Is'. Esas variables corresponden a códigos identificadores de categorías y no representan variables cuantitativas de interés para este análisis. Un ejemplo de ello es 'IdMotivo' que refiere al código del motivo de ingreso. Por esta razón, se decidió excluirlas del conteo y del análisis exploratorio posterior.
 
 Para ello, crearemos un nuevo data frame: 'df1' excluyendo las variable mencionadas utilizando de la función *select* y *start_with* para seleccionar todas las variables del dataset excepto las que comienzan con 'Id'. Una vez teniendo el nuevo dataframe, realizamos el conteo con el mismo.
 
-```{r} df1 = df |>    select(-starts_with('Id'), -starts_with('Is'))  data.frame(   Tipo = c('Numéricas', 'Categóricas', 'Fechas'), Cantidad = c(     sum(sapply(df1, is.numeric)),     sum(sapply(df1, is.character)),     sum(sapply(df1, inherits, "POSIXct"))   ) )}
+```{r}
+df1 = df |>    
+  select(-starts_with('Id'), -starts_with('Is'))  
+
+data.frame(   
+  Tipo = c('Numéricas', 'Categóricas', 'Fechas'), 
+  Cantidad = c(     
+    sum(sapply(df1, is.numeric)),     
+    sum(sapply(df1, is.character)),     
+    sum(sapply(df1, inherits, "POSIXct"))  
+  ) )
 ```
 
 Finalmente observamos que dentro de las 48 variables inicialmente mencionadas, son de nuestro interés 30. De ellas, 12 corresponden a variables cuantitativas, 16 cualitativas y 2 son variables de fechas.
 
 Luego verificamos la presencia de datos faltantes en las variables del conjunto de datos. Para ello se utilizó summarise() junto con across(), lo que permite aplicar una misma operación a múltiples variables de forma simultánea. Se aplicó la función sum(is..na(.)) a todas las variables mediante el selector everithing(). Es decir, se buscó sumar para cada variable los datos faltantes y así poder corroborar para cada variable cuantos datos faltaban.
 
-```{r} df1 |>   summarise(across(everything(), ~sum(is.na(.))))}
+```{r}
+#Vetifiacmos presencia de datos faltantes
+df1 |>   
+  summarise(across(everything(), ~sum(is.na(.))))
 ```
 
 Es posible afirmar que las variabels que presentan datos faltantes son una minoría de cuatro: estudio, localidad, departamento, otro departamento y otra localidad. No obstante,es un buen indicio debido a que para las variables de mayor interés en nuestro análisis exploratorio no incide de forma significativa la falta de estos datos.
@@ -110,31 +137,65 @@ En esta línea, resulta pertinente plantear una serie de preguntas secundarias q
 
 La variable *Pais* corresponde a la nacionalidad de quién ingresó y no necesariamente a su lugar de residencia habitual. Al explorar esta variable se observa que una proporción importante de los visitantes posee nacionalidad uruguaya. Sin embargo, esto no implica que residan en Uruguay, ya que una persona puede de nacionalidad uruguaya puede vivir en el exterior y ser considerada visitante al ingresar al país. Esto puede observarse mediante una tabla de frecuencias absolutas y relativas de la variable *Pais*, donde se aprecia que el 15,9% de los visitantes tienen nacionalidad uruguaya.
 
-```{r} df1 |>    count(Pais, sort = TRUE) |>    mutate(porcentaje = (n/ sum(n))* 100)}
+```{r}
+df1 |>    
+  count(Pais, sort = TRUE) |>    
+  mutate(porcentaje = (n/ sum(n))* 100)
 ```
 
 Dado que el objetivo es analizar el lugar de residencia de los visitantes y no su nacionalidad, se construyó una nueva variable nombrada *'Pais_residencia'* a partir de la variable *Residencia* agrupando las ciudades, provincias y estados de acuerdo al país que corresponda. Previo a elllo, se utilizaron los valores únicos de la variable Residencia mediante la función *unique,* con el fin de identificar las categorías presentes y definir los agrupamientos necesarios.
 
-```{r} unique(df1$Residencia)}
+```{r}
+unique(df1$Residencia)
 ```
 
 Se observó que, mientras la mayoría de las categorías refieren a países o regiones, en los casos de Argentina y Brasil, la información se encuentra desagregada por ciudades, provincias y estados. Por lo tanto, se utilizó la función *case_when* para agrupar dichs categorías bajo un mismo país. En el resto de los casos se conservó el valor original mediante la condición *TRUE \~ Residencia.*
 
 Por otra parte, se observa una categoría denominada 'Sin datos', por lo tanto converitemos esa variable en na para facilitar el trabajo posterior al filtrar las obervaciones exclyendo los datos faltantes con la función *filter(!is.na())*.
 
-```{r} #Creamos la varible Pais_residencia df1 = df1 |> mutate(   Pais_residencia = case_when(     Residencia %in% c(       'Buenos Aires', 'Rosario', 'Pcia. Enre Rios', 'Otras Pcias. Argentinas', 'Cordoba', 'Otros Pcia. Santa Fe', 'Otras Pcia Cordoba', 'Otros Pcia. Bs. As.', 'Corrientes') ~ 'Argentina',          Residencia %in% c(       'Santa Catarina', 'Otra  ciudades de Brasil', 'San Pablo', 'Rio Grande', 'Porto Alegre', 'Rio de Janeiro', 'Pelotas - Rio Grande', 'Otros San Pablo') ~ 'Brasil',           Residencia == 'Sin Datos' ~ NA_character_,          TRUE ~ Residencia   ) )}
+```{r}
+#Creamos la varible Pais_residencia 
+df1 = df1 |> 
+  mutate(   
+    Pais_residencia = case_when(     
+      
+      Residencia %in% c(
+        'Buenos Aires', 'Rosario', 'Pcia. Enre Rios', 'Otras Pcias. Argentinas', 'Cordoba', 'Otros Pcia. Santa Fe', 'Otras Pcia Cordoba', 'Otros Pcia. Bs. As.', 'Corrientes') ~ 'Argentina',          
+      
+      Residencia %in% c(      
+        'Santa Catarina', 'Otra  ciudades de Brasil', 'San Pablo', 'Rio Grande', 'Porto Alegre', 'Rio de Janeiro', 'Pelotas - Rio Grande', 'Otros San Pablo') ~ 'Brasil',           
+      
+      Residencia == 'Sin Datos' ~ NA_character_,          
+      
+      TRUE ~ Residencia   ))
 ```
 
 Una vez que fue creada la variable País residencia, será posible analizar cuáles son los principales países o regiones de residencia de los visitantes a través del comando *count.* Se crea una nueva columna con el valor expresado en porcentaje para facilitar la visualización.
 
-```{r} #Tabla de frecuencia de la variable Pais_residencia df1 |>    filter(!is.na(Pais_residencia)) |>    count(Pais_residencia, sort = TRUE) |>    mutate(porcentaje = (n/ sum(n)) *100)}
+```{r}
+#Tabla de frecuencia de la variable Pais_residencia 
+df1 |>    
+  filter(!is.na(Pais_residencia)) |>    
+  count(Pais_residencia, sort = TRUE) |>    
+  mutate(porcentaje = (n/ sum(n)) *100)
 ```
 
 A partir de la nueva variable construída, se observa que aproximadamente el 61% de los visitantes residen en Argentina, seguido por Brasil con alrededor de 21%. En proporciones considerablemente menores aparecen Europa (3,1%) y Chile (3,0%). Estos resultados muestran que el Turismo receptivo en Uruguay proviene principalmente de Argentina y Brasil.
 
 A modo de visualización, se construyó un gráfico de barrras con la función *ggplot* y *geom_col()*. El mismo representa la proporción de visitantes provenientes de cada país o región. En cuanto a la construcción del gráfico, el *Pais_residencia* corresponde a la abscisa y el *porcentaje de visitantes* corresponde a la ordenada.
 
-```{r} #Gráfico de barras principales países o regiones de residencia df1 |>    filter(!is.na(Pais_residencia)) |>    count(Pais_residencia) |>    mutate(porcentaje = (n/ sum(n)) *100) |>    ggplot(aes(x=reorder(Pais_residencia, porcentaje), y = porcentaje))+   geom_col(fill='steelblue')+ coord_flip()+   labs(title = 'Pricipales países o regiones de residencia de los visitantes', x= 'País o Región', y='Cantidad de visitantes')+   theme(plot.title = element_text(face = 'bold', size =12), legend.position = 'bottom')+   theme_minimal()}
+```{r}
+ #Gráfico de barras principales países o regiones de residencia 
+df1 |>    
+  filter(!is.na(Pais_residencia)) |>    
+  count(Pais_residencia) |>    
+  mutate(porcentaje = (n/ sum(n)) *100) |>    
+  ggplot(aes(x=reorder(Pais_residencia, porcentaje), y = porcentaje))+   
+  geom_col(fill='steelblue')+ 
+  coord_flip()+   
+  labs(title = 'Pricipales países o regiones de residencia de los visitantes', x= 'País o Región', y='Cantidad de visitantes')+   
+  theme(plot.title = element_text(face = 'bold', size =12), legend.position = 'bottom')+   
+  theme_minimal()
 ```
 
 1.2 Considerando la residencia de los visitantes por continente, ¿de qué continente provienen la mayoría de los visitantes?
@@ -143,53 +204,122 @@ Los pasos para resolver esta pregunta son similares al caso anterior. En primer 
 
 En primer lugar, visualizamos los valores únicos de la variable Pais_residencia mediante la función *unique,* con el fin de identificar las categorías presentes y definir los agrupamientos necesarios.
 
-```{r} #Valores únicos de las categorías presentes en variable Pais_residencia unique(df1$Pais_residencia)}
+```{r}
+#Valores únicos de las categorías presentes en variable Pais_residencia 
+unique(df1$Pais_residencia)
 ```
 
 Una vez que tenemos todas las categorías posibles, creamos la variable continente
 
-```{r} #Creamos variable continente df1 = df1 |>    mutate(     Continente = case_when(       Pais_residencia %in% c('Otras ciudades Sudamerica', 'Brasil','Paraguay','Argentina', 'Chile', 'Otras ciudades America', 'Colombia','Peru') ~ 'América del Sur y Central',              Pais_residencia %in% c('EEUU - Canada', 'Mexico') ~ 'América del Norte',              Pais_residencia %in% c('Europa', 'Alemanai', 'España', 'Reino Unido') ~ 'Europa' ,              Pais_residencia == 'Ciudades de Asia' ~'Asia',       Pais_residencia == 'Ciudades Africa y Oceania' ~'África y Oceanía'       )   )}
+```{r}
+#Creamos variable continente 
+df1 = df1 |>    
+  mutate(     
+    Continente = case_when(       
+      
+      Pais_residencia %in% c('Otras ciudades Sudamerica', 'Brasil','Paraguay','Argentina', 'Chile', 'Otras ciudades America', 'Colombia','Peru') ~ 'América del Sur y Central',              
+      
+      Pais_residencia %in% c('EEUU - Canada', 'Mexico') ~ 'América del Norte',              
+      Pais_residencia %in% c('Europa', 'Alemanai', 'España', 'Reino Unido') ~ 'Europa' ,              
+      
+      Pais_residencia == 'Ciudades de Asia' ~'Asia',       
+      Pais_residencia == 'Ciudades Africa y Oceania' ~'África y Oceanía'       
+      )
+    )
 ```
 
 Una vez que fue creada la variable Continente, será posible analizar de qué continente provienen la mayoría de los visitantes a través del comando *count.* Se crea una nueva columna con el valor expresado en porcentaje para facilitar la visualización.
 
-```{r} #Tabla de frecuencia de variable Continente df1 |>    filter(!is.na(Continente)) |>    count(Continente, sort = TRUE) |>    mutate(porcentaje = (n/ sum(n)) *100)}
+```{r}
+ #Tabla de frecuencia de variable Continente 
+df1 |>    
+  filter(!is.na(Continente)) |>    
+  count(Continente, sort = TRUE) |>    
+  mutate(porcentaje = (n/ sum(n)) *100)
 ```
 
 Frente a estos datos, puede observarse que una gran mayoría (92%) de los visitantes que ingresan a Uruguay, provienen de América del Sur y Central,. Luego, en una proporción significativamente menor provienen de Europa y América del Norte representando un 3,8% y 2,76% de los visitantes respectivamente.
 
 Finalmente creamos un gráfico representativo de la Proporción de visitantes por continente
 
-```{r} #Gráfico proporción de visitantes por Continente df1 |>    filter(!is.na(Continente)) |>    count(Continente) |>    mutate(porcentaje = (n/ sum(n)) *100) |>    ggplot(aes(x=reorder(Continente, porcentaje), y = porcentaje))+   geom_col(fill='steelblue')+ coord_flip()+   labs(title = 'Proporción de visitantes por continente', x= 'Continente', y='Porcentaje de visitantes')+   theme(plot.title = element_text(face = 'bold', size =12), legend.position = 'bottom')+   theme_minimal()}
+```{r}
+#Gráfico proporción de visitantes por Continente 
+df1 |>    
+  filter(!is.na(Continente)) |>    
+  count(Continente) |>    
+  mutate(porcentaje = (n/ sum(n)) *100) |>    
+  ggplot(aes(x=reorder(Continente, porcentaje), y = porcentaje))+   
+  geom_col(fill='steelblue')+ coord_flip()+   
+  labs(title = 'Proporción de visitantes por continente', x= 'Continente', y='Porcentaje de visitantes')+   
+  theme(plot.title = element_text(face = 'bold', size =12), legend.position = 'bottom')+   
+  theme_minimal()
 ```
 
 1.3 Durante 2016 a 2024, ¿en qué meses del año ingresaron más turistas?
 
 Teniendo en cuenta que se pretende analizar los meses del año en los que ingresan más turistas, se deberá trabajar con la variable *FechaIngreso* que refiere a la fecha de Ingreso al país. Como fue mencionado en la sección anterio, la informacion está expresada en formato fecha, por lo que no es necesario convertir la variable y se puede extraer el mes directamente. Para extraer el mes de la fecha, se creará una nueva variable con los meses: 12 niveles con sus respectivos nombres (labels). Previo a ello, es necesario convertir la variable a factor.
 
-```{r} #Creamos variable Meses df1 = df1 |>    mutate(     Mes = factor(       month(FechaIngreso),       levels = 1:12,       labels = c(         'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',         'Julio', 'Agosto', 'Setiembre', 'Octubre', 'Noviembre', 'Diciembre')            )   )}
+```{r}
+#Creamos variable Meses 
+df1 = df1 |>    
+  mutate(     
+    Mes = factor(       
+      month(FechaIngreso),       
+      levels = 1:12,       
+      labels = c(         
+        'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio','Julio', 'Agosto', 'Setiembre', 'Octubre', 'Noviembre', 'Diciembre')   
+      )
+    )
 ```
 
 Una vez que fue creada la nueva variable *Mes*, es posible analizar el flujo de visitantes que ingresaron al país durante 2016-2024, dependiendo del mes, a través del comando *count.* Se crea una nueva columna con el valor expresado en porcentaje para facilitar la visualización.
 
-```{r} #Cantidad de visitantes que Ingresan al país por mes  df1 |>    count(Mes) |>    mutate(porcentaje = n / sum(n)* 100)}
+```{r}
+ #Cantidad de visitantes que Ingresan al país por mes  
+df1 |>    
+  count(Mes) |>    
+  mutate(porcentaje = n / sum(n)* 100)
 ```
 
 Y luego construímos un gráfico de barras para visualizar los datos
 
-```{r} #Gráfico de barras de la cantidad promedio de visitantes que ingresaron al país desagregada por mes durante el período 2016-2024  df1 |>    count(Mes) |>    mutate(porcentaje = n / sum(n)* 100) |>   ggplot(aes(x=Mes, y = porcentaje))+   geom_col(fill='steelblue')+   labs(title = 'Cantidad promedio de visitantes que ingresaron al país por mes durante 2016-2024', x= 'Mes', y='Porcentaje de visitantes')+   theme(plot.title = element_text(face = 'bold', size =12), legend.position = 'bottom')+   theme_minimal()}
+```{r}
+#Gráfico de barras de la cantidad promedio de visitantes que ingresaron al país desagregada por mes durante el período 2016-2024  
+df1 |>    
+  count(Mes) |>    
+  mutate(porcentaje = n / sum(n)* 100) |>   
+  ggplot(aes(x=Mes, y = porcentaje))+   
+  geom_col(fill='steelblue')+   
+  labs(title = 'Cantidad promedio de visitantes que ingresaron al país por mes durante 2016-2024', x= 'Mes', y='Porcentaje de visitantes')+   
+  theme(plot.title = element_text(face = 'bold', size =12), legend.position = 'bottom')+   
+  theme_minimal()
 ```
 
 Al observar la tabla de frecuencias absoluta y relativa y el gráfico de barras referido a la cantidad de visitantes que ingresaron al país desagregado por mes, es posible extraer ciertas conclusiones. Durante el período 2016-2024, la mayoría de los visitantes ingresaron al país durante el verano, es decir: Diciembre, Enero y Febrero. Los mayores ingresos se concentran en Enero mientras que Mayo y Octubre fueron los meses con menor entrada de visitantes al Uruguay. Mientras que el mes de Diciembre y el primer trimestre del año concentran el mayor flujo de entradas, el resto del año es relativamente constante.
 
 Por su parte, si se quiere analizar si existe un mismo patron en el flujo de entrada de los visitantes a lo largo de los años 2016-2024, se puede desagregar por año. Para ello primero debemos crear una variable Año extrayendo el año de la variable *FechaIngreso.*
 
-```{r} #Creamos la variable año df1 = df1 |>    mutate(     Año = year(FechaIngreso)   )}
+```{r}
+#Creamos la variable año 
+df1 = df1 |>    
+  mutate(     
+    Año = year(FechaIngreso)  
+    )
 ```
 
 Una vez que se creó la variable año, será posible realizar un gráfico de líneas por cada año para visualizar cómo varía la entrada de visitantes al país por mes dependiendo de cada año. Para ello utilizaremos la función *geom_point* y *geom_line* ya que es una variable continua.
 
-```{r} #Visualización de la entrada de visitantes al país durante cada año del 2016-2024 df1 |>    count(Año, Mes) |>    mutate(porcentaje=n/sum(n)*100) |>    ggplot(aes(x=Mes, y=porcentaje, color=factor(Año), group=Año))+ geom_line()+ geom_point()+   labs(title = 'Proporción de visitantes que ingresaron al país por mes durante 2016-2024', x= 'Mes', y='Porcentaje de visitantes', color= 'Año')+   theme(plot.title = element_text(face = 'bold', size =12), legend.position = 'bottom')+   theme_minimal()}
+```{r}
+#Visualización de la entrada de visitantes al país durante cada año del 2016-
+df1 |>    
+  count(Año, Mes) |>    
+  mutate(porcentaje=n/sum(n)*100) |>    
+  ggplot(aes(x=Mes, y=porcentaje, color=factor(Año), group=Año))+ 
+  geom_line()+ 
+  geom_point()+   
+  labs(title = 'Proporción de visitantes que ingresaron al país por mes durante 2016-2024', x= 'Mes', y='Porcentaje de visitantes', color= 'Año')+   
+  theme(plot.title = element_text(face = 'bold', size =12), legend.position = 'bottom')+   
+  theme_minimal()
 ```
 
 A partir de este gráfico se puede concluir que, a pesar de que los datos varían año a año, existe cierta estacionalidad. Es notorio que los meses con mayor ingreso de visitantes son Diciembre, Enero, Febrero. Por su parte, a partir de marzo 2020 a octubre 2021 no hubo entrada de visitantes debido a la pandemia por el COVID-19.
@@ -198,10 +328,23 @@ A partir de este gráfico se puede concluir que, a pesar de que los datos varía
 
 Para analizar cuál es el principal motivo del viaje se puede realizar una tabla de frecuencias relativas y absolutas como en los casos anteriores y luego vizualizar los resultados mediante un gráfico de barras.
 
-```{r} #Tabla de frecuencias relativas y absolutas del motivo del viaje df1 |>    count(Motivo, sort = TRUE) |>    mutate(porcentaje = n/sum(n)* 100)}
+```{r}
+#Tabla de frecuencias relativas y absolutas del motivo del viaje 
+df1 |>    
+  count(Motivo, sort = TRUE) |>    
+  mutate(porcentaje = n/sum(n)* 100)
 ```
 
-```{r} #Gráfico motivo de viaje de los visitantes df1 |>    count(Motivo, sort = TRUE) |>    mutate(porcentaje = (n/ sum(n)) *100) |>    ggplot(aes(x=reorder(Motivo, porcentaje), y = porcentaje))+   geom_col(fill='steelblue')+ coord_flip()+   labs(title = 'Motivo de viaje de los visitantes durante 2016-2024', x= 'Motivo del viaje', y='Porcentaje de visitantes')+   theme(plot.title = element_text(face = 'bold', size =12), legend.position = 'bottom')+   theme_minimal()}
+```{r}
+#Gráfico motivo de viaje de los visitantes 
+df1 |>    count(Motivo, sort = TRUE) |>    
+  mutate(porcentaje = (n/ sum(n)) *100) |>    
+  ggplot(aes(x=reorder(Motivo, porcentaje), y = porcentaje))+   
+  geom_col(fill='steelblue')+ 
+  coord_flip()+   
+  labs(title = 'Motivo de viaje de los visitantes durante 2016-2024', x= 'Motivo del viaje', y='Porcentaje de visitantes')+   
+  theme(plot.title = element_text(face = 'bold', size =12), legend.position = 'bottom')+   
+  theme_minimal()
 ```
 
 Al observar los resultados, es posible concluir que el principal motivo del viaje es por ocio y vacaciones y más de la mitad de los visitantes han ingresado al país por este motivo. Por su parte, la visita a familiares y amigos es el segundo motivo más importante, lo cual tiene lógica porque comose vio anteriormente, una gran proporcion de los visitantes son de nacionalidad uruguaya. Seguido a esto pero en una menor proporción, el trabajo es un motivo recurrente entre los visitantes dado que mas de 9% de los visitantes entran al país por dicho motivo. Finalmente, una mínima, proporción de visitantes (menor al 0.5% en cada caso) ingresan por estudios, compras, por motivos de salud, religiosos o de MICE (Meetings, Incentives, Conferences and Exhibitions).
@@ -212,21 +355,36 @@ Para responder esta pregunta, se estudiará conjuntamente la variable "Motivo" q
 
 En primer lugar, se analizarán las categorías existentes en ambas variables mediante la función "unique" para reconocerlas.
 
-```{r} unique(df1$Motivo) unique(df1$Destino)}
+```{r}
+ unique(df1$Motivo) 
+ unique(df1$Destino)
 ```
 
 Podemos observar que las categorías de motivos de viaje son 11, mientras que los destinos de viaje se concentran en 9, mayoritariamente en la capital y el este del país, aunque también hay destinos como Colonia o el Litoral Termal. En el caso de los destinos, también se encuentra la categoría "Tránsito", que refiere a las personas que ingresan al país, pero debido a una conexión, siendo su destino final fuera de Uruguay. En ambas categorías se encuentra el grupo "Otros" que refiere a motivos o destinos diferentes a los de las categorías, pero que no se cuenta con suficientes observaciones como para generar una nueva, por lo que se agrupan.
 
 Para verificar si existen datos faltantes en ambas variables, se utiliza la función "sum" junto con "is.na" para, en caso de que existan, se genere un conteo de cuántas variables son en cada caso.
 
-```{r} df1 %>%  summarise( faltantes_motivo = sum(is.na(Motivo)), faltantes_destino = sum(is.na(Destino)) )}
+```{r}
+df1 |>   
+  summarise( 
+    faltantes_motivo = sum(is.na(Motivo)), 
+    faltantes_destino = sum(is.na(Destino))
+    )
 ```
 
 La salida de R indica que no existen datos faltantes para las categorías.
 
 Para un primer análisis exploratorio, se construyó una tabla de frecuencias relativas por motivo y destino del viaje, que permite identificar las principales combinaciones de variables y qué porcentaje dentro del total de las observaciones por destino corresponden a los distintos motivos.
 
-```{r}  # Frecuencias relativas de los motivos dentro de cada destino tabla_destino_motivo = df1 %>%    count(Destino, Motivo, name = "cantidad") %>%    group_by(Destino) %>%     mutate( total_destino = sum(cantidad), porcentaje = cantidad / total_destino * 100 ) %>%    ungroup() %>%    arrange(Destino, desc(porcentaje))  tabla_destino_motivo}
+```{r}
+ # Frecuencias relativas de los motivos dentro de cada destino
+tabla_destino_motivo = df1 |> 
+  count(Destino, Motivo, name = "cantidad") |> 
+  group_by(Destino)  |>      
+  mutate( 
+    total_destino = sum(cantidad), porcentaje = cantidad / total_destino * 100 ) |>   ungroup() |> 
+  arrange(Destino, desc(porcentaje)) 
+tabla_destino_motivo
 ```
 
 En primer lugar, en la columna "total_destino" podemos extraer información respecto de los principales destinos de viaje, que son Montevideo (con un total de 21.610 casos de las 65.333 observaciones, aproximadamente 1/3) y Punta del Este. Cabe destacar que las observaciones de Punta del Este son casi la mitad que las de Montevideo (11.924). A estos destinos les siguen el Litoral Termal, con 9.702 observaciones y Colonia, con 6.530 observaciones. Si bien estos destinos son los que atraen a la mayor parte de turistas, la proporción es considerablemente menor que en Montevideo.
@@ -237,12 +395,30 @@ La categoría "Visita a familiares y amigos" es la segunda en relevancia en la m
 
 Para visualizar la composición e incidencia de los motivos del viaje en cada destino, se realizó un gráfico de barras apiladas. En este, cada barra representa un destino, y los diferentes colores el segmento de proporción correspondiente a cada motivo del viaje. Cabe aclarar, que cada barra suma 100% y no corresponden al porcentaje del total de observaciones, pero es la mejor manera de poder observar el motivo más frecuente dentro de cada destinto y comparar entre ellos. Para esto se utilizó el argumento position="fill" dentro de geom_bar().
 
-```{r} # Gráfico de barras apiladas  df1 |>   ggplot(aes(x = Destino, fill = Motivo)) +   geom_bar(position = "fill") +   coord_flip() +   scale_y_continuous( labels = scales::percent_format(accuracy = 1) )+   scale_fill_brewer(palette="Set3") +   labs( title = "Motivos del viaje según el destino elegido", subtitle = "Distribución porcentual de los motivos dentro de cada destino, 2016-2024", x = "Destino", y = "Porcentaje de visitantes", fill = "Motivo del viaje" ) +   theme_minimal() +   theme( plot.title = element_text(face = "bold", size = 12), legend.position = "bottom" )}
+```{r}
+ # Gráfico de barras apiladas  
+df1 |>   
+  ggplot(aes(x = Destino, fill = Motivo)) +   
+  geom_bar(position = "fill") +   
+  coord_flip() +   
+  scale_y_continuous(labels = scales::percent_format(accuracy = 1) )+  
+  scale_fill_brewer(palette="Set3") +   
+  labs( title = "Motivos del viaje según el destino elegido", subtitle = "Distribución porcentual de los motivos dentro de cada destino, 2016-2024", x = "Destino", y = "Porcentaje de visitantes", fill = "Motivo del viaje" ) +
+  theme_minimal() +   
+  theme( plot.title = element_text(face = "bold", size = 12), legend.position = "bottom" )
 ```
 
 El gráfico de barras apiladas permite observar lo analizado anteriormente. Sin embargo, no deja claras las cantidades absolutas respecto del total de observaciones. En este sentido, se agrega un complemento que grafica las cantidades absolutas, lo cual permite visualizar de manera simultánea los motivos y las diferencias en el número de observaciones por destino.
 
-```{r} df1 %>%  count(Destino, Motivo) |> ggplot( aes( x = reorder(Destino, n, FUN = sum), y = n, fill = Motivo ) ) + geom_col() + coord_flip() + labs( title = "Cantidad de visitantes según destino y motivo del viaje", subtitle = "Turismo receptivo en Uruguay, 2016-2024", x = "Destino", y = "Cantidad de observaciones", fill = "Motivo del viaje" ) + theme_minimal() + theme( plot.title = element_text(face = "bold", size = 12), legend.position = "bottom" )}
+```{r}
+ df1 |> 
+   count(Destino, Motivo) |> 
+   ggplot( aes( x = reorder(Destino, n, FUN = sum), y = n, fill = Motivo ) ) +
+   geom_col() + 
+   coord_flip() + 
+   labs( title = "Cantidad de visitantes según destino y motivo del viaje", subtitle = "Turismo receptivo en Uruguay, 2016-2024", x = "Destino", y = "Cantidad de observaciones", fill = "Motivo del viaje" ) + 
+   theme_minimal() + 
+   theme( plot.title = element_text(face = "bold", size = 12), legend.position = "bottom" )
 ```
 
 En conclusión, podemos afirmar que, a grandes rasgos, no existen diferencias significativas en los motivos del viaje según el destino.
@@ -255,17 +431,91 @@ En primer lugar, sabemos que la variable "Continente" tiene datos faltantes, por
 
 Al igual que en el caso anterior, construimos una tabla de frecuencias relativas, para conocer cómo se distribuyen las observaciones según las distintas combinaciones de continente y destino. Para esto, se agruparon las observaciones según la variable "Continente" y se creó la columna de "porcentaje", para poder observar qué parte del total de las observaciones por continente corresponde a cada destino.
 
-```{r} tabla_continente_destino = df1 %>%    filter( !is.na(Continente) ) %>%    count(Continente, Destino, name = "cantidad") %>%    group_by(Continente) %>%    mutate( total_continente = sum(cantidad), porcentaje = cantidad / total_continente * 100 ) %>%    ungroup() %>%    arrange(Continente, desc(porcentaje)) tabla_continente_destino}
-```
+`{r} tabla_continente_destino = df1 %>%    filter( !is.na(Continente) ) %>%    count(Continente, Destino, name = "cantidad") %>%    group_by(Continente) %>%    mutate( total_continente = sum(cantidad), porcentaje = cantidad / total_continente * 100 ) %>%    ungroup() %>%    arrange(Continente, desc(porcentaje)) tabla_continente_destino}`
 
 Como se puede observar, la gran mayoría de los turistas provienen de América del Sur y Central (93%), y el resto de los continentes componen el 7% de las observaciones. A grandes rasgos, podemos afirmar que el destino visitado en Uruguay no cambia sustancialmente según el continente de proveniencia: la mayoría visitan Montevideo y luego Colonia o Punta del Este.
 
 Para visualizar la distribución, se construyó un gráfico de barras apiladas al 100%, tal y como se realizó en el punto anterior:
 
-```{r} # Gráfico de barras apiladas al 100%  df1 %>%  filter( !is.na(Continente), !is.na(Destino) ) %>%    ggplot(aes(x = Continente, fill = Destino))+   geom_bar(position = "fill") + coord_flip() +   scale_y_continuous( labels = scales::percent_format(accuracy = 1) ) +   labs( title = "Destino elegido según la región de residencia", subtitle = "Distribución porcentual de los destinos dentro de cada región, 2016-2024", x = "Región de residencia", y = "Porcentaje de visitantes", fill = "Destino" ) +   theme_minimal() +   theme( plot.title = element_text(face = "bold", size = 12), legend.position = "bottom" )}
-```
+`{r} # Gráfico de barras apiladas al 100%  df1 %>%  filter( !is.na(Continente), !is.na(Destino) ) %>%    ggplot(aes(x = Continente, fill = Destino))+   geom_bar(position = "fill") + coord_flip() +   scale_y_continuous( labels = scales::percent_format(accuracy = 1) ) +   labs( title = "Destino elegido según la región de residencia", subtitle = "Distribución porcentual de los destinos dentro de cada región, 2016-2024", x = "Región de residencia", y = "Porcentaje de visitantes", fill = "Destino" ) +   theme_minimal() +   theme( plot.title = element_text(face = "bold", size = 12), legend.position = "bottom" )}`
 
 Lo observado en el gráfico coincide con el análisis: la amplia mayoría de turistas, independientemente de su proveniencia, viajan a Montevideo, y dependiendo del continente, el segundo lugar más visitado es Punta del Este (América del Sur y Central, África y Oceanía) o Colonia (Europa, Asia, América del Norte).
+
+3.  [Estadía]{.underline}
+
+3.1 ¿Cómo se distribuye la duración de la estadía y cuál es su duración promedio?
+
+Para analizar la distribución de la duración de la estadía, se calcularán medidas de resumen como la media, la mediana, el desvío estándar,los cuartiles, el máximo y el mínimo, utilizando el verbo *summarise()*. Posteriormente, el análisis se complementará con visualizaciones que permitan estudiar la forma de la distribución y detectar posible presencia de valores atípicos.
+
+Dado que ya existe una variable llamada *Estadía* que corresponde a los días que permanecen los visitantes en nuestro país, las medidas de resumen se calcularán sobre dicha variable.
+
+`{r} #Caluclamos la distribución de la duración de la estadía dist_estadia = df1 |>    summarise(     estadia_promedio=mean(Estadia, na.rm=TRUE),     mediana_estadia = median(Estadia, na.rm = TRUE),     desvio_estadia= sd(Estadia, na.rm = TRUE),     q1_estadia= quantile(Estadia, 0.25, na.rm = TRUE),     q3_estadia= quantile(Estadia, 0.75, na.rm = TRUE),     min_estadia= min(Estadia, na.rm = TRUE),     max_estadia= max(Estadia, na.rm = TRUE)   ) dist_estadia}`
+
+Las medidas de resumen muestran que la estadía promedio de los visitantes es de 5,7 días mientras que la mediana es de 4 días. Asimismo, el 50% de los visitantes permanece en el país entre 3 y 7 días de acuerdo con el primer y tercer cuartil. La estadía mínima registrada es de medio día y la máxima alcanza los 365 días.
+
+Por otra parte, la media es superior a la mediana, lo que indica una distribución con asimetría positiva. Esto sugiere un número reducido de visitantes con estadías considerablemente más largas que el resto, elevando el promedio.
+
+Para visualizar la distribuición de la duración de la estadía se construye un gráfico de barras, donde cada barra represente el número de visitantes para cada número de días de permanencia. Sin embargo, el gráfico resulta poco informativo debido a la existencia de algunas estadías muy prolongadas que expanden la escala del eje horizontal y dificultan la visualización de la distribución para la mayoría de los visitantes:
+
+`{r} df1 |>    count(Estadia) |>    ggplot(aes(x=factor(Estadia), y=n))+ geom_col(fill='steelblue')+   labs(title = 'Distribucipon de la estadía de los visitantes', x='Días de estadía', y='Cantidad de visitantes')+ theme(plot.title = element_text(face='bold', size=12), legend.position = 'bottom')+ theme_minimal()}`
+
+Con el objetivo de facilitar la interpretación del gráfico, se decide acortar la estadía a un máximo de 20 días. Esta decisión no implica eliminar observaciones del análisis, sino únicamente restringir la escala del eje horizontal mediante *coord_cartesian().*
+
+Antes de limitar la escala del gráfico se verificó que solamente un 1,7% de los visitantes permanecen en el país por un período mayor a 20 días.
+
+`{r} #Proporción de visitantes con estadías mayores a 20 días df1 |>    summarise(     total = sum(!is.na(Estadia)),     masde20 = sum(Estadia > 20, na.rm = TRUE),     prop_masde20 = masde20 / total   )}`
+
+Por lo tanto el gráfico acotado representa aproximadamente el 98,3% de las observaciones y permite apreciar con mayor claridad la distribución de la variable.
+
+`{r} df1 |>    count(Estadia) |>    ggplot(aes(x=factor(Estadia), y =n))+    geom_col(fill = 'steelblue')+   coord_cartesian(xlim = c(0,20))+   labs(title = 'Distribución de la duración de la estadía', x='Días de estadía', y='Cantidad de visitantes')+ theme(plot.title = element_text(face='bold', size=12), legend.position = 'bottom')+ theme_minimal()}`
+
+Finalmente se presenta un diagrama de caja que resume la distribución de la duración de la estadía y permite identificar la presencia de valores atípicos, confirmando la existencia de algunas estadías significativamente superiores al resto de las observaciones. puede plantear un Diagrama de caja, limitando la escala a una estadía menor a 20 días mediante *coord_cartesiano* para que sea más informatvo:
+
+`{r} df1 |>    ggplot(aes(y=Estadia))+    geom_boxplot()+     coord_cartesian(ylim = c(0,20))+   labs(title = 'Diagrama de caja de la duración de la estadía', x=NULL, y='Días de estadía')+    theme_minimal()+   theme(plot.title = element_text(face='bold', size=12), legend.position = 'bottom')}`
+
+En suma, el diagram de caja reafirma las conclusiones previas. La mediana se ubica en 4 días y el 50% de los visitantes permanecen en el país entre 3 y 7 días. Por su parte, se confirma una asimetría positiva con numerosos valores atípicos por encima del bigote superior, alcanzando una estadía máxima de 365 días. En consecuencia, si bien la mayoría de los visitantes permanecen en el país unos pocos días, existe un grupo reducido con estadías considerablemente más prolongadas que elevan el promedio a 5,7 días.
+
+3.2 ¿La duración de la estadía varía según lel destion?
+
+Con el fin de analizar si varía la la duración de la estadía dependiendo del destino elegido por los visitantes, se calculan las mismas medidas de resumen presentadas en la sección anterior agrupando las observaciones por destino mediante el verbo *group_by().* Luego los destinos se ordenan de forma descendiente según la la duración promedio de la estadía .
+
+`{r} #Calculamos distribución de la estadía por destino df1 |> group_by(Destino) |>    summarise(     estadia_promedio=mean(Estadia, na.rm=TRUE),     mediana_estadia = median(Estadia, na.rm = TRUE),     desvio_estadia= sd(Estadia, na.rm = TRUE),     q1_estadia= quantile(Estadia, 0.25, na.rm = TRUE),     q3_estadia= quantile(Estadia, 0.75, na.rm = TRUE),     min_estadia= min(Estadia, na.rm = TRUE),     max_estadia= max(Estadia, na.rm = TRUE)   ) |>    arrange(desc(estadia_promedio))}`
+
+Las medidas de resumen muestran que la duración de la estadía varía según el destino elegido. En particular, los visitantes que tienen como destino las Costas Oceánicas, Piriápolis, Punta del Este y la Costa de Oro presentan las mayores estadías promedio, comprendidas entre 7,7 y 8,9 días. En contraste, Montevideo registra una estadía promedio de 5,8 días, mientras que Colonia y el Litoral Termal presentan permanencias considerablemente menores, de 3,1 y 3,9 días, respectivamente. Finalmente, los visitantes en tránsito permanecen en el país menos de un día en promedio, lo cual resulta consistente con la naturaleza de este tipo de viaje..
+
+Los cuartiles muestran que la dispersión también difiere entre destinos. En las Costas Oceánicas, Piriápolis, Punta del Este y la Costa de Oro, el 50% central de las estadías se ubica aproximadamente entre 5 y 9-11 días. En Montevideo, dicho intervalo se reduce a entre 3 y 7 días, mientras que en Colonia y el Litoral Termal las estadías son aún más cortas.
+
+En todos los destinos la media supera a la mediana, lo que indica una distribución con asimetría positiva. Esto sugiere la existencia de algunas estadías considerablemente más largas que la mayoría de las observaciones, las cuales incrementan el valor del promedio.
+
+Estas interpretaciones también se pueden visualizar en un diagrama de caja:
+
+`{r} df1 |>    ggplot(aes(x=Destino, y=Estadia))+    geom_boxplot()+     labs(title = 'Diagrama de caja de la duración de la estadía según el destino', x='Destino', y='Días de estadía')+ theme(plot.title = element_text(face='bold', size=12), legend.position = 'bottom')+ theme_minimal()}`
+
+Dado que sucede lo msimo que en la sección anterior, limitamos la escala a una estadía menor a 20 días:
+
+`{r} #Diagrama de caja de la duración de la estadía por Destino df1 |>    ggplot(aes(x=Destino, y=Estadia, fill=Destino))+    geom_boxplot()+     coord_cartesian(ylim = c(0,20))+   labs(title = 'Diagrama de caja de la duración de la estadía según el destino', x='Destino', y='Días de estadía')+    theme_minimal()+   theme(     plot.title = element_text(face='bold', size=12),      axis.text.x = element_text(angle = 45, hjust = 1),     legend.position = 'none')}`
+
+El diagrama de caja confirma estas conclusiones. Se observa que los destinos con mayor duración promedio también presentan medianas más elevadas y una mayor dispersión en la duración de la estadía. Asimismo, en todos los destinos se identifican valores atípicos correspondientes a estadías prolongadas, lo que resulta consistente con la asimetría positiva observada en las medidas de resumen.
+
+En suma, las medidas de resumen y el diagrama de caja muestran que la duración de la estadía varía según el destino elegido. Los destinos Costas Oceánicas, Piriápolis, Punta del Este y Costa de Oro presentan las mayores duraciones promedio de estadía y, especialmente, los visitantes en tránsito registran permanencias considerablemente menores. Asimismo, en todos los destinos se observa una distribución asimétrica hacia la derecha, consistente con la existencia de algunas estadías excepcionalmente largas.
+
+3.3 ¿La duración de la estadía varía según el motivo del viaje?
+
+Con el fin de analizar si varía la la duración de la estadía dependiendo del motivo del viaje, se calculan las mismas medidas de resumen presentadas en la sección anterior agrupando las observaciones por motivo mediante el verbo *group_by().* Luego la tabla de resultados se ordena de forma descendiente según la la duración promedio de la estadía .
+
+`{r} #Calculamos distribución de la estadía según el motivo df1 |> group_by(Motivo) |>    summarise(     estadia_promedio=mean(Estadia, na.rm=TRUE),     mediana_estadia = median(Estadia, na.rm = TRUE),     desvio_estadia= sd(Estadia, na.rm = TRUE),     q1_estadia= quantile(Estadia, 0.25, na.rm = TRUE),     q3_estadia= quantile(Estadia, 0.75, na.rm = TRUE),     min_estadia= min(Estadia, na.rm = TRUE),     max_estadia= max(Estadia, na.rm = TRUE)   ) |>    arrange(desc(estadia_promedio))}`
+
+Al agrupar las observaciones según el motivo del viaje, se observa que la duración promedio de la estadía difiere considerablemente entre categorías. Los visitantes cuyo motivo del viaje son estudios presentan la mayor estadía promedio, con 17,6 días, seguidos por quienes viajan por segunda residencia, con una permanencia promedio de 10,2 días. Estos resultados son esperables, ya que este tipo de viajes suele implicar estadías prolongadas.
+
+En un segundo grupo se ubican los viajes por ocio y vacaciones, visita a familiares y amigos, motivos religiosos y MICE, cuyas estadías promedio oscilan entre 5 y 6 días. Estas categorías presentan duraciones similares y cercanas al promedio general observado anteriormente
+
+Por el contrario, los viajes por compras registran la menor duración promedio (1,5 días), seguidos por la categoría Otros y por los viajes de trabajo o profesionales, con estadías promedio inferiores a cuatro días. Esto resulta consistente con la naturaleza de estos viajes, que generalmente requieren una permanencia más breve.
+
+Cabe destacar que, en la categoría Estudios, la media (17,6 días) es considerablemente superior a la mediana (6 días),. Esto indica la existencia de algunos visitantes con estadías excepcionalmente largas que incrementan significativamente el promedio.
+
+Se presenta a continuación un Diagrama de Cajas de la duración de la estadía dependiendo del motivo, al igual que en las secciones anteriores, se limitó la escala a 20 días de estadía.
+
+`{r} #Diagrama de caja de la duración de la estadía por Destino df1 |>    ggplot(aes(x=Motivo, y=Estadia, fill=Motivo))+    geom_boxplot()+     coord_cartesian(ylim = c(0,20))+   labs(title = 'Diagrama de caja de la duración de la estadía según el Motivo', x='Motivo del viaje', y='Días de estadía')+    theme_minimal()+   theme(     plot.title = element_text(face='bold', size=12),      axis.text.x = element_text(angle = 45, hjust = 1),     legend.position = 'none')}`
 
 4.  [Gastos turísticos]{.underline}
 
@@ -273,13 +523,11 @@ Lo observado en el gráfico coincide con el análisis: la amplia mayoría de tur
 
 Para analizar el gasto diario, creamos un nuevo objeto "df_gasto" que contenga las columnas del gasto diario y de los días de estadía, y se le agrega una tercer columna, que es el gasto promedio por día, llamado "GastoDiario". En esta parte se excluyen del análisis las otras variables, que no son necesarias.
 
-```{r} df_gasto <- df1 %>%   transmute(GastoTotal, Estadia) %>%    mutate(GastoDiario=GastoTotal/Estadia) df_gasto}
-```
+`{r} df_gasto <- df1 %>%   transmute(GastoTotal, Estadia) %>%    mutate(GastoDiario=GastoTotal/Estadia) df_gasto}`
 
 Para calcular el promedio diario, obtenemos la media del gasto:
 
-```{r} df_gasto %>%   summarise(     gasto_promedio_diario = mean(GastoDiario)   )}
-```
+`{r} df_gasto %>%   summarise(     gasto_promedio_diario = mean(GastoDiario)   )}`
 
 El promedio diario de gasto por turista es de aproximadamente USD 240.
 
@@ -287,55 +535,46 @@ El promedio diario de gasto por turista es de aproximadamente USD 240.
 
 En primer lugar, creamos un objeto que conserva los componentes desagregados del gasto y excluye GastoTotal
 
-```{r} rubros_gasto <- df1 %>%   select(starts_with("Gasto"), -GastoTotal) rubros_gasto}
-```
+`{r} rubros_gasto <- df1 %>%   select(starts_with("Gasto"), -GastoTotal) rubros_gasto}`
 
 Como los rubros están distribuidos en distintas columnas, conviene transformar la base de ancho a largo. Esto lo hacemos mediante pivot_longer(). En esta tabla tenemos dos columnas: "Rubro", que identifica el componente del gasto y "Gasto" que indica el valor registrado para ese rubro.
 
-```{r} tabla_rubros <- rubros_gasto %>%   pivot_longer(     cols = everything(),     names_to = "Rubro",     values_to = "Gasto"   ) tabla_rubros}
-```
+`{r} tabla_rubros <- rubros_gasto %>%   pivot_longer(     cols = everything(),     names_to = "Rubro",     values_to = "Gasto"   ) tabla_rubros}`
 
 En segundo lugar, se suma el total correspondiente a cada rubro, para luego poder calcular la participación porcentual. Se crea una nueva variable llamada "GastoAcumulado" que representa la suma total de los gastos registrados en cada rubro. La variable "Porcentaje" indica qué proporción del gasto total desagregado corresponde a cada uno.
 
-```{r} resumen_rubros <- tabla_rubros %>%   group_by(Rubro) %>%   summarise(     GastoAcumulado = sum(Gasto),     .groups = "drop"   ) %>%   mutate(     Porcentaje = GastoAcumulado / sum(GastoAcumulado) * 100   ) %>%   arrange(desc(GastoAcumulado))  resumen_rubros}
-```
+`{r} resumen_rubros <- tabla_rubros %>%   group_by(Rubro) %>%   summarise(     GastoAcumulado = sum(Gasto),     .groups = "drop"   ) %>%   mutate(     Porcentaje = GastoAcumulado / sum(GastoAcumulado) * 100   ) %>%   arrange(desc(GastoAcumulado))  resumen_rubros}`
 
 El dataframe creado permite observar que casi un 60% del gasto se reparte entre alojamiento (32%) y alimentación (27,4%). Si además consideramos el gasto asociado a compras y temas culturales, el porcentaje asciende al 84% del total. Por tanto, puede afirmarse que el gasto turístico se encuentra principalmente orientado hacia estas categorías, mientras que los rubros restantes presentan una participación menor.
 
 Para visualizar este resultado, creamos un gráfico de barras, en donde se ordenan los rubros de mayor a menor, según su participación porcentual en el gasto.
 
-```{r} resumen_rubros %>%   ggplot(     aes(       x = reorder(Rubro, Porcentaje),       y = Porcentaje     )   ) +   geom_col(fill = "steelblue") +   coord_flip() +   scale_y_continuous(     labels = scales::label_percent(       scale = 1,       accuracy = 0.1,       decimal.mark = ","     )   ) +   labs(     title = "Participación de cada rubro en el gasto turístico",     subtitle = "Porcentaje sobre el gasto total desagregado, 2016-2024",     x = "Rubro",     y = "Participación en el gasto total"   ) +   theme_minimal()}
-```
+`{r} resumen_rubros %>%   ggplot(     aes(       x = reorder(Rubro, Porcentaje),       y = Porcentaje     )   ) +   geom_col(fill = "steelblue") +   coord_flip() +   scale_y_continuous(     labels = scales::label_percent(       scale = 1,       accuracy = 0.1,       decimal.mark = ","     )   ) +   labs(     title = "Participación de cada rubro en el gasto turístico",     subtitle = "Porcentaje sobre el gasto total desagregado, 2016-2024",     x = "Rubro",     y = "Participación en el gasto total"   ) +   theme_minimal()}`
 
 4.3 ¿El gasto diario varía según destino o motivo del viaje?
 
 En primer lugar, se crea un nuevo dataframe con las variables de interés para el análisis, y además se crea la variable de gasto diario, que es igual a la usada anteriormente.
 
-```{r} df_gasto_destino_motivo <- df1 %>%   transmute(     Destino,     Motivo,     GastoTotal,     Estadia,     GastoDiario = GastoTotal / Estadia   )}
-```
+`{r} df_gasto_destino_motivo <- df1 %>%   transmute(     Destino,     Motivo,     GastoTotal,     Estadia,     GastoDiario = GastoTotal / Estadia   )}`
 
 Luego, se procede al análisis del gasto diario según destino, para lo cual se calcula el promedio de gasto por destino y la cantidad de observaciones por destino.
 
-```{r} gasto_por_destino <- df_gasto_destino_motivo %>%   group_by(Destino) %>%   summarise(     observaciones = n(),     gasto_promedio_diario = mean(GastoDiario)) %>%   arrange(desc(gasto_promedio_diario))  gasto_por_destino}
-```
+`{r} gasto_por_destino <- df_gasto_destino_motivo %>%   group_by(Destino) %>%   summarise(     observaciones = n(),     gasto_promedio_diario = mean(GastoDiario)) %>%   arrange(desc(gasto_promedio_diario))  gasto_por_destino}`
 
 Podemos observar que la variación de presupuestos entre destinos es sustancial: mientras en Punta del Este el gasto promedio diario por día es de 427 dólares, en la Costa de Oro es de 147. Podemos considerar que el dato de Punta del Este es atípico, ya que el segundo destino en el que más gastan los turistas por día es Pirápolis, con USD 297 dólares, es decir, 130 dólares menos que en Punta del Este. Esto tiene sentido desde un punto de vista económico, ya que es un destino más costoso que el resto.
 
 Para poder visualizarlo gráficamente, utilizamos la herramienta del gráfico de barras:
 
-```{r} gasto_por_destino %>%   ggplot(     aes(       x = reorder(Destino, gasto_promedio_diario),       y = gasto_promedio_diario     )   ) +   geom_col(fill = "steelblue") +   coord_flip() +   labs(     title = "Gasto diario promedio según el destino",     subtitle = "Turismo receptivo en Uruguay, 2016-2024",     x = "Destino",     y = "Gasto diario promedio"   ) +   theme_minimal()}
-```
+`{r} gasto_por_destino %>%   ggplot(     aes(       x = reorder(Destino, gasto_promedio_diario),       y = gasto_promedio_diario     )   ) +   geom_col(fill = "steelblue") +   coord_flip() +   labs(     title = "Gasto diario promedio según el destino",     subtitle = "Turismo receptivo en Uruguay, 2016-2024",     x = "Destino",     y = "Gasto diario promedio"   ) +   theme_minimal()}`
 
 Para analizar el gasto diario por motivo de viaje, utilizamos la misma metodología y recursos que para el caso del destino:
 
-```{r} gasto_por_motivo <- df_gasto_destino_motivo %>%   group_by(Motivo) %>%   summarise(     observaciones = n(),     gasto_promedio_diario = mean(GastoDiario),   ) %>%   arrange(desc(gasto_promedio_diario))  gasto_por_motivo}
-```
+`{r} gasto_por_motivo <- df_gasto_destino_motivo %>%   group_by(Motivo) %>%   summarise(     observaciones = n(),     gasto_promedio_diario = mean(GastoDiario),   ) %>%   arrange(desc(gasto_promedio_diario))  gasto_por_motivo}`
 
 El motivo de viaje en el cual el gasto diario es mayor es "Compras" lo cual tiene sentido, ya que los turistas afirman que el gasto será el elemento central de su viaje. Al igual que en el caso de los destinos, este valor está muy por encima del resto. En segundo lugar, el gasto diario en turistas que viajan por ocio y vacaciones y aquellos que tienen a Uruguay como segunda residencia es similar, en torno a los USD 300. Resulta interesante también destacar que el motivo de viaje en el cual el gasto promedio diario es menor es el religioso, con un gasto de 89 USD.
 
 Gráficamente, también lo visualzamos a partir de un gráfico de barras:
 
-```{r} gasto_por_motivo %>%   ggplot(     aes(       x = reorder(Motivo, gasto_promedio_diario),       y = gasto_promedio_diario     )   ) +   geom_col(fill = "steelblue") +   coord_flip() +   labs(     title = "Gasto diario promedio según el motivo del viaje",     subtitle = "Turismo receptivo en Uruguay, 2016-2024",     x = "Motivo del viaje",     y = "Gasto diario promedio"   ) +   theme_minimal()}
-```
+`{r} gasto_por_motivo %>%   ggplot(     aes(       x = reorder(Motivo, gasto_promedio_diario),       y = gasto_promedio_diario     )   ) +   geom_col(fill = "steelblue") +   coord_flip() +   labs(     title = "Gasto diario promedio según el motivo del viaje",     subtitle = "Turismo receptivo en Uruguay, 2016-2024",     x = "Motivo del viaje",     y = "Gasto diario promedio"   ) +   theme_minimal()}`
 
 4.4 undefined
