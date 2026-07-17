@@ -127,11 +127,7 @@ En esta línea, resulta pertinente plantear una serie de preguntas secundarias q
 
 4.3 ¿El gasto diario varía según destino o motivo del viaje?
 
-4.4 ¿Existe relación entre la duración de la estadía y el gasto total?
-
-*¿Qué características presentan los visitantes con mayor gasto diario? - pregunta difícil pero interesante para shiny*
-
-4.5 ¿Cómo evolucionaron la cantidad de visitantes y el gasto turístico entre 2016 y 2024? ¿Qué impacto tuvo la pandemia en estas variables?
+4.4 ¿Cómo evoluciona el gasto diario promedio por trimestre y por año?
 
 1.1 ¿Cuáles son los principales países o regiones de residencia de los visitantes?
 
@@ -793,7 +789,7 @@ gasto_por_motivo
 
 El motivo de viaje en el cual el gasto diario es mayor es "Compras" lo cual tiene sentido, ya que los turistas afirman que el gasto será el elemento central de su viaje. Al igual que en el caso de los destinos, este valor está muy por encima del resto. En segundo lugar, el gasto diario en turistas que viajan por ocio y vacaciones y aquellos que tienen a Uruguay como segunda residencia es similar, en torno a los USD 300. Resulta interesante también destacar que el motivo de viaje en el cual el gasto promedio diario es menor es el religioso, con un gasto de 89 USD.
 
-Gráficamente, también lo visualzamos a partir de un gráfico de barras:
+Gráficamente, también lo visualizamos a partir de un gráfico de barras:
 
 ```{r}
 gasto_por_motivo  |> 
@@ -812,8 +808,57 @@ gasto_por_motivo  |>
   theme_minimal()
 ```
 
+4.4 ¿¿Cómo evoluciona el gasto diario promedio por trimestre y por año?
+
+En primer lugar, lo que debemos hacer es extraer de cada observación, el año y el trimestre de la visita. Para esto, creamos dos nuevas variables: Año y Trimestre.
+
+```{r}
+df_evolucion_gasto <- df1 %>% 
+  transmute(
+    FechaIngreso,
+    GastoTotal,
+    Estadia,
+    GastoDiario = GastoTotal / Estadia,
+    Año = year(FechaIngreso),
+    Trimestre = quarter(FechaIngreso)
+  )
+df_evolucion_gasto
+```
+
+En primer lugar, calculamos el promedio de gasto diario por persona por año. Para esto agrupamos las observaciones por año y creamos la variable "gasto_promedio_diario".
+
+```{r}
+gasto_anual <- df_evolucion_gasto %>%
+  group_by(Año) %>%
+  summarise(
+    observaciones = n(),
+    gasto_promedio_diario = mean(GastoDiario))
+
+gasto_anual
+```
+
+Podemos observar que tanto las observaciones (cantidad de personas que visitaron al país por año) como el gasto promedio diario varía bastante entre períodos. En cuanto al gasto, se observa una tendencia general descendente, con algunas fluctuaciones. En 2016 se registra el valor más elevado, con un gasto promedio diario de USD 353,85, mientras que en 2024 se observa un gasto de USD 226 por persona. Entre medio, los valores fluctúan, pero la tendencia general es a la baja. En cuanto a la cantidad de observaciones (visitantes por año) hay grandes diferencias: en 2016 se registran 383 observaciones, pero esto se puede explicar porque las observaciones correspondientes a este año abarcan únicamente el último trimestre. Entre 2017 y 2019 las observaciones son similares, pero entre 2020 y 2021 los números son mucho más bajos, debido a que el turismo fue absolutamente golpeado por la pandemia mundial. A partir de 2022 se denota una leve recuperación.
+
+Para analizar el gasto por trimestre se procedió de la misma manera:
+
+```{r}
+gasto_trimestre <- df_evolucion_gasto %>%
+  group_by(Año, Trimestre) %>%
+  summarise(
+    observaciones = n(),
+    gasto_promedio_diario = mean(GastoDiario))
+
+gasto_trimestre
+```
+
+En cuanto al gasto, se observa un patrón bastante claro: el gasto promedio suele ser más alto en el primer trimestre y en el cuarto, y más bajo en el segundo y tercer trimestre. Esto puede asociarse a la temporada dalta de verano, donde los turistas tienen mayor disposición a pagar y se concentran en destinos y actividades turísticas de mayor valor. Si observamos
+
 **Aplicación Shiny**
 
 Una vez que fue realizado el análisis exploratorio, se desarrollará una apliacación Shiny que permita comunicar de forma interactiva los aspectos más relevantes del análisis exploratorio.
 
 Antes de comenzar con la aplicación, se deberá guardar el dataset final df1 para así usar el mismo proyecto con las variables creadas y transformaciones realizadas.
+
+```{r}
+saveRDS(df1, "df1.rds")
+```
