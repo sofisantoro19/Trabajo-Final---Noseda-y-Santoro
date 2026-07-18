@@ -1,254 +1,558 @@
 library(shiny)
-library(tidyverse)
-library(lubridate)
-install.packages("bslib")
-library(bslib)
+library(ggplot2)
+
+# Cargar la base -------------------------------------------------------
 
 df1 <- readRDS("../df1.rds")
 
-library(shiny)
-library(bslib)
-library(tidyverse)
-library(lubridate)
-library(scales)
+# Preparación mínima de variables -------------------------------------
 
-# Cargar el dataset procesado
-df1 <- readRDS("../df1.rds")
+df1$FechaIngreso <- as.Date(df1$FechaIngreso)
 
-# Preparar las variables que utilizará la aplicación
-df_app <- df1 %>%
-  filter(Estadia > 0) %>%
-  mutate(
-    GastoDiario = GastoTotal / Estadia,
-    Anio = year(FechaIngreso),
-    Trimestre = paste0("T", quarter(FechaIngreso))
-  ) %>%
-  filter(Anio >= 2016)
+# Crear año cuando todavía no exista
+if (!"Anio" %in% names(df1)) {
+  df1$Anio <- as.numeric(format(df1$FechaIngreso, "%Y"))
+}
 
-# Detectar automáticamente las variables correspondientes a rubros de gasto
-variables_rubros <- names(df_app)[
-  str_detect(names(df_app), regex("^Gasto", ignore_case = TRUE))
+# Crear mes cuando todavía no exista
+if (!"Mes" %in% names(df1)) {
+  
+  numero_mes <- as.numeric(
+    format(df1$FechaIngreso, "%m")
+  )
+  
+  df1$Mes <- factor(
+    numero_mes,
+    levels = 1:12,
+    labels = c(
+      "Enero",
+      "Febrero",
+      "Marzo",
+      "Abril",
+      "Mayo",
+      "Junio",
+      "Julio",
+      "Agosto",
+      "Setiembre",
+      "Octubre",
+      "Noviembre",
+      "Diciembre"
+    )
+  )
+}
+
+# Crear gasto diario cuando todavía no exista
+if (!"GastoDiario" %in% names(df1)) {
+  df1$GastoDiario <- df1$GastoTotal / df1$Estadia
+}
+
+# Crear trimestre cuando todavía no exista
+if (!"Trimestre" %in% names(df1)) {
+  
+  numero_mes <- as.numeric(
+    format(df1$FechaIngreso, "%m")
+  )
+  
+  df1$Trimestre <- paste0(
+    "T",
+    ceiling(numero_mes / 3)
+  )
+}
+
+# Conservar el período del trabajo
+df_app <- df1[
+  df1$Anio >= 2016 &
+    df1$Anio <= 2024,
 ]
+
+# Variables de rubros de gasto
+variables_rubros <- grep(
+  "^Gasto",
+  names(df_app),
+  value = TRUE
+)
 
 variables_rubros <- setdiff(
   variables_rubros,
   c("GastoTotal", "GastoDiario")
 )
 
-# INTERFAZ ---------------------------------------------------------------
+# Función para mostrar porcentajes sin usar scales
+etiqueta_porcentaje <- function(x) {
+  paste0(
+    round(x * 100),
+    "%"
+  )
+}
 
-ui <- page_sidebar(
+# Interfaz -------------------------------------------------------------
+
+ui <- fluidPage(
   
-  title = "Turismo receptivo en Uruguay",
-  
-  theme = bs_theme(
-    version = 5,
-    bootswatch = "flatly",
-    primary = "#4682B4"
-  ),
-  
-  sidebar = sidebar(
+  tags$head(
     
-    h4("Filtros"),
-    
-    selectInput(
-      inputId = "anio",
-      label = "Año:",
-      choices = c(
-        "Todos",
-        sort(unique(df_app$Anio))
-      ),
-      selected = "Todos"
-    ),
-    
-    selectInput(
-      inputId = "trimestre",
-      label = "Trimestre:",
-      choices = c(
-        "Todos",
-        "T1",
-        "T2",
-        "T3",
-        "T4"
-      ),
-      selected = "Todos"
-    ),
-    
-    selectInput(
-      inputId = "destino",
-      label = "Destino:",
-      choices = c(
-        "Todos",
-        sort(unique(df_app$Destino))
-      ),
-      selected = "Todos"
-    ),
-    
-    selectInput(
-      inputId = "motivo",
-      label = "Motivo del viaje:",
-      choices = c(
-        "Todos",
-        sort(unique(df_app$Motivo))
-      ),
-      selected = "Todos"
-    ),
-    
-    hr(),
-    
-    actionButton(
-      inputId = "reiniciar",
-      label = "Reiniciar filtros",
-      class = "btn-primary"
+    tags$style(
+      HTML("
+        body {
+          background-color: #f4f6f8;
+        }
+
+        .titulo-app {
+          background-color: steelblue;
+          color: white;
+          padding: 18px;
+          border-radius: 5px;
+          margin-bottom: 20px;
+        }
+
+        .panel-grafico {
+          background-color: white;
+          padding: 15px;
+          margin-bottom: 20px;
+          border-radius: 5px;
+        }
+
+        .indicador {
+          background-color: white;
+          border-left: 6px solid steelblue;
+          padding: 15px;
+          margin-bottom: 20px;
+          border-radius: 5px;
+        }
+
+        .indicador-titulo {
+          color: #555555;
+          font-size: 15px;
+        }
+
+        .indicador-valor {
+          color: #222222;
+          font-size: 25px;
+          margin-top: 5px;
+        }
+      ")
     )
   ),
   
-  navset_card_tab(
+  div(
+    class = "titulo-app",
+    h2("Turismo receptivo en Uruguay"),
+    p("Análisis del período 2016-2024")
+  ),
+  
+  sidebarLayout(
     
-    # PESTAÑA 1 ----------------------------------------------------------
-    
-    nav_panel(
-      title = "Resumen general",
+    sidebarPanel(
       
-      layout_columns(
-        
-        value_box(
-          title = "Observaciones",
-          value = textOutput("total_visitantes"),
-          showcase = icon("users"),
-          theme = "primary"
+      h4("Filtros"),
+      
+      selectInput(
+        inputId = "filtro_anio",
+        label = "Año:",
+        choices = c(
+          "Todos",
+          sort(unique(df_app$Anio))
         ),
-        
-        value_box(
-          title = "Estadía promedio",
-          value = textOutput("estadia_promedio"),
-          showcase = icon("calendar"),
-          theme = "info"
-        ),
-        
-        value_box(
-          title = "Gasto diario promedio",
-          value = textOutput("gasto_promedio"),
-          showcase = icon("dollar-sign"),
-          theme = "success"
-        ),
-        
-        value_box(
-          title = "Principal destino",
-          value = textOutput("principal_destino"),
-          showcase = icon("location-dot"),
-          theme = "warning"
-        )
+        selected = "Todos"
       ),
       
-      layout_columns(
-        
-        card(
-          full_screen = TRUE,
-          card_header("Evolución anual del gasto diario"),
-          plotOutput(
-            outputId = "grafico_anual",
-            height = "380px"
+      selectInput(
+        inputId = "filtro_pais",
+        label = "País o región de residencia:",
+        choices = c(
+          "Todos",
+          sort(
+            unique(
+              na.omit(df_app$Pais_residencia)
+            )
           )
         ),
-        
-        card(
-          full_screen = TRUE,
-          card_header("Gasto diario promedio por trimestre"),
-          plotOutput(
-            outputId = "grafico_trimestre",
-            height = "380px"
+        selected = "Todos"
+      ),
+      
+      selectInput(
+        inputId = "filtro_motivo",
+        label = "Motivo del viaje:",
+        choices = c(
+          "Todos",
+          sort(
+            unique(
+              na.omit(df_app$Motivo)
+            )
           )
-        )
+        ),
+        selected = "Todos"
+      ),
+      
+      selectInput(
+        inputId = "filtro_destino",
+        label = "Destino:",
+        choices = c(
+          "Todos",
+          sort(
+            unique(
+              na.omit(df_app$Destino)
+            )
+          )
+        ),
+        selected = "Todos"
+      ),
+      
+      br(),
+      
+      actionButton(
+        inputId = "reiniciar",
+        label = "Reiniciar filtros"
       )
     ),
     
-    # PESTAÑA 2 ----------------------------------------------------------
-    
-    nav_panel(
-      title = "Perfil del viaje",
+    mainPanel(
       
-      layout_columns(
+      tabsetPanel(
         
-        card(
-          full_screen = TRUE,
-          card_header("Principales destinos"),
-          plotOutput(
-            outputId = "grafico_destinos",
-            height = "450px"
+        # PESTAÑA 1 ----------------------------------------------------
+        
+        tabPanel(
+          title = "Origen y estacionalidad",
+          
+          fluidRow(
+            
+            column(
+              width = 4,
+              
+              div(
+                class = "indicador",
+                
+                div(
+                  class = "indicador-titulo",
+                  "Cantidad de visitantes"
+                ),
+                
+                div(
+                  class = "indicador-valor",
+                  textOutput("total_visitantes")
+                )
+              )
+            ),
+            
+            column(
+              width = 4,
+              
+              div(
+                class = "indicador",
+                
+                div(
+                  class = "indicador-titulo",
+                  "Principal país o región"
+                ),
+                
+                div(
+                  class = "indicador-valor",
+                  textOutput("principal_pais")
+                )
+              )
+            ),
+            
+            column(
+              width = 4,
+              
+              div(
+                class = "indicador",
+                
+                div(
+                  class = "indicador-titulo",
+                  "Principal continente"
+                ),
+                
+                div(
+                  class = "indicador-valor",
+                  textOutput("principal_continente")
+                )
+              )
+            )
+          ),
+          
+          fluidRow(
+            
+            column(
+              width = 6,
+              
+              div(
+                class = "panel-grafico",
+                
+                plotOutput(
+                  outputId = "grafico_paises",
+                  height = "480px"
+                )
+              )
+            ),
+            
+            column(
+              width = 6,
+              
+              div(
+                class = "panel-grafico",
+                
+                plotOutput(
+                  outputId = "grafico_continentes",
+                  height = "480px"
+                )
+              )
+            )
+          ),
+          
+          fluidRow(
+            
+            column(
+              width = 6,
+              
+              div(
+                class = "panel-grafico",
+                
+                plotOutput(
+                  outputId = "grafico_meses",
+                  height = "430px"
+                )
+              )
+            ),
+            
+            column(
+              width = 6,
+              
+              div(
+                class = "panel-grafico",
+                
+                plotOutput(
+                  outputId = "grafico_meses_anios",
+                  height = "430px"
+                )
+              )
+            )
           )
         ),
         
-        card(
-          full_screen = TRUE,
-          card_header("Motivos del viaje"),
-          plotOutput(
-            outputId = "grafico_motivos",
-            height = "450px"
-          )
-        )
-      ),
-      
-      card(
-        full_screen = TRUE,
-        card_header("Motivo del viaje según destino"),
-        plotOutput(
-          outputId = "grafico_destino_motivo",
-          height = "500px"
-        )
-      )
-    ),
-    
-    # PESTAÑA 3 ----------------------------------------------------------
-    
-    nav_panel(
-      title = "Gasto turístico",
-      
-      layout_columns(
+        # PESTAÑA 2 ----------------------------------------------------
         
-        card(
-          full_screen = TRUE,
-          card_header("Gasto diario promedio según destino"),
-          plotOutput(
-            outputId = "gasto_destino",
-            height = "450px"
+        tabPanel(
+          title = "Motivo y destino",
+          
+          div(
+            class = "panel-grafico",
+            
+            plotOutput(
+              outputId = "grafico_motivo",
+              height = "450px"
+            )
+          ),
+          
+          div(
+            class = "panel-grafico",
+            
+            plotOutput(
+              outputId = "grafico_motivo_destino_porcentaje",
+              height = "550px"
+            )
+          ),
+          
+          div(
+            class = "panel-grafico",
+            
+            plotOutput(
+              outputId = "grafico_motivo_destino_cantidad",
+              height = "550px"
+            )
+          ),
+          
+          div(
+            class = "panel-grafico",
+            
+            plotOutput(
+              outputId = "grafico_destino_continente",
+              height = "550px"
+            )
           )
         ),
         
-        card(
-          full_screen = TRUE,
-          card_header("Gasto diario promedio según motivo"),
-          plotOutput(
-            outputId = "gasto_motivo",
-            height = "450px"
+        # PESTAÑA 3 ----------------------------------------------------
+        
+        tabPanel(
+          title = "Estadía",
+          
+          fluidRow(
+            
+            column(
+              width = 6,
+              
+              div(
+                class = "indicador",
+                
+                div(
+                  class = "indicador-titulo",
+                  "Estadía promedio"
+                ),
+                
+                div(
+                  class = "indicador-valor",
+                  textOutput("estadia_promedio")
+                )
+              )
+            ),
+            
+            column(
+              width = 6,
+              
+              div(
+                class = "indicador",
+                
+                div(
+                  class = "indicador-titulo",
+                  "Estadía mediana"
+                ),
+                
+                div(
+                  class = "indicador-valor",
+                  textOutput("estadia_mediana")
+                )
+              )
+            )
+          ),
+          
+          fluidRow(
+            
+            column(
+              width = 6,
+              
+              div(
+                class = "panel-grafico",
+                
+                plotOutput(
+                  outputId = "grafico_distribucion_estadia",
+                  height = "430px"
+                )
+              )
+            ),
+            
+            column(
+              width = 6,
+              
+              div(
+                class = "panel-grafico",
+                
+                plotOutput(
+                  outputId = "grafico_caja_estadia",
+                  height = "430px"
+                )
+              )
+            )
+          ),
+          
+          div(
+            class = "panel-grafico",
+            
+            plotOutput(
+              outputId = "grafico_estadia_destino",
+              height = "520px"
+            )
+          ),
+          
+          div(
+            class = "panel-grafico",
+            
+            plotOutput(
+              outputId = "grafico_estadia_motivo",
+              height = "520px"
+            )
+          )
+        ),
+        
+        # PESTAÑA 4 ----------------------------------------------------
+        
+        tabPanel(
+          title = "Gasto",
+          
+          fluidRow(
+            
+            column(
+              width = 6,
+              
+              div(
+                class = "indicador",
+                
+                div(
+                  class = "indicador-titulo",
+                  "Gasto diario promedio"
+                ),
+                
+                div(
+                  class = "indicador-valor",
+                  textOutput("gasto_promedio")
+                )
+              )
+            ),
+            
+            column(
+              width = 6,
+              
+              div(
+                class = "indicador",
+                
+                div(
+                  class = "indicador-titulo",
+                  "Gasto diario mediano"
+                ),
+                
+                div(
+                  class = "indicador-valor",
+                  textOutput("gasto_mediano")
+                )
+              )
+            )
+          ),
+          
+          div(
+            class = "panel-grafico",
+            
+            plotOutput(
+              outputId = "grafico_rubros",
+              height = "500px"
+            )
+          ),
+          
+          fluidRow(
+            
+            column(
+              width = 6,
+              
+              div(
+                class = "panel-grafico",
+                
+                plotOutput(
+                  outputId = "grafico_gasto_destino",
+                  height = "480px"
+                )
+              )
+            ),
+            
+            column(
+              width = 6,
+              
+              div(
+                class = "panel-grafico",
+                
+                plotOutput(
+                  outputId = "grafico_gasto_motivo",
+                  height = "480px"
+                )
+              )
+            )
           )
         )
-      ),
-      
-      card(
-        full_screen = TRUE,
-        card_header("Participación de los rubros en el gasto"),
-        plotOutput(
-          outputId = "grafico_rubros",
-          height = "500px"
-        )
-      )
-    ),
-    
-    # PESTAÑA 4 ----------------------------------------------------------
-    
-    nav_panel(
-      title = "Datos",
-      
-      card(
-        card_header("Resumen de los datos filtrados"),
-        tableOutput("tabla_resumen")
       )
     )
   )
 )
 
-# SERVIDOR ---------------------------------------------------------------
+# Servidor -------------------------------------------------------------
 
 server <- function(input, output, session) {
   
@@ -257,73 +561,145 @@ server <- function(input, output, session) {
     
     updateSelectInput(
       session,
-      "anio",
+      "filtro_anio",
       selected = "Todos"
     )
     
     updateSelectInput(
       session,
-      "trimestre",
+      "filtro_pais",
       selected = "Todos"
     )
     
     updateSelectInput(
       session,
-      "destino",
+      "filtro_motivo",
       selected = "Todos"
     )
     
     updateSelectInput(
       session,
-      "motivo",
+      "filtro_destino",
       selected = "Todos"
     )
   })
   
-  # Dataset reactivo
+  # Aplicación de los filtros
   datos_filtrados <- reactive({
     
     datos <- df_app
     
-    if (input$anio != "Todos") {
-      datos <- datos %>%
-        filter(Anio == as.numeric(input$anio))
+    if (input$filtro_anio != "Todos") {
+      
+      datos <- datos[
+        datos$Anio ==
+          as.numeric(input$filtro_anio),
+      ]
     }
     
-    if (input$trimestre != "Todos") {
-      datos <- datos %>%
-        filter(Trimestre == input$trimestre)
+    if (input$filtro_pais != "Todos") {
+      
+      datos <- datos[
+        datos$Pais_residencia ==
+          input$filtro_pais,
+      ]
     }
     
-    if (input$destino != "Todos") {
-      datos <- datos %>%
-        filter(Destino == input$destino)
+    if (input$filtro_motivo != "Todos") {
+      
+      datos <- datos[
+        datos$Motivo ==
+          input$filtro_motivo,
+      ]
     }
     
-    if (input$motivo != "Todos") {
-      datos <- datos %>%
-        filter(Motivo == input$motivo)
+    if (input$filtro_destino != "Todos") {
+      
+      datos <- datos[
+        datos$Destino ==
+          input$filtro_destino,
+      ]
     }
     
     datos
   })
   
-  # INDICADORES ----------------------------------------------------------
+  # Indicadores --------------------------------------------------------
   
   output$total_visitantes <- renderText({
     
     format(
       nrow(datos_filtrados()),
-      big.mark = ".",
-      decimal.mark = ","
+      big.mark = "."
     )
+  })
+  
+  output$principal_pais <- renderText({
+    
+    datos <- datos_filtrados()
+    
+    datos <- datos[
+      !is.na(datos$Pais_residencia),
+    ]
+    
+    if (nrow(datos) == 0) {
+      return("Sin datos")
+    }
+    
+    tabla <- sort(
+      table(datos$Pais_residencia),
+      decreasing = TRUE
+    )
+    
+    names(tabla)[1]
+  })
+  
+  output$principal_continente <- renderText({
+    
+    datos <- datos_filtrados()
+    
+    datos <- datos[
+      !is.na(datos$Continente),
+    ]
+    
+    if (nrow(datos) == 0) {
+      return("Sin datos")
+    }
+    
+    tabla <- sort(
+      table(datos$Continente),
+      decreasing = TRUE
+    )
+    
+    names(tabla)[1]
   })
   
   output$estadia_promedio <- renderText({
     
+    datos <- datos_filtrados()
+    
     paste0(
       round(
-        mean(datos_filtrados()$Estadia),
+        mean(
+          datos$Estadia,
+          na.rm = TRUE
+        ),
+        1
+      ),
+      " días"
+    )
+  })
+  
+  output$estadia_mediana <- renderText({
+    
+    datos <- datos_filtrados()
+    
+    paste0(
+      round(
+        median(
+          datos$Estadia,
+          na.rm = TRUE
+        ),
         1
       ),
       " días"
@@ -332,362 +708,962 @@ server <- function(input, output, session) {
   
   output$gasto_promedio <- renderText({
     
+    datos <- datos_filtrados()
+    
     paste0(
-      "$ ",
-      round(
-        mean(datos_filtrados()$GastoDiario),
-        2
-      )
-    )
-  })
-  
-  output$principal_destino <- renderText({
-    
-    datos <- datos_filtrados()
-    
-    validate(
-      need(nrow(datos) > 0, "Sin datos")
-    )
-    
-    datos %>%
-      count(Destino, sort = TRUE) %>%
-      slice_head(n = 1) %>%
-      pull(Destino)
-  })
-  
-  # EVOLUCIÓN ANUAL ------------------------------------------------------
-  
-  output$grafico_anual <- renderPlot({
-    
-    datos <- datos_filtrados()
-    
-    validate(
-      need(nrow(datos) > 0, "No hay observaciones para los filtros seleccionados")
-    )
-    
-    datos %>%
-      group_by(Anio) %>%
-      summarise(
-        gasto_promedio = mean(GastoDiario),
-        .groups = "drop"
-      ) %>%
-      ggplot(
-        aes(
-          x = Anio,
-          y = gasto_promedio
-        )
-      ) +
-      geom_line(
-        color = "steelblue",
-        linewidth = 1.2
-      ) +
-      geom_point(
-        color = "steelblue",
-        size = 3
-      ) +
-      scale_x_continuous(
-        breaks = sort(unique(datos$Anio))
-      ) +
-      scale_y_continuous(
-        labels = label_number(
-          decimal.mark = ",",
-          big.mark = "."
-        )
-      ) +
-      labs(
-        x = "Año",
-        y = "Gasto diario promedio"
-      ) +
-      theme_minimal() +
-      theme(
-        panel.grid.minor = element_blank()
-      )
-  })
-  
-  # GASTO POR TRIMESTRE --------------------------------------------------
-  
-  output$grafico_trimestre <- renderPlot({
-    
-    datos <- datos_filtrados()
-    
-    validate(
-      need(nrow(datos) > 0, "No hay observaciones para los filtros seleccionados")
-    )
-    
-    datos %>%
-      group_by(Trimestre) %>%
-      summarise(
-        gasto_promedio = mean(GastoDiario),
-        .groups = "drop"
-      ) %>%
-      mutate(
-        Trimestre = factor(
-          Trimestre,
-          levels = c("T1", "T2", "T3", "T4")
-        )
-      ) %>%
-      ggplot(
-        aes(
-          x = Trimestre,
-          y = gasto_promedio
-        )
-      ) +
-      geom_col(
-        fill = "steelblue",
-        width = 0.7
-      ) +
-      geom_text(
-        aes(
-          label = round(gasto_promedio, 1)
+      "USD ",
+      format(
+        round(
+          mean(
+            datos$GastoDiario,
+            na.rm = TRUE
+          ),
+          1
         ),
-        vjust = -0.5,
-        size = 4
+        big.mark = ".",
+        decimal.mark = ","
+      )
+    )
+  })
+  
+  output$gasto_mediano <- renderText({
+    
+    datos <- datos_filtrados()
+    
+    paste0(
+      "USD ",
+      format(
+        round(
+          median(
+            datos$GastoDiario,
+            na.rm = TRUE
+          ),
+          1
+        ),
+        big.mark = ".",
+        decimal.mark = ","
+      )
+    )
+  })
+  
+  # Países o regiones --------------------------------------------------
+  
+  output$grafico_paises <- renderPlot({
+    
+    datos <- datos_filtrados()
+    
+    datos <- datos[
+      !is.na(datos$Pais_residencia),
+    ]
+    
+    validate(
+      need(
+        nrow(datos) > 0,
+        "No hay datos para los filtros seleccionados"
+      )
+    )
+    
+    tabla <- as.data.frame(
+      table(datos$Pais_residencia)
+    )
+    
+    names(tabla) <- c(
+      "Pais_residencia",
+      "n"
+    )
+    
+    tabla <- tabla[
+      tabla$n > 0,
+    ]
+    
+    tabla$porcentaje <-
+      tabla$n / sum(tabla$n) * 100
+    
+    ggplot(
+      tabla,
+      aes(
+        x = reorder(
+          Pais_residencia,
+          porcentaje
+        ),
+        y = porcentaje
+      )
+    ) +
+      geom_col(
+        fill = "steelblue"
       ) +
-      scale_y_continuous(
-        expand = expansion(mult = c(0, 0.12))
-      ) +
+      coord_flip() +
       labs(
-        x = "Trimestre",
-        y = "Gasto diario promedio"
+        title = paste(
+          "Principales países o regiones",
+          "de residencia de los visitantes"
+        ),
+        x = "País o región",
+        y = "Porcentaje de visitantes"
       ) +
       theme_minimal() +
       theme(
-        panel.grid.major.x = element_blank(),
-        panel.grid.minor = element_blank()
+        plot.title = element_text(
+          face = "bold",
+          size = 12
+        ),
+        legend.position = "bottom"
       )
   })
   
-  # PRINCIPALES DESTINOS -------------------------------------------------
+  # Continentes --------------------------------------------------------
   
-  output$grafico_destinos <- renderPlot({
+  output$grafico_continentes <- renderPlot({
     
-    datos_filtrados() %>%
-      count(Destino, sort = TRUE) %>%
-      slice_head(n = 10) %>%
-      ggplot(
-        aes(
-          x = reorder(Destino, n),
-          y = n
-        )
+    datos <- datos_filtrados()
+    
+    datos <- datos[
+      !is.na(datos$Continente),
+    ]
+    
+    validate(
+      need(
+        nrow(datos) > 0,
+        "No hay datos para los filtros seleccionados"
+      )
+    )
+    
+    tabla <- as.data.frame(
+      table(datos$Continente)
+    )
+    
+    names(tabla) <- c(
+      "Continente",
+      "n"
+    )
+    
+    tabla <- tabla[
+      tabla$n > 0,
+    ]
+    
+    tabla$porcentaje <-
+      tabla$n / sum(tabla$n) * 100
+    
+    ggplot(
+      tabla,
+      aes(
+        x = reorder(
+          Continente,
+          porcentaje
+        ),
+        y = porcentaje
+      )
+    ) +
+      geom_col(
+        fill = "steelblue"
       ) +
-      geom_col(fill = "steelblue") +
       coord_flip() +
-      scale_y_continuous(
-        labels = label_number(
-          big.mark = ".",
-          decimal.mark = ","
-        )
-      ) +
       labs(
-        x = "Destino",
-        y = "Cantidad de observaciones"
+        title = "Proporción de visitantes por continente",
+        x = "Continente",
+        y = "Porcentaje de visitantes"
       ) +
       theme_minimal() +
       theme(
-        panel.grid.major.y = element_blank(),
-        panel.grid.minor = element_blank()
+        plot.title = element_text(
+          face = "bold",
+          size = 12
+        ),
+        legend.position = "bottom"
       )
   })
   
-  # MOTIVOS DEL VIAJE ----------------------------------------------------
+  # Visitantes por mes -------------------------------------------------
   
-  output$grafico_motivos <- renderPlot({
+  output$grafico_meses <- renderPlot({
     
-    datos_filtrados() %>%
-      count(Motivo, sort = TRUE) %>%
-      ggplot(
-        aes(
-          x = reorder(Motivo, n),
-          y = n
-        )
-      ) +
-      geom_col(fill = "steelblue") +
-      coord_flip() +
-      scale_y_continuous(
-        labels = label_number(
-          big.mark = ".",
-          decimal.mark = ","
-        )
+    datos <- datos_filtrados()
+    
+    validate(
+      need(
+        nrow(datos) > 0,
+        "No hay datos para los filtros seleccionados"
+      )
+    )
+    
+    tabla <- as.data.frame(
+      table(datos$Mes)
+    )
+    
+    names(tabla) <- c(
+      "Mes",
+      "n"
+    )
+    
+    tabla$porcentaje <-
+      tabla$n / sum(tabla$n) * 100
+    
+    ggplot(
+      tabla,
+      aes(
+        x = Mes,
+        y = porcentaje
+      )
+    ) +
+      geom_col(
+        fill = "steelblue"
       ) +
       labs(
+        title = paste(
+          "Cantidad promedio de visitantes que ingresaron",
+          "al país por mes durante 2016-2024"
+        ),
+        x = "Mes",
+        y = "Porcentaje de visitantes"
+      ) +
+      theme_minimal() +
+      theme(
+        plot.title = element_text(
+          face = "bold",
+          size = 12
+        ),
+        legend.position = "bottom",
+        axis.text.x = element_text(
+          angle = 45,
+          hjust = 1
+        )
+      )
+  })
+  
+  # Visitantes mensuales por año --------------------------------------
+  
+  output$grafico_meses_anios <- renderPlot({
+    
+    datos <- datos_filtrados()
+    
+    validate(
+      need(
+        nrow(datos) > 0,
+        "No hay datos para los filtros seleccionados"
+      )
+    )
+    
+    tabla <- as.data.frame(
+      table(
+        datos$Anio,
+        datos$Mes
+      )
+    )
+    
+    names(tabla) <- c(
+      "Anio",
+      "Mes",
+      "n"
+    )
+    
+    tabla <- tabla[
+      tabla$n > 0,
+    ]
+    
+    tabla$porcentaje <-
+      tabla$n / sum(tabla$n) * 100
+    
+    ggplot(
+      tabla,
+      aes(
+        x = Mes,
+        y = porcentaje,
+        color = factor(Anio),
+        group = Anio
+      )
+    ) +
+      geom_line() +
+      geom_point() +
+      labs(
+        title = paste(
+          "Proporción de visitantes que ingresaron",
+          "al país por mes durante 2016-2024"
+        ),
+        x = "Mes",
+        y = "Porcentaje de visitantes",
+        color = "Año"
+      ) +
+      theme_minimal() +
+      theme(
+        plot.title = element_text(
+          face = "bold",
+          size = 12
+        ),
+        legend.position = "bottom",
+        axis.text.x = element_text(
+          angle = 45,
+          hjust = 1
+        )
+      )
+  })
+  
+  # Motivo del viaje ---------------------------------------------------
+  
+  output$grafico_motivo <- renderPlot({
+    
+    datos <- datos_filtrados()
+    
+    datos <- datos[
+      !is.na(datos$Motivo),
+    ]
+    
+    validate(
+      need(
+        nrow(datos) > 0,
+        "No hay datos para los filtros seleccionados"
+      )
+    )
+    
+    tabla <- as.data.frame(
+      table(datos$Motivo)
+    )
+    
+    names(tabla) <- c(
+      "Motivo",
+      "n"
+    )
+    
+    tabla <- tabla[
+      tabla$n > 0,
+    ]
+    
+    tabla$porcentaje <-
+      tabla$n / sum(tabla$n) * 100
+    
+    ggplot(
+      tabla,
+      aes(
+        x = reorder(
+          Motivo,
+          porcentaje
+        ),
+        y = porcentaje
+      )
+    ) +
+      geom_col(
+        fill = "steelblue"
+      ) +
+      coord_flip() +
+      labs(
+        title = paste(
+          "Motivo de viaje de los visitantes",
+          "durante 2016-2024"
+        ),
         x = "Motivo del viaje",
-        y = "Cantidad de observaciones"
+        y = "Porcentaje de visitantes"
       ) +
       theme_minimal() +
       theme(
-        panel.grid.major.y = element_blank(),
-        panel.grid.minor = element_blank()
+        plot.title = element_text(
+          face = "bold",
+          size = 12
+        ),
+        legend.position = "bottom"
       )
   })
   
-  # MOTIVO SEGÚN DESTINO -------------------------------------------------
+  # Motivo según destino: porcentajes ---------------------------------
   
-  output$grafico_destino_motivo <- renderPlot({
+  output$grafico_motivo_destino_porcentaje <- renderPlot({
     
-    destinos_principales <- datos_filtrados() %>%
-      count(Destino, sort = TRUE) %>%
-      slice_head(n = 8) %>%
-      pull(Destino)
+    datos <- datos_filtrados()
     
-    datos_filtrados() %>%
-      filter(Destino %in% destinos_principales) %>%
-      ggplot(
-        aes(
-          x = Destino,
-          fill = Motivo
-        )
-      ) +
-      geom_bar(position = "fill") +
+    datos <- datos[
+      !is.na(datos$Destino) &
+        !is.na(datos$Motivo),
+    ]
+    
+    validate(
+      need(
+        nrow(datos) > 0,
+        "No hay datos para los filtros seleccionados"
+      )
+    )
+    
+    tabla <- prop.table(
+      table(
+        datos$Destino,
+        datos$Motivo
+      ),
+      margin = 1
+    )
+    
+    grafico <- as.data.frame(tabla)
+    
+    names(grafico) <- c(
+      "Destino",
+      "Motivo",
+      "porcentaje"
+    )
+    
+    grafico <- grafico[
+      grafico$porcentaje > 0,
+    ]
+    
+    ggplot(
+      grafico,
+      aes(
+        x = Destino,
+        y = porcentaje,
+        fill = Motivo
+      )
+    ) +
+      geom_col() +
       coord_flip() +
       scale_y_continuous(
-        labels = label_percent(
-          accuracy = 1,
-          decimal.mark = ","
-        )
+        labels = etiqueta_porcentaje
+      ) +
+      scale_fill_brewer(
+        palette = "Set3"
       ) +
       labs(
+        title = "Motivos del viaje según el destino elegido",
+        subtitle = paste(
+          "Distribución porcentual de los motivos",
+          "dentro de cada destino, 2016-2024"
+        ),
         x = "Destino",
         y = "Porcentaje de visitantes",
-        fill = "Motivo"
+        fill = "Motivo del viaje"
       ) +
       theme_minimal() +
       theme(
-        legend.position = "bottom",
-        panel.grid.major.y = element_blank(),
-        panel.grid.minor = element_blank()
+        plot.title = element_text(
+          face = "bold",
+          size = 12
+        ),
+        legend.position = "bottom"
       )
   })
   
-  # GASTO SEGÚN DESTINO --------------------------------------------------
+  # Motivo según destino: cantidades ---------------------------------
   
-  output$gasto_destino <- renderPlot({
+  output$grafico_motivo_destino_cantidad <- renderPlot({
     
-    datos_filtrados() %>%
-      group_by(Destino) %>%
-      summarise(
-        gasto_promedio = mean(GastoDiario),
-        observaciones = n(),
-        .groups = "drop"
-      ) %>%
-      filter(observaciones >= 20) %>%
-      arrange(desc(gasto_promedio)) %>%
-      slice_head(n = 10) %>%
-      ggplot(
-        aes(
-          x = reorder(Destino, gasto_promedio),
-          y = gasto_promedio
-        )
-      ) +
-      geom_col(fill = "steelblue") +
+    datos <- datos_filtrados()
+    
+    datos <- datos[
+      !is.na(datos$Destino) &
+        !is.na(datos$Motivo),
+    ]
+    
+    validate(
+      need(
+        nrow(datos) > 0,
+        "No hay datos para los filtros seleccionados"
+      )
+    )
+    
+    tabla <- as.data.frame(
+      table(
+        datos$Destino,
+        datos$Motivo
+      )
+    )
+    
+    names(tabla) <- c(
+      "Destino",
+      "Motivo",
+      "n"
+    )
+    
+    tabla <- tabla[
+      tabla$n > 0,
+    ]
+    
+    ggplot(
+      tabla,
+      aes(
+        x = reorder(
+          Destino,
+          n,
+          FUN = sum
+        ),
+        y = n,
+        fill = Motivo
+      )
+    ) +
+      geom_col() +
       coord_flip() +
       labs(
+        title = paste(
+          "Cantidad de visitantes según destino",
+          "y motivo del viaje"
+        ),
+        subtitle = "Turismo receptivo en Uruguay, 2016-2024",
         x = "Destino",
-        y = "Gasto diario promedio"
+        y = "Cantidad de observaciones",
+        fill = "Motivo del viaje"
       ) +
       theme_minimal() +
       theme(
-        panel.grid.major.y = element_blank(),
-        panel.grid.minor = element_blank()
+        plot.title = element_text(
+          face = "bold",
+          size = 12
+        ),
+        legend.position = "bottom"
       )
   })
   
-  # GASTO SEGÚN MOTIVO ---------------------------------------------------
+  # Destino según continente ------------------------------------------
   
-  output$gasto_motivo <- renderPlot({
+  output$grafico_destino_continente <- renderPlot({
     
-    datos_filtrados() %>%
-      group_by(Motivo) %>%
-      summarise(
-        gasto_promedio = mean(GastoDiario),
-        observaciones = n(),
-        .groups = "drop"
-      ) %>%
-      filter(observaciones >= 20) %>%
-      ggplot(
-        aes(
-          x = reorder(Motivo, gasto_promedio),
-          y = gasto_promedio
-        )
-      ) +
-      geom_col(fill = "steelblue") +
+    datos <- datos_filtrados()
+    
+    datos <- datos[
+      !is.na(datos$Continente) &
+        !is.na(datos$Destino),
+    ]
+    
+    validate(
+      need(
+        nrow(datos) > 0,
+        "No hay datos para los filtros seleccionados"
+      )
+    )
+    
+    tabla <- prop.table(
+      table(
+        datos$Continente,
+        datos$Destino
+      ),
+      margin = 1
+    )
+    
+    grafico <- as.data.frame(tabla)
+    
+    names(grafico) <- c(
+      "Continente",
+      "Destino",
+      "porcentaje"
+    )
+    
+    grafico <- grafico[
+      grafico$porcentaje > 0,
+    ]
+    
+    ggplot(
+      grafico,
+      aes(
+        x = Continente,
+        y = porcentaje,
+        fill = Destino
+      )
+    ) +
+      geom_col() +
       coord_flip() +
+      scale_y_continuous(
+        labels = etiqueta_porcentaje
+      ) +
       labs(
-        x = "Motivo del viaje",
-        y = "Gasto diario promedio"
+        title = "Destino elegido según la región de residencia",
+        subtitle = paste(
+          "Distribución porcentual de los destinos",
+          "dentro de cada región, 2016-2024"
+        ),
+        x = "Región de residencia",
+        y = "Porcentaje de visitantes",
+        fill = "Destino"
       ) +
       theme_minimal() +
       theme(
-        panel.grid.major.y = element_blank(),
-        panel.grid.minor = element_blank()
+        plot.title = element_text(
+          face = "bold",
+          size = 12
+        ),
+        legend.position = "bottom"
       )
   })
   
-  # RUBROS DEL GASTO -----------------------------------------------------
+  # Distribución de la estadía ----------------------------------------
+  
+  output$grafico_distribucion_estadia <- renderPlot({
+    
+    datos <- datos_filtrados()
+    
+    datos <- datos[
+      !is.na(datos$Estadia),
+    ]
+    
+    validate(
+      need(
+        nrow(datos) > 0,
+        "No hay datos para los filtros seleccionados"
+      )
+    )
+    
+    tabla <- as.data.frame(
+      table(datos$Estadia)
+    )
+    
+    names(tabla) <- c(
+      "Estadia",
+      "n"
+    )
+    
+    tabla$Estadia <- as.numeric(
+      as.character(tabla$Estadia)
+    )
+    
+    tabla <- tabla[
+      tabla$Estadia <= 20,
+    ]
+    
+    ggplot(
+      tabla,
+      aes(
+        x = Estadia,
+        y = n
+      )
+    ) +
+      geom_col(
+        fill = "steelblue"
+      ) +
+      scale_x_continuous(
+        breaks = 0:20
+      ) +
+      labs(
+        title = "Distribución de la duración de la estadía",
+        x = "Días de estadía",
+        y = "Cantidad de visitantes"
+      ) +
+      theme_minimal() +
+      theme(
+        plot.title = element_text(
+          face = "bold",
+          size = 12
+        ),
+        legend.position = "bottom"
+      )
+  })
+  
+  # Caja general de estadía -------------------------------------------
+  
+  output$grafico_caja_estadia <- renderPlot({
+    
+    datos <- datos_filtrados()
+    
+    datos <- datos[
+      !is.na(datos$Estadia),
+    ]
+    
+    validate(
+      need(
+        nrow(datos) > 0,
+        "No hay datos para los filtros seleccionados"
+      )
+    )
+    
+    ggplot(
+      datos,
+      aes(y = Estadia)
+    ) +
+      geom_boxplot() +
+      coord_cartesian(
+        ylim = c(0, 20)
+      ) +
+      labs(
+        title = paste(
+          "Diagrama de caja de la duración",
+          "de la estadía"
+        ),
+        x = NULL,
+        y = "Días de estadía"
+      ) +
+      theme_minimal() +
+      theme(
+        plot.title = element_text(
+          face = "bold",
+          size = 12
+        ),
+        legend.position = "bottom"
+      )
+  })
+  
+  # Estadía según destino ---------------------------------------------
+  
+  output$grafico_estadia_destino <- renderPlot({
+    
+    datos <- datos_filtrados()
+    
+    datos <- datos[
+      !is.na(datos$Destino) &
+        !is.na(datos$Estadia),
+    ]
+    
+    validate(
+      need(
+        nrow(datos) > 0,
+        "No hay datos para los filtros seleccionados"
+      )
+    )
+    
+    ggplot(
+      datos,
+      aes(
+        x = Destino,
+        y = Estadia,
+        fill = Destino
+      )
+    ) +
+      geom_boxplot() +
+      coord_cartesian(
+        ylim = c(0, 20)
+      ) +
+      labs(
+        title = paste(
+          "Diagrama de caja de la duración",
+          "de la estadía según el destino"
+        ),
+        x = "Destino",
+        y = "Días de estadía"
+      ) +
+      theme_minimal() +
+      theme(
+        plot.title = element_text(
+          face = "bold",
+          size = 12
+        ),
+        axis.text.x = element_text(
+          angle = 45,
+          hjust = 1
+        ),
+        legend.position = "none"
+      )
+  })
+  
+  # Estadía según motivo ----------------------------------------------
+  
+  output$grafico_estadia_motivo <- renderPlot({
+    
+    datos <- datos_filtrados()
+    
+    datos <- datos[
+      !is.na(datos$Motivo) &
+        !is.na(datos$Estadia),
+    ]
+    
+    validate(
+      need(
+        nrow(datos) > 0,
+        "No hay datos para los filtros seleccionados"
+      )
+    )
+    
+    ggplot(
+      datos,
+      aes(
+        x = Motivo,
+        y = Estadia,
+        fill = Motivo
+      )
+    ) +
+      geom_boxplot() +
+      coord_cartesian(
+        ylim = c(0, 20)
+      ) +
+      labs(
+        title = paste(
+          "Diagrama de caja de la duración",
+          "de la estadía según el motivo"
+        ),
+        x = "Motivo del viaje",
+        y = "Días de estadía"
+      ) +
+      theme_minimal() +
+      theme(
+        plot.title = element_text(
+          face = "bold",
+          size = 12
+        ),
+        axis.text.x = element_text(
+          angle = 45,
+          hjust = 1
+        ),
+        legend.position = "none"
+      )
+  })
+  
+  # Participación de rubros -------------------------------------------
   
   output$grafico_rubros <- renderPlot({
+    
+    datos <- datos_filtrados()
     
     validate(
       need(
         length(variables_rubros) > 0,
-        "No se encontraron variables desagregadas de gasto"
+        "No se encontraron variables de rubros de gasto"
       )
     )
     
-    datos_filtrados() %>%
-      select(all_of(variables_rubros)) %>%
-      pivot_longer(
-        cols = everything(),
-        names_to = "Rubro",
-        values_to = "Gasto"
-      ) %>%
-      group_by(Rubro) %>%
-      summarise(
-        gasto_acumulado = sum(Gasto, na.rm = TRUE),
-        .groups = "drop"
-      ) %>%
-      mutate(
-        porcentaje = gasto_acumulado /
-          sum(gasto_acumulado) * 100
-      ) %>%
-      arrange(desc(porcentaje)) %>%
-      ggplot(
-        aes(
-          x = reorder(Rubro, porcentaje),
-          y = porcentaje
-        )
+    totales <- sapply(
+      datos[
+        ,
+        variables_rubros,
+        drop = FALSE
+      ],
+      sum,
+      na.rm = TRUE
+    )
+    
+    resumen_rubros <- data.frame(
+      Rubro = names(totales),
+      Gasto = as.numeric(totales)
+    )
+    
+    resumen_rubros$Porcentaje <-
+      resumen_rubros$Gasto /
+      sum(resumen_rubros$Gasto) *
+      100
+    
+    resumen_rubros$Rubro <- sub(
+      "^Gasto",
+      "",
+      resumen_rubros$Rubro
+    )
+    
+    ggplot(
+      resumen_rubros,
+      aes(
+        x = reorder(
+          Rubro,
+          Porcentaje
+        ),
+        y = Porcentaje
+      )
+    ) +
+      geom_col(
+        fill = "steelblue"
       ) +
-      geom_col(fill = "steelblue") +
       coord_flip() +
       scale_y_continuous(
-        labels = label_percent(
-          scale = 1,
-          accuracy = 0.1,
-          decimal.mark = ","
-        )
+        labels = function(x) {
+          paste0(
+            round(x, 1),
+            "%"
+          )
+        }
       ) +
       labs(
+        title = paste(
+          "Participación de cada rubro",
+          "en el gasto turístico"
+        ),
+        subtitle = paste(
+          "Porcentaje sobre el gasto total",
+          "desagregado, 2016-2024"
+        ),
         x = "Rubro",
         y = "Participación en el gasto total"
       ) +
-      theme_minimal() +
-      theme(
-        panel.grid.major.y = element_blank(),
-        panel.grid.minor = element_blank()
-      )
+      theme_minimal()
   })
   
-  # TABLA RESUMEN --------------------------------------------------------
+  # Gasto según destino -----------------------------------------------
   
-  output$tabla_resumen <- renderTable({
+  output$grafico_gasto_destino <- renderPlot({
     
-    datos_filtrados() %>%
-      summarise(
-        Observaciones = n(),
-        `Estadía promedio` = round(mean(Estadia), 2),
-        `Gasto total promedio` = round(mean(GastoTotal), 2),
-        `Gasto diario promedio` = round(mean(GastoDiario), 2),
-        `Gasto diario mediano` = round(median(GastoDiario), 2)
+    datos <- datos_filtrados()
+    
+    datos <- datos[
+      !is.na(datos$Destino) &
+        !is.na(datos$GastoDiario),
+    ]
+    
+    validate(
+      need(
+        nrow(datos) > 0,
+        "No hay datos para los filtros seleccionados"
       )
+    )
+    
+    gasto_por_destino <- aggregate(
+      GastoDiario ~ Destino,
+      data = datos,
+      FUN = mean
+    )
+    
+    names(gasto_por_destino)[
+      names(gasto_por_destino) == "GastoDiario"
+    ] <- "gasto_promedio_diario"
+    
+    ggplot(
+      gasto_por_destino,
+      aes(
+        x = reorder(
+          Destino,
+          gasto_promedio_diario
+        ),
+        y = gasto_promedio_diario
+      )
+    ) +
+      geom_col(
+        fill = "steelblue"
+      ) +
+      coord_flip() +
+      labs(
+        title = "Gasto diario promedio según el destino",
+        subtitle = "Turismo receptivo en Uruguay, 2016-2024",
+        x = "Destino",
+        y = "Gasto diario promedio"
+      ) +
+      theme_minimal()
+  })
+  
+  # Gasto según motivo -------------------------------------------------
+  
+  output$grafico_gasto_motivo <- renderPlot({
+    
+    datos <- datos_filtrados()
+    
+    datos <- datos[
+      !is.na(datos$Motivo) &
+        !is.na(datos$GastoDiario),
+    ]
+    
+    validate(
+      need(
+        nrow(datos) > 0,
+        "No hay datos para los filtros seleccionados"
+      )
+    )
+    
+    gasto_por_motivo <- aggregate(
+      GastoDiario ~ Motivo,
+      data = datos,
+      FUN = mean
+    )
+    
+    names(gasto_por_motivo)[
+      names(gasto_por_motivo) == "GastoDiario"
+    ] <- "gasto_promedio_diario"
+    
+    ggplot(
+      gasto_por_motivo,
+      aes(
+        x = reorder(
+          Motivo,
+          gasto_promedio_diario
+        ),
+        y = gasto_promedio_diario
+      )
+    ) +
+      geom_col(
+        fill = "steelblue"
+      ) +
+      coord_flip() +
+      labs(
+        title = paste(
+          "Gasto diario promedio según",
+          "el motivo del viaje"
+        ),
+        subtitle = "Turismo receptivo en Uruguay, 2016-2024",
+        x = "Motivo del viaje",
+        y = "Gasto diario promedio"
+      ) +
+      theme_minimal()
   })
 }
 
