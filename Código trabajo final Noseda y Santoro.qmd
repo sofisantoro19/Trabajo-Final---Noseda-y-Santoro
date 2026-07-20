@@ -161,6 +161,8 @@ df1 = df1 |>
       Residencia %in% c(      
         'Santa Catarina', 'Otra  ciudades de Brasil', 'San Pablo', 'Rio Grande', 'Porto Alegre', 'Rio de Janeiro', 'Pelotas - Rio Grande', 'Otros San Pablo') ~ 'Brasil',           
       
+      Residencia == 'Alemanai'~ 'Alemania',
+        
       Residencia == 'Sin Datos' ~ NA_character_,          
       
       TRUE ~ Residencia   ))
