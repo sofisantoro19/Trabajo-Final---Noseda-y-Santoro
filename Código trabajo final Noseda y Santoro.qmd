@@ -1,5 +1,5 @@
 ---
-title: "Trabajjo final"
+title: "Trabajo final"
 author: "Inés Noseda y Sofía Santoro"
 format: html
 editor: visual

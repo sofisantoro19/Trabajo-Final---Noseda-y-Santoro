@@ -1,0 +1,1920 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.9.37">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Inés Noseda y Sofía Santoro">
+
+<title>Trabajo final</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="Código trabajo final Noseda y Santoro_files/libs/clipboard/clipboard.min.js"></script>
+<script src="Código trabajo final Noseda y Santoro_files/libs/quarto-html/quarto.js" type="module"></script>
+<script src="Código trabajo final Noseda y Santoro_files/libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="Código trabajo final Noseda y Santoro_files/libs/quarto-html/popper.min.js"></script>
+<script src="Código trabajo final Noseda y Santoro_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="Código trabajo final Noseda y Santoro_files/libs/quarto-html/anchor.min.js"></script>
+<link href="Código trabajo final Noseda y Santoro_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="Código trabajo final Noseda y Santoro_files/libs/quarto-html/quarto-syntax-highlighting-7f8f88aac4f3542376d5c11b86a4c14d.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="Código trabajo final Noseda y Santoro_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="Código trabajo final Noseda y Santoro_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="Código trabajo final Noseda y Santoro_files/libs/bootstrap/bootstrap-efbb37e9afcc02144ebbc7afd12a776f.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+
+
+</head>
+
+<body class="fullcontent quarto-light">
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Trabajo final</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Inés Noseda y Sofía Santoro </p>
+          </div>
+  </div>
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="el-turismo-receptivo-en-uruguay" class="level2">
+<h2 class="anchored" data-anchor-id="el-turismo-receptivo-en-uruguay">EL TURISMO RECEPTIVO EN URUGUAY</h2>
+<p>El trabajo a continuación trata acerca de un análisis exploratorio de datos en el que se pretende investigar sobre el Turismo Receptivo en Uruguay durante 2016 al 2024. El conjunto de datos fue abstraído del Catálogo Nacional de Datos Abiertos de Uruguay. De acuerdo con la fuente mencionada, los mismos fueron obtenidos a través de una encuesta de Turismo Receptivo y contiene la información desagregada acerca de los visitantes y el gasto de los mismos referente a cada trimestre desde el año 2016 hasta el 2024.</p>
+<p>Al momento de elegir el conjunto de datos que se iba a utilizar el grupo decidió que podía ser pertinente investigar acerca del Turismo Receptivo en Uruguay dado que es un factor de gran incidencia en el PBI en el país y porque, además de que es un tema atractivo y de interés personal, puede ser útil a nivel económico.</p>
+<p>En la misma línea, al realizar un análisis exploratorio de estos datos, se puede obtener información acerca del flujo de visitantes ingresados al país, de dónde provienen, cuál es el motivo del viaje, cuál es el destino de preferencia de la mayoría, el tipo de alojamiento de la estadía y la principal fuente de gasto de los turistas entre otros aspectos.</p>
+<p>El análisis a continuación se desarrollará mediante técnicas de análisis exploratorio de datos. En primer lugar se realizará una descripción del conunto de datos, examinando la fuente, el tipo de variables que se utilizarán, la cantidad de observaciones y la presencia de datos faltantes. En segundo lugar, se aplicarán medidas de resumen para las variables numéricas, tales como media, mediana, desviación estandar, el rango intercuartílico y los percentiles. En tercer lugar, para las variables categóricas se analizarán las frecuencias relativas y absolutas. Por su parte, también se realizarán visualizaciones gráficas como histogramas, gráficos de barra y de dispersión para explorar la distribución de las variables y relaciones entre ellas.</p>
+<p><strong>Exploración del conjunto de datos</strong></p>
+<p>Una vez presentado el fenómeno de interés, su relevancia y una breve descripción de los métodos que se aplicarán, pasaremos a realizar una exploración inicial del conjunto de datos con el objetivo de conocer su estructura. Para ello debemos cargar el dataset que se va a utilizar y guardarlo en un objeto que llamaremos df utilizando la función <em>readxl.</em></p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Cargamos el dataset que se va a utilizar </span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>df <span class="ot">=</span> readxl<span class="sc">::</span><span class="fu">read_xlsx</span>(<span class="st">'receptivo.xlsx'</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Una vez cargado el dataset se debe analizar su estructura es decir, cantidad de observaciones, columnas, tipo de variables: categóricas o numéricas. Para ello utilizaremos la función <em>glimpse.</em> Pero antes, se deberán cargar las librerías que vamos a utilizar.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Cargamos las librerías </span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse) </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package 'tidyverse' was built under R version 4.6.1</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
+✔ dplyr     1.2.1     ✔ readr     2.2.0
+✔ forcats   1.0.1     ✔ stringr   1.6.0
+✔ ggplot2   4.0.3     ✔ tibble    3.3.1
+✔ lubridate 1.9.5     ✔ tidyr     1.3.2
+✔ purrr     1.2.2     
+── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+✖ dplyr::filter() masks stats::filter()
+✖ dplyr::lag()    masks stats::lag()
+ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(lubridate)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a> <span class="co">#Estructura del df </span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>df <span class="sc">|&gt;</span> <span class="fu">glimpse</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Rows: 65,333
+Columns: 48
+$ IdIngresos                            &lt;dbl&gt; 3, 18, 3, 7, 7, 2, 3, 1, 1, 4, 1…
+$ `Lugar Ingreso`                       &lt;chr&gt; "Aeropuerto de Carrasco", "Río B…
+$ IdTranspIngreso                       &lt;dbl&gt; 1, 2, 1, 2, 2, 5, 1, 5, 5, 2, 5,…
+$ `Transporte Internacional de Ingreso` &lt;chr&gt; "Aereo", "Terrestre Auto", "Aere…
+$ FechaIngreso                          &lt;dttm&gt; 2017-02-22, 2017-01-05, 2017-01…
+$ IdFecIng                              &lt;dbl&gt; 13567, 13519, 13518, 13532, 1351…
+$ FechaEgreso                           &lt;dttm&gt; 2017-03-03, 2017-01-09, 2017-01…
+$ IdFecEgr                              &lt;dbl&gt; 13576, 13523, 13526, 13540, 1353…
+$ IdNacionalidad                        &lt;dbl&gt; 33, 19, 30, 30, 10, 59, 32, 19, …
+$ Pais                                  &lt;chr&gt; "Ecuador", "Brasil", "Paraguay",…
+$ IdResidencia                          &lt;dbl&gt; 50, 23, 30, 30, 11, 80, 50, 26, …
+$ Residencia                            &lt;chr&gt; "Otras ciudades Sudamerica", "Sa…
+$ IdMotivo                              &lt;dbl&gt; 99, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1…
+$ Motivo                                &lt;chr&gt; "Otros", "Ocio y vacaciones", "O…
+$ IdOcupacion                           &lt;dbl&gt; 20, 12, 13, 11, 13, 13, 11, 13, …
+$ Ocupacion                             &lt;chr&gt; "Deportista, Entrenador, Juez De…
+$ IsEstudio                             &lt;dbl&gt; 4, 6, 6, 4, 6, 6, 4, 6, 5, 6, 6,…
+$ Estudio                               &lt;chr&gt; "Secundaria completa", "Terciari…
+$ IdDestinoLocalidad                    &lt;dbl&gt; 1, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3,…
+$ Localidad                             &lt;chr&gt; "Montevideo", "Punta del Este", …
+$ IdDepartamentoDestino                 &lt;dbl&gt; 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,…
+$ Departamento                          &lt;chr&gt; "Montevideo", "Maldonado", "Mald…
+$ IdOtroDepartamento                    &lt;dbl&gt; 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,…
+$ `Otro Departamento`                   &lt;chr&gt; "Canelones", "Montevideo", "Mont…
+$ IdOtraLocalidad                       &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,…
+$ `Otra Localidad`                      &lt;chr&gt; "Parador Tajes", "Montevideo", "…
+$ IdAlojamiento                         &lt;dbl&gt; 23, 24, 24, 23, 23, 23, 21, 24, …
+$ Alojamiento                           &lt;chr&gt; "Hotel 3 estrellas", "Hotel 4 es…
+$ IdTranspLocal                         &lt;dbl&gt; 6, 1, 3, 1, 1, 3, 6, 1, 1, 1, 1,…
+$ TransporteLocal                       &lt;chr&gt; "Otros", "Auto propio", "Taxi - …
+$ IdEgresos                             &lt;dbl&gt; 3, 18, 3, 7, 7, 2, 3, 4, 7, 4, 1…
+$ `Lugar Egreso`                        &lt;chr&gt; "Aeropuerto de Carrasco", "Río B…
+$ IdTranspEgreso                        &lt;dbl&gt; 1, 2, 1, 2, 2, 5, 1, 2, 2, 2, 5,…
+$ `Transporte Internacional de Egreso`  &lt;chr&gt; "Aereo", "Terrestre Auto", "Aere…
+$ IdDestino                             &lt;dbl&gt; 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,…
+$ Destino                               &lt;chr&gt; "Montevideo", "Punta del Este", …
+$ Estadia                               &lt;dbl&gt; 9, 4, 8, 8, 15, 2, 7, 2, 6, 4, 5…
+$ Gente                                 &lt;dbl&gt; 3, 2, 2, 3, 2, 2, 2, 2, 2, 3, 2,…
+$ GastoTotal                            &lt;dbl&gt; 3213.00, 2016.00, 3846.00, 3696.…
+$ GastoAlojamiento                      &lt;dbl&gt; 1566.00, 784.00, 1568.00, 2352.0…
+$ GastoAlimentacion                     &lt;dbl&gt; 1134, 376, 752, 1128, 1410, 104,…
+$ GastoTransporte                       &lt;dbl&gt; 0.0, 72.0, 160.0, 216.0, 270.0, …
+$ GastoCultural                         &lt;dbl&gt; 0, 384, 0, 0, 0, 0, 0, 0, 384, 0…
+$ GastoTours                            &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,…
+$ GastoCompras                          &lt;dbl&gt; 0, 0, 566, 0, 566, 0, 566, 0, 0,…
+$ GastoOtros                            &lt;dbl&gt; 513, 400, 800, 0, 1500, 12, 0, 0…
+$ Coef                                  &lt;dbl&gt; 129.35, 57.49, 63.94, 53.25, 142…
+$ CoefTot                               &lt;dbl&gt; 388.04, 114.98, 127.89, 159.76, …</code></pre>
+</div>
+</div>
+<p>Al examinar la estructura, se visualiza un total de 65.333 observaciones y 48 variables. Es de interés conocer esas 48 variables, y saber cuáles son variables categóricas y cuáles numéricas. Utilizamos la función <em>sapply</em> dado que permite conocer el nombre de las variables y cuáles son consideradas categóricas y cuáles numericas.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Variables categóricas y variables numéricas </span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sapply</span>(df, class)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>$IdIngresos
+[1] "numeric"
+
+$`Lugar Ingreso`
+[1] "character"
+
+$IdTranspIngreso
+[1] "numeric"
+
+$`Transporte Internacional de Ingreso`
+[1] "character"
+
+$FechaIngreso
+[1] "POSIXct" "POSIXt" 
+
+$IdFecIng
+[1] "numeric"
+
+$FechaEgreso
+[1] "POSIXct" "POSIXt" 
+
+$IdFecEgr
+[1] "numeric"
+
+$IdNacionalidad
+[1] "numeric"
+
+$Pais
+[1] "character"
+
+$IdResidencia
+[1] "numeric"
+
+$Residencia
+[1] "character"
+
+$IdMotivo
+[1] "numeric"
+
+$Motivo
+[1] "character"
+
+$IdOcupacion
+[1] "numeric"
+
+$Ocupacion
+[1] "character"
+
+$IsEstudio
+[1] "numeric"
+
+$Estudio
+[1] "character"
+
+$IdDestinoLocalidad
+[1] "numeric"
+
+$Localidad
+[1] "character"
+
+$IdDepartamentoDestino
+[1] "numeric"
+
+$Departamento
+[1] "character"
+
+$IdOtroDepartamento
+[1] "numeric"
+
+$`Otro Departamento`
+[1] "character"
+
+$IdOtraLocalidad
+[1] "numeric"
+
+$`Otra Localidad`
+[1] "character"
+
+$IdAlojamiento
+[1] "numeric"
+
+$Alojamiento
+[1] "character"
+
+$IdTranspLocal
+[1] "numeric"
+
+$TransporteLocal
+[1] "character"
+
+$IdEgresos
+[1] "numeric"
+
+$`Lugar Egreso`
+[1] "character"
+
+$IdTranspEgreso
+[1] "numeric"
+
+$`Transporte Internacional de Egreso`
+[1] "character"
+
+$IdDestino
+[1] "numeric"
+
+$Destino
+[1] "character"
+
+$Estadia
+[1] "numeric"
+
+$Gente
+[1] "numeric"
+
+$GastoTotal
+[1] "numeric"
+
+$GastoAlojamiento
+[1] "numeric"
+
+$GastoAlimentacion
+[1] "numeric"
+
+$GastoTransporte
+[1] "numeric"
+
+$GastoCultural
+[1] "numeric"
+
+$GastoTours
+[1] "numeric"
+
+$GastoCompras
+[1] "numeric"
+
+$GastoOtros
+[1] "numeric"
+
+$Coef
+[1] "numeric"
+
+$CoefTot
+[1] "numeric"</code></pre>
+</div>
+</div>
+<p>A partir de la función glimpse() y del tipo de dato asignado por R, se observa que le conjunto de datos contiene variables de distinta naturaleza. Entre las variables cualitativas se encuentra se encuentran la nacionalidad de quién ingresó, el lugar de residencia, el destino, el departamento y la zona de destino, la ocupación, el nivel educativo, el motivo del viaje, el tipo de alojamiento, el destino y el medio de transporte utilizado (para ingresar, para salir y durante la estadía). Por su parte, entre las variables cuantitativas se encuentran la estadía, la cantidad de personas del grupo encuestado, el gasto total y los distintos componentes del gasto desagregados. Finalmente, también se dispone de variables correspondiente a fechas de ingreso y egreso al país</p>
+<p>Con el objetivo de conocer la composición del conjunto de datos, se contabilizó la cantidad de variables según el tipo de dato reconocido por R: ‘numeric’ para variables numéricas, ‘character’ para variables categórica y ‘POSIXct’ ‘POSIXt’ para variables que corresponden a fechas. Para ello, le asignamos un nombre a cada uno de los tres tipos de variables clasificados y usamos la función <em>sum.</em></p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">data.frame</span>(   </span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">Tipo =</span> <span class="fu">c</span>(<span class="st">'Numéricas'</span>, <span class="st">'Categóricas'</span>, <span class="st">'Fechas'</span>), </span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">Cantidad =</span> <span class="fu">c</span>(<span class="fu">sum</span>(<span class="fu">sapply</span>(df, is.numeric)),</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>               <span class="fu">sum</span>(<span class="fu">sapply</span>(df, is.character)),</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>               <span class="fu">sum</span>(<span class="fu">sapply</span>(df, inherits, <span class="st">"POSIXct"</span>))   ) )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>         Tipo Cantidad
+1   Numéricas       30
+2 Categóricas       16
+3      Fechas        2</code></pre>
+</div>
+</div>
+<p>Al observar los datos podemos visualizar que se reconocen 30 variables numéricas, 16 variables categóricas y 2 fechas. Sin embargo, dentro de las variables clasificadas como numéricas, existen varias cuyo nombre comienza con el prefijo ‘Id’ o ‘Is’. Esas variables corresponden a códigos identificadores de categorías y no representan variables cuantitativas de interés para este análisis. Un ejemplo de ello es ‘IdMotivo’ que refiere al código del motivo de ingreso. Por esta razón, se decidió excluirlas del conteo y del análisis exploratorio posterior.</p>
+<p>Para ello, crearemos un nuevo data frame: ‘df1’ excluyendo las variable mencionadas utilizando de la función <em>select</em> y <em>start_with</em> para seleccionar todas las variables del dataset excepto las que comienzan con ‘Id’. Una vez teniendo el nuevo dataframe, realizamos el conteo con el mismo.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>df1 <span class="ot">=</span> df <span class="sc">|&gt;</span>    </span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span><span class="fu">starts_with</span>(<span class="st">'Id'</span>), <span class="sc">-</span><span class="fu">starts_with</span>(<span class="st">'Is'</span>))  </span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="fu">data.frame</span>(   </span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">Tipo =</span> <span class="fu">c</span>(<span class="st">'Numéricas'</span>, <span class="st">'Categóricas'</span>, <span class="st">'Fechas'</span>), </span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">Cantidad =</span> <span class="fu">c</span>(     </span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">sum</span>(<span class="fu">sapply</span>(df1, is.numeric)),     </span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">sum</span>(<span class="fu">sapply</span>(df1, is.character)),     </span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">sum</span>(<span class="fu">sapply</span>(df1, inherits, <span class="st">"POSIXct"</span>))  </span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>  ) )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>         Tipo Cantidad
+1   Numéricas       12
+2 Categóricas       16
+3      Fechas        2</code></pre>
+</div>
+</div>
+<p>Finalmente observamos que dentro de las 48 variables inicialmente mencionadas, son de nuestro interés 30. De ellas, 12 corresponden a variables cuantitativas, 16 cualitativas y 2 son variables de fechas.</p>
+<p>Luego verificamos la presencia de datos faltantes en las variables del conjunto de datos. Para ello se utilizó summarise() junto con across(), lo que permite aplicar una misma operación a múltiples variables de forma simultánea. Se aplicó la función sum(is..na(.)) a todas las variables mediante el selector everithing(). Es decir, se buscó sumar para cada variable los datos faltantes y así poder corroborar para cada variable cuantos datos faltaban.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Vetifiacmos presencia de datos faltantes</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>df1 <span class="sc">|&gt;</span>   </span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="fu">across</span>(<span class="fu">everything</span>(), <span class="sc">~</span><span class="fu">sum</span>(<span class="fu">is.na</span>(.))))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1 × 30
+  `Lugar Ingreso` Transporte Internacional de I…¹ FechaIngreso FechaEgreso  Pais
+            &lt;int&gt;                           &lt;int&gt;        &lt;int&gt;       &lt;int&gt; &lt;int&gt;
+1               0                               0            0           0     0
+# ℹ abbreviated name: ¹​`Transporte Internacional de Ingreso`
+# ℹ 25 more variables: Residencia &lt;int&gt;, Motivo &lt;int&gt;, Ocupacion &lt;int&gt;,
+#   Estudio &lt;int&gt;, Localidad &lt;int&gt;, Departamento &lt;int&gt;,
+#   `Otro Departamento` &lt;int&gt;, `Otra Localidad` &lt;int&gt;, Alojamiento &lt;int&gt;,
+#   TransporteLocal &lt;int&gt;, `Lugar Egreso` &lt;int&gt;,
+#   `Transporte Internacional de Egreso` &lt;int&gt;, Destino &lt;int&gt;, Estadia &lt;int&gt;,
+#   Gente &lt;int&gt;, GastoTotal &lt;int&gt;, GastoAlojamiento &lt;int&gt;, …</code></pre>
+</div>
+</div>
+<p>Es posible afirmar que las variables que presentan datos faltantes son una minoría de cuatro: estudio, localidad, departamento, otro departamento y otra localidad. No obstante,es un buen indicio debido a que para las variables de mayor interés en nuestro análisis exploratorio no incide de forma significativa la falta de estos datos.</p>
+<p>Una vez realizado un análisis descriptivo del conjunto de los datos, donde se examinó la cantidad de observaciones y variables, el tipo de variables y la presencia de datos faltantes es posible continuar al análisis exploratorio con resumenes estadísticos y visualizaciones para explorar los datos.</p>
+<p><strong>Análisis exploratorio</strong></p>
+<p>Como fue meniconado anteriormente, el objetivo de este trabajo es realizar un análisis exploratorio del conjunto de datos correspondiente al Turismo Receptivo en Uruguay. En este contexto, resulta pertinente definir las preguntras que orientarán el análisis. En particular, se busca responder la siguiente pregunta principal: <em>¿Cuáles son las principales características de los visitantes que ingresan a Uruguay y cuáles son sus destinos de preferencia? Asimismo, ¿en qué rubro realizan los mayores gastos durante su estadía?</em></p>
+<p>En esta línea, resulta pertinente plantear una serie de preguntas secundarias que orienten el análisis exploratorio del conjunto de datos. A continuaión se presentan las preguntas que guiarán el estudio:</p>
+<ol type="1">
+<li><u>Características generales de los visitantes:</u></li>
+</ol>
+<p>1.1 ¿Cuáles son los principales países o regiones de residencia de los visitantes?</p>
+<p>1.2 Considerando la residencia de los visitantes por continente, ¿de qué continente provienen la mayoría de los visitantes?</p>
+<p>1.3 ¿En qué meses del año ingresan más turistas? ¿Existen patrones estacionales en el ingreso de turistas?</p>
+<ol start="2" type="1">
+<li><u>Características del viaje:</u></li>
+</ol>
+<p>2.1 ¿Cuál es el principal motivo del viaje?</p>
+<p>2.2 ¿Cómo varía el motivo del viaje según el destino elegido?</p>
+<p>2.3 ¿Cómo varía el destino elegido según la región de residencia del visitante?</p>
+<ol start="3" type="1">
+<li><u>Estadía</u></li>
+</ol>
+<p>3.1 ¿Cuál es la duración promedio de la estadía?</p>
+<p>3.2 ¿La duración de la estadía varía según el destino?</p>
+<p>3.3 ¿La duración de la estadía varía según el motivo del viaje?</p>
+<ol start="4" type="1">
+<li><u>Gastos turísticos</u></li>
+</ol>
+<p>4.1 ¿Cuál es el gasto promedio diario de los visitantes?</p>
+<p>4.2 ¿Qué rubros concentran la mayor parte del gasto?</p>
+<p>4.3 ¿El gasto diario varía según destino o motivo del viaje?</p>
+<p>4.4 ¿Cómo evoluciona el gasto diario promedio por trimestre y por año?</p>
+<p>1.1 ¿Cuáles son los principales países o regiones de residencia de los visitantes?</p>
+<p>La variable <em>Pais</em> corresponde a la nacionalidad de quién ingresó y no necesariamente a su lugar de residencia habitual. Al explorar esta variable se observa que una proporción importante de los visitantes posee nacionalidad uruguaya. Sin embargo, esto no implica que residan en Uruguay, ya que una persona de nacionalidad uruguaya puede vivir en el exterior y ser considerada visitante al ingresar al país. Esto puede observarse mediante una tabla de frecuencias absolutas y relativas de la variable <em>Pais</em>, donde se aprecia que el 15,9% de los visitantes tienen nacionalidad uruguaya.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>df1 <span class="sc">|&gt;</span>    </span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(Pais, <span class="at">sort =</span> <span class="cn">TRUE</span>) <span class="sc">|&gt;</span>    </span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">porcentaje =</span> (n<span class="sc">/</span> <span class="fu">sum</span>(n))<span class="sc">*</span> <span class="dv">100</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 28 × 3
+   Pais                n porcentaje
+   &lt;chr&gt;           &lt;int&gt;      &lt;dbl&gt;
+ 1 Argentina       32267     49.4  
+ 2 Brasil          12604     19.3  
+ 3 Uruguay         10384     15.9  
+ 4 Chile            1819      2.78 
+ 5 Paraguay         1433      2.19 
+ 6 Otro de America   898      1.37 
+ 7 EE.UU.            872      1.33 
+ 8 España            711      1.09 
+ 9 Otro de Europa    672      1.03 
+10 Peru              517      0.791
+# ℹ 18 more rows</code></pre>
+</div>
+</div>
+<p>Dado que el objetivo es analizar el lugar de residencia de los visitantes y no su nacionalidad, se construyó una nueva variable nombrada <em>‘Pais_residencia’</em> a partir de la variable <em>Residencia</em> agrupando las ciudades, provincias y estados de acuerdo al país que corresponda. Previo a elllo, se utilizaron los valores únicos de la variable Residencia mediante la función <em>unique,</em> con el fin de identificar las categorías presentes y definir los agrupamientos necesarios.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">unique</span>(df1<span class="sc">$</span>Residencia)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] "Otras ciudades Sudamerica" "Santa Catarina"           
+ [3] "Paraguay"                  "Buenos Aires"             
+ [5] "Europa"                    "Otra  ciudades de Brasil" 
+ [7] "San Pablo"                 "EEUU - Canada"            
+ [9] "Pcia. Enre Rios"           "Chile"                    
+[11] "Rio Grande"                "Rosario"                  
+[13] "Otras Pcias. Argentinas"   "Cordoba"                  
+[15] "Otros Pcia. Santa Fe"      "Otras ciudades America"   
+[17] "Ciudades de Asia"          "Porto Alegre"             
+[19] "Rio de Janeiro"            "Pelotas - Rio Grande"     
+[21] "Otras Pcia Cordoba"        "Sin Datos"                
+[23] "Ciudades Africa y Oceania" "España"                   
+[25] "Otros Pcia. Bs. As."       "Corrientes"               
+[27] "Colombia"                  "Alemanai"                 
+[29] "Mexico"                    "Peru"                     
+[31] "Otros San Pablo"           "Reino Unido"              </code></pre>
+</div>
+</div>
+<p>Se observó que, mientras la mayoría de las categorías refieren a países o regiones, en los casos de Argentina y Brasil, la información se encuentra desagregada por ciudades, provincias y estados. Por lo tanto, se utilizó la función <em>case_when</em> para agrupar dichs categorías bajo un mismo país. En el resto de los casos se conservó el valor original mediante la condición <em>TRUE ~ Residencia.</em></p>
+<p>Por otra parte, se observa una categoría denominada ‘Sin datos’, por lo tanto converitemos esa variable en na para facilitar el trabajo posterior al filtrar las obervaciones exclyendo los datos faltantes con la función <em>filter(!is.na())</em>.</p>
+<p>Sumado a esto, se observó un error tipográfico en el dataset en el país Alemania, el cual fue corregido en esta sección.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Creamos la varible Pais_residencia </span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>df1 <span class="ot">=</span> df1 <span class="sc">|&gt;</span> </span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(   </span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">Pais_residencia =</span> <span class="fu">case_when</span>(     </span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>      </span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>      Residencia <span class="sc">%in%</span> <span class="fu">c</span>(</span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a>        <span class="st">'Buenos Aires'</span>, <span class="st">'Rosario'</span>, <span class="st">'Pcia. Enre Rios'</span>, <span class="st">'Otras Pcias. Argentinas'</span>, <span class="st">'Cordoba'</span>, <span class="st">'Otros Pcia. Santa Fe'</span>, <span class="st">'Otras Pcia Cordoba'</span>, <span class="st">'Otros Pcia. Bs. As.'</span>, <span class="st">'Corrientes'</span>) <span class="sc">~</span> <span class="st">'Argentina'</span>,          </span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a>      </span>
+<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a>      Residencia <span class="sc">%in%</span> <span class="fu">c</span>(      </span>
+<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a>        <span class="st">'Santa Catarina'</span>, <span class="st">'Otra  ciudades de Brasil'</span>, <span class="st">'San Pablo'</span>, <span class="st">'Rio Grande'</span>, <span class="st">'Porto Alegre'</span>, <span class="st">'Rio de Janeiro'</span>, <span class="st">'Pelotas - Rio Grande'</span>, <span class="st">'Otros San Pablo'</span>) <span class="sc">~</span> <span class="st">'Brasil'</span>,           </span>
+<span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a>      </span>
+<span id="cb20-12"><a href="#cb20-12" aria-hidden="true" tabindex="-1"></a>      Residencia <span class="sc">==</span> <span class="st">'Alemanai'</span><span class="sc">~</span> <span class="st">'Alemania'</span>,</span>
+<span id="cb20-13"><a href="#cb20-13" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb20-14"><a href="#cb20-14" aria-hidden="true" tabindex="-1"></a>      Residencia <span class="sc">==</span> <span class="st">'Sin Datos'</span> <span class="sc">~</span> <span class="cn">NA_character_</span>,          </span>
+<span id="cb20-15"><a href="#cb20-15" aria-hidden="true" tabindex="-1"></a>      </span>
+<span id="cb20-16"><a href="#cb20-16" aria-hidden="true" tabindex="-1"></a>      <span class="cn">TRUE</span> <span class="sc">~</span> Residencia   ))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Una vez que fue creada la variable <em>País_residencia</em>, será posible analizar cuáles son los principales países o regiones de residencia de los visitantes a través del comando <em>count.</em> Se creó una nueva columna con el valor expresado en porcentaje para facilitar la visualización.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Tabla de frecuencia de la variable Pais_residencia </span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>df1 <span class="sc">|&gt;</span>    </span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(Pais_residencia)) <span class="sc">|&gt;</span>    </span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(Pais_residencia, <span class="at">sort =</span> <span class="cn">TRUE</span>) <span class="sc">|&gt;</span>    </span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">porcentaje =</span> (n<span class="sc">/</span> <span class="fu">sum</span>(n)) <span class="sc">*</span><span class="dv">100</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 16 × 3
+   Pais_residencia               n porcentaje
+   &lt;chr&gt;                     &lt;int&gt;      &lt;dbl&gt;
+ 1 Argentina                 40105    61.4   
+ 2 Brasil                    14185    21.7   
+ 3 Europa                     2046     3.13  
+ 4 Chile                      1963     3.00  
+ 5 EEUU - Canada              1632     2.50  
+ 6 Paraguay                   1628     2.49  
+ 7 Otras ciudades America     1549     2.37  
+ 8 Otras ciudades Sudamerica   743     1.14  
+ 9 Ciudades de Asia            343     0.525 
+10 España                      322     0.493 
+11 Peru                        254     0.389 
+12 Mexico                      176     0.269 
+13 Colombia                    170     0.260 
+14 Alemania                    102     0.156 
+15 Ciudades Africa y Oceania    63     0.0964
+16 Reino Unido                  44     0.0674</code></pre>
+</div>
+</div>
+<p>A partir de la nueva variable construída, se observa que aproximadamente el 61% de los visitantes residen en Argentina, seguido por Brasil con alrededor de 21%. En proporciones considerablemente menores aparecen Europa (3,1%) y Chile (3,0%). Estos resultados muestran que el Turismo receptivo en Uruguay proviene principalmente de Argentina y Brasil.</p>
+<p>A modo de visualización, se construyó un gráfico de barrras con la función <em>ggplot</em> y <em>geom_col()</em>. El mismo representa la proporción de visitantes provenientes de cada país o región. En cuanto a la construcción del gráfico, el <em>Pais_residencia</em> corresponde a la abscisa y el <em>porcentaje de visitantes</em> corresponde a la ordenada.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a> <span class="co">#Gráfico de barras principales países o regiones de residencia </span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>df1 <span class="sc">|&gt;</span>    </span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(Pais_residencia)) <span class="sc">|&gt;</span>    </span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(Pais_residencia) <span class="sc">|&gt;</span>    </span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">porcentaje =</span> (n<span class="sc">/</span> <span class="fu">sum</span>(n)) <span class="sc">*</span><span class="dv">100</span>) <span class="sc">|&gt;</span>    </span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x=</span><span class="fu">reorder</span>(Pais_residencia, porcentaje), <span class="at">y =</span> porcentaje))<span class="sc">+</span>   </span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="at">fill=</span><span class="st">'steelblue'</span>)<span class="sc">+</span> </span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_flip</span>()<span class="sc">+</span>   </span>
+<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">'Pricipales países o regiones de residencia de los visitantes'</span>, <span class="at">x=</span> <span class="st">'País o Región'</span>, <span class="at">y=</span><span class="st">'Cantidad de visitantes'</span>)<span class="sc">+</span>   </span>
+<span id="cb23-10"><a href="#cb23-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">face =</span> <span class="st">'bold'</span>, <span class="at">size =</span><span class="dv">12</span>), <span class="at">legend.position =</span> <span class="st">'bottom'</span>)<span class="sc">+</span>   </span>
+<span id="cb23-11"><a href="#cb23-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Código-trabajo-final-Noseda-y-Santoro_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>1.2 Considerando la residencia de los visitantes por continente, ¿de qué continente provienen la mayoría de los visitantes?</p>
+<p>Los pasos para resolver esta pregunta son similares al caso anterior. En primer lugar se debe crear una nueva variable <em>Continente</em> donde se agruparán los países por continente. Al igual que en el caso previo, se utiliza la función <em>case_when</em> para agrupar los países en la categoría corespondiente: Europa, Asia, América del Sur, América del Norte, América Central, Oceanía, Africa.</p>
+<p>En primer lugar, visualizamos los valores únicos de la variable <em>Pais_residencia</em> mediante la función <em>unique,</em> con el fin de identificar las categorías presentes y definir los agrupamientos necesarios.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Valores únicos de las categorías presentes en variable Pais_residencia </span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="fu">unique</span>(df1<span class="sc">$</span>Pais_residencia)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] "Otras ciudades Sudamerica" "Brasil"                   
+ [3] "Paraguay"                  "Argentina"                
+ [5] "Europa"                    "EEUU - Canada"            
+ [7] "Chile"                     "Otras ciudades America"   
+ [9] "Ciudades de Asia"          NA                         
+[11] "Ciudades Africa y Oceania" "España"                   
+[13] "Colombia"                  "Alemania"                 
+[15] "Mexico"                    "Peru"                     
+[17] "Reino Unido"              </code></pre>
+</div>
+</div>
+<p>Una vez que tenemos todas las categorías posibles, creamos la variable continente</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Creamos variable continente </span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>df1 <span class="ot">=</span> df1 <span class="sc">|&gt;</span>    </span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(     </span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">Continente =</span> <span class="fu">case_when</span>(       </span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>      </span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>      Pais_residencia <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">'Otras ciudades Sudamerica'</span>, <span class="st">'Brasil'</span>,<span class="st">'Paraguay'</span>,<span class="st">'Argentina'</span>, <span class="st">'Chile'</span>, <span class="st">'Otras ciudades America'</span>, <span class="st">'Colombia'</span>,<span class="st">'Peru'</span>) <span class="sc">~</span> <span class="st">'América del Sur y Central'</span>,              </span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a>      </span>
+<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a>      Pais_residencia <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">'EEUU - Canada'</span>, <span class="st">'Mexico'</span>) <span class="sc">~</span> <span class="st">'América del Norte'</span>,              </span>
+<span id="cb26-9"><a href="#cb26-9" aria-hidden="true" tabindex="-1"></a>      Pais_residencia <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">'Europa'</span>, <span class="st">'Alemanai'</span>, <span class="st">'España'</span>, <span class="st">'Reino Unido'</span>) <span class="sc">~</span> <span class="st">'Europa'</span> ,              </span>
+<span id="cb26-10"><a href="#cb26-10" aria-hidden="true" tabindex="-1"></a>      </span>
+<span id="cb26-11"><a href="#cb26-11" aria-hidden="true" tabindex="-1"></a>      Pais_residencia <span class="sc">==</span> <span class="st">'Ciudades de Asia'</span> <span class="sc">~</span><span class="st">'Asia'</span>,       </span>
+<span id="cb26-12"><a href="#cb26-12" aria-hidden="true" tabindex="-1"></a>      Pais_residencia <span class="sc">==</span> <span class="st">'Ciudades Africa y Oceania'</span> <span class="sc">~</span><span class="st">'África y Oceanía'</span>       </span>
+<span id="cb26-13"><a href="#cb26-13" aria-hidden="true" tabindex="-1"></a>      )</span>
+<span id="cb26-14"><a href="#cb26-14" aria-hidden="true" tabindex="-1"></a>    )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Una vez que fue creada la variable Continente, es posible analizar de qué continente provienen la mayoría de los visitantes a través del comando <em>count.</em> Se creó una nueva columna con el valor expresado en porcentaje para facilitar la visualización.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a> <span class="co">#Tabla de frecuencia de variable Continente </span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>df1 <span class="sc">|&gt;</span>    </span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(Continente)) <span class="sc">|&gt;</span>    </span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(Continente, <span class="at">sort =</span> <span class="cn">TRUE</span>) <span class="sc">|&gt;</span>    </span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">porcentaje =</span> (n<span class="sc">/</span> <span class="fu">sum</span>(n)) <span class="sc">*</span><span class="dv">100</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 5 × 3
+  Continente                    n porcentaje
+  &lt;chr&gt;                     &lt;int&gt;      &lt;dbl&gt;
+1 América del Sur y Central 60597    92.9   
+2 Europa                     2412     3.70  
+3 América del Norte          1808     2.77  
+4 Asia                        343     0.526 
+5 África y Oceanía             63     0.0966</code></pre>
+</div>
+</div>
+<p>Frente a estos datos, puede observarse que una gran mayoría (92%) de los visitantes que ingresan a Uruguay, provienen de América del Sur y Central,. Luego, en una proporción significativamente menor provienen de Europa y América del Norte representando un 3,8% y 2,76% de los visitantes respectivamente.</p>
+<p>Finalmente creamos un gráfico representativo de la Proporción de visitantes por continente</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Gráfico proporción de visitantes por Continente </span></span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>df1 <span class="sc">|&gt;</span>    </span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(Continente)) <span class="sc">|&gt;</span>    </span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(Continente) <span class="sc">|&gt;</span>    </span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">porcentaje =</span> (n<span class="sc">/</span> <span class="fu">sum</span>(n)) <span class="sc">*</span><span class="dv">100</span>) <span class="sc">|&gt;</span>    </span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x=</span><span class="fu">reorder</span>(Continente, porcentaje), <span class="at">y =</span> porcentaje))<span class="sc">+</span>   </span>
+<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="at">fill=</span><span class="st">'steelblue'</span>)<span class="sc">+</span> <span class="fu">coord_flip</span>()<span class="sc">+</span>   </span>
+<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">'Proporción de visitantes por continente'</span>, <span class="at">x=</span> <span class="st">'Continente'</span>, <span class="at">y=</span><span class="st">'Porcentaje de visitantes'</span>)<span class="sc">+</span>   </span>
+<span id="cb29-9"><a href="#cb29-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">face =</span> <span class="st">'bold'</span>, <span class="at">size =</span><span class="dv">12</span>), <span class="at">legend.position =</span> <span class="st">'bottom'</span>)<span class="sc">+</span>   </span>
+<span id="cb29-10"><a href="#cb29-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Código-trabajo-final-Noseda-y-Santoro_files/figure-html/unnamed-chunk-16-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>1.3 Durante 2016 a 2024, ¿en qué meses del año ingresaron más turistas?</p>
+<p>Teniendo en cuenta que se pretende analizar los meses del año en los que ingresan más turistas, se deberá trabajar con la variable <em>FechaIngreso</em> que refiere a la fecha de Ingreso al país. Como fue mencionado en la sección anterioe, la informacion está expresada en formato fecha, por lo que no es necesario convertir la variable y se puede extraer el mes directamente. Para extraer el mes de la fecha, se creó una nueva variable con los meses: 12 niveles con sus respectivos nombres (labels). Previo a ello, fue necesario convertir la variable a factor.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Creamos variable Meses </span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>df1 <span class="ot">=</span> df1 <span class="sc">|&gt;</span>    </span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(     </span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">Mes =</span> <span class="fu">factor</span>(       </span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a>      <span class="fu">month</span>(FechaIngreso),       </span>
+<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a>      <span class="at">levels =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">12</span>,       </span>
+<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a>      <span class="at">labels =</span> <span class="fu">c</span>(         </span>
+<span id="cb30-8"><a href="#cb30-8" aria-hidden="true" tabindex="-1"></a>        <span class="st">'Enero'</span>, <span class="st">'Febrero'</span>, <span class="st">'Marzo'</span>, <span class="st">'Abril'</span>, <span class="st">'Mayo'</span>, <span class="st">'Junio'</span>,<span class="st">'Julio'</span>, <span class="st">'Agosto'</span>, <span class="st">'Setiembre'</span>, <span class="st">'Octubre'</span>, <span class="st">'Noviembre'</span>, <span class="st">'Diciembre'</span>)   </span>
+<span id="cb30-9"><a href="#cb30-9" aria-hidden="true" tabindex="-1"></a>      )</span>
+<span id="cb30-10"><a href="#cb30-10" aria-hidden="true" tabindex="-1"></a>    )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Una vez que fue creada la nueva variable <em>Mes</em>, es posible analizar el flujo de visitantes que ingresaron al país durante 2016-2024, dependiendo del mes, a través del comando <em>count.</em> Se creó una nueva columna con el valor expresado en porcentaje para facilitar la visualización.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a> <span class="co">#Cantidad de visitantes que Ingresan al país por mes  </span></span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>df1 <span class="sc">|&gt;</span>    </span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(Mes) <span class="sc">|&gt;</span>    </span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">porcentaje =</span> n <span class="sc">/</span> <span class="fu">sum</span>(n)<span class="sc">*</span> <span class="dv">100</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 12 × 3
+   Mes           n porcentaje
+   &lt;fct&gt;     &lt;int&gt;      &lt;dbl&gt;
+ 1 Enero      8689      13.3 
+ 2 Febrero    7637      11.7 
+ 3 Marzo      6096       9.33
+ 4 Abril      4798       7.34
+ 5 Mayo       4160       6.37
+ 6 Junio      4707       7.20
+ 7 Julio      5024       7.69
+ 8 Agosto     4472       6.84
+ 9 Setiembre  4653       7.12
+10 Octubre    4073       6.23
+11 Noviembre  4566       6.99
+12 Diciembre  6458       9.88</code></pre>
+</div>
+</div>
+<p>Y luego construímos un gráfico de barras para visualizar los datos</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Gráfico de barras de la cantidad promedio de visitantes que ingresaron al país desagregada por mes durante el período 2016-2024  </span></span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>df1 <span class="sc">|&gt;</span>    </span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(Mes) <span class="sc">|&gt;</span>    </span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">porcentaje =</span> n <span class="sc">/</span> <span class="fu">sum</span>(n)<span class="sc">*</span> <span class="dv">100</span>) <span class="sc">|&gt;</span>   </span>
+<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x=</span>Mes, <span class="at">y =</span> porcentaje))<span class="sc">+</span>   </span>
+<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="at">fill=</span><span class="st">'steelblue'</span>)<span class="sc">+</span>   </span>
+<span id="cb33-7"><a href="#cb33-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">'Cantidad promedio de visitantes que ingresaron al país por mes durante 2016-2024'</span>, <span class="at">x=</span> <span class="st">'Mes'</span>, <span class="at">y=</span><span class="st">'Porcentaje de visitantes'</span>)<span class="sc">+</span>   </span>
+<span id="cb33-8"><a href="#cb33-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">face =</span> <span class="st">'bold'</span>, <span class="at">size =</span><span class="dv">12</span>), <span class="at">legend.position =</span> <span class="st">'bottom'</span>)<span class="sc">+</span>   </span>
+<span id="cb33-9"><a href="#cb33-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Código-trabajo-final-Noseda-y-Santoro_files/figure-html/unnamed-chunk-19-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Al observar la tabla de frecuencias absoluta y relativa y el gráfico de barras referido a la cantidad de visitantes que ingresaron al país desagregado por mes, es posible extraer ciertas conclusiones. Durante el período 2016-2024, la mayoría de los visitantes ingresaron al país durante el verano, es decir: Diciembre, Enero y Febrero. Los mayores ingresos se concentran en Enero mientras que Mayo y Octubre fueron los meses con menor entrada de visitantes al Uruguay. Mientras que el mes de Diciembre y el primer trimestre del año concentran el mayor flujo de entradas, el resto del año es relativamente constante.</p>
+<p>Por su parte, si se quiere analizar si existe un mismo patron en el flujo de entrada de los visitantes a lo largo de los años 2016-2024, se puede desagregar por año. Para ello primero se debe crear una variable Año extrayendo el año de la variable <em>FechaIngreso.</em></p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Creamos la variable año </span></span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>df1 <span class="ot">=</span> df1 <span class="sc">|&gt;</span>    </span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(     </span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a>    Año <span class="ot">=</span> <span class="fu">year</span>(FechaIngreso)  </span>
+<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a>    )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Una vez que se creó la variable año, es posible realizar un gráfico de líneas por cada año para visualizar cómo varía la entrada de visitantes al país por mes dependiendo de cada año. Para ello se utilizó la función <em>geom_point</em> y <em>geom_line</em> ya que es una variable continua.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Visualización de la entrada de visitantes al país durante cada año del 2016-</span></span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>df1 <span class="sc">|&gt;</span>    </span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(Año, Mes) <span class="sc">|&gt;</span>    </span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">porcentaje=</span>n<span class="sc">/</span><span class="fu">sum</span>(n)<span class="sc">*</span><span class="dv">100</span>) <span class="sc">|&gt;</span>    </span>
+<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x=</span>Mes, <span class="at">y=</span>porcentaje, <span class="at">color=</span><span class="fu">factor</span>(Año), <span class="at">group=</span>Año))<span class="sc">+</span> </span>
+<span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>()<span class="sc">+</span> </span>
+<span id="cb35-7"><a href="#cb35-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>()<span class="sc">+</span>   </span>
+<span id="cb35-8"><a href="#cb35-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">'Proporción de visitantes que ingresaron al país por mes durante 2016-2024'</span>, <span class="at">x=</span> <span class="st">'Mes'</span>, <span class="at">y=</span><span class="st">'Porcentaje de visitantes'</span>, <span class="at">color=</span> <span class="st">'Año'</span>)<span class="sc">+</span>   </span>
+<span id="cb35-9"><a href="#cb35-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">face =</span> <span class="st">'bold'</span>, <span class="at">size =</span><span class="dv">12</span>), <span class="at">legend.position =</span> <span class="st">'bottom'</span>)<span class="sc">+</span>   </span>
+<span id="cb35-10"><a href="#cb35-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Código-trabajo-final-Noseda-y-Santoro_files/figure-html/unnamed-chunk-21-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>A partir de este gráfico se puede concluir que, a pesar de que los datos varían año a año, existe cierta estacionalidad. Es notorio que los meses con mayor ingreso de visitantes son Diciembre, Enero, Febrero. Por su parte, a partir de marzo 2020 a octubre 2021 no hubo entrada de visitantes debido a la pandemia por el COVID-19.</p>
+<p>2.1 ¿Cuál es el principal motivo del viaje?</p>
+<p>Para analizar cuál es el principal motivo del viaje se puede realizar una tabla de frecuencias relativas y absolutas como en los casos anteriores y luego vizualizar los resultados mediante un gráfico de barras.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Tabla de frecuencias relativas y absolutas del motivo del viaje </span></span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>df1 <span class="sc">|&gt;</span>    </span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(Motivo, <span class="at">sort =</span> <span class="cn">TRUE</span>) <span class="sc">|&gt;</span>    </span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">porcentaje =</span> n<span class="sc">/</span><span class="fu">sum</span>(n)<span class="sc">*</span> <span class="dv">100</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 11 × 3
+   Motivo                           n porcentaje
+   &lt;chr&gt;                        &lt;int&gt;      &lt;dbl&gt;
+ 1 Ocio y vacaciones            36248     55.5  
+ 2 Visita a familiares y amigos 15282     23.4  
+ 3 Trabajo / Profesional         6397      9.79 
+ 4 Transito                      3111      4.76 
+ 5 Segunda Residencia            2161      3.31 
+ 6 Otros                         1022      1.56 
+ 7 Estudios                       292      0.447
+ 8 Salud / wellness               277      0.424
+ 9 Compras                        249      0.381
+10 Religioso                      193      0.295
+11 MICE                           101      0.155</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Gráfico motivo de viaje de los visitantes </span></span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>df1 <span class="sc">|&gt;</span>    <span class="fu">count</span>(Motivo, <span class="at">sort =</span> <span class="cn">TRUE</span>) <span class="sc">|&gt;</span>    </span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">porcentaje =</span> (n<span class="sc">/</span> <span class="fu">sum</span>(n)) <span class="sc">*</span><span class="dv">100</span>) <span class="sc">|&gt;</span>    </span>
+<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x=</span><span class="fu">reorder</span>(Motivo, porcentaje), <span class="at">y =</span> porcentaje))<span class="sc">+</span>   </span>
+<span id="cb38-5"><a href="#cb38-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="at">fill=</span><span class="st">'steelblue'</span>)<span class="sc">+</span> </span>
+<span id="cb38-6"><a href="#cb38-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_flip</span>()<span class="sc">+</span>   </span>
+<span id="cb38-7"><a href="#cb38-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">'Motivo de viaje de los visitantes durante 2016-2024'</span>, <span class="at">x=</span> <span class="st">'Motivo del viaje'</span>, <span class="at">y=</span><span class="st">'Porcentaje de visitantes'</span>)<span class="sc">+</span>   </span>
+<span id="cb38-8"><a href="#cb38-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">face =</span> <span class="st">'bold'</span>, <span class="at">size =</span><span class="dv">12</span>), <span class="at">legend.position =</span> <span class="st">'bottom'</span>)<span class="sc">+</span>   </span>
+<span id="cb38-9"><a href="#cb38-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Código-trabajo-final-Noseda-y-Santoro_files/figure-html/unnamed-chunk-23-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Al observar los resultados, es posible concluir que el principal motivo del viaje es por ocio y vacaciones y más de la mitad de los visitantes han ingresado al país por este motivo. Por su parte, la visita a familiares y amigos es el segundo motivo más importante, lo cual tiene lógica porque comose vio anteriormente, una gran proporción de los visitantes son de nacionalidad uruguaya. Seguido a esto pero en una menor proporción, el trabajo es un motivo recurrente entre los visitantes dado que mas de 9% de los visitantes entran al país por dicho motivo. Finalmente, una mínima, proporción de visitantes (menor al 0.5% en cada caso) ingresan por estudios, compras, por motivos de salud, religiosos o de MICE (Meetings, Incentives, Conferences and Exhibitions).</p>
+<p>2.2 ¿Cómo varía el motivo del viaje según el destino elegido?</p>
+<p>Para responder esta pregunta, se estudió conjuntamente la variable “Motivo” que indica la razón principal del viaje y la variable “Destino”, que identifica el principal destino visitado durante la estadía.</p>
+<p>En primer lugar, se analizaron las categorías existentes en ambas variables mediante la función <em>unique</em> para reconocerlas.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a> <span class="fu">unique</span>(df1<span class="sc">$</span>Motivo) </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] "Otros"                        "Ocio y vacaciones"           
+ [3] "Trabajo / Profesional"        "Visita a familiares y amigos"
+ [5] "Segunda Residencia"           "Estudios"                    
+ [7] "Salud / wellness"             "Compras"                     
+ [9] "Religioso"                    "Transito"                    
+[11] "MICE"                        </code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a> <span class="fu">unique</span>(df1<span class="sc">$</span>Destino)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "Montevideo"       "Punta del Este"   "Piriapolis"       "Costas Oceanicas"
+[5] "Colonia"          "Costa de Oro"     "Otros"            "Litoral Termal"  
+[9] "Transito"        </code></pre>
+</div>
+</div>
+<p>Podemos observar que las categorías de motivos de viaje son 11, mientras que los destinos de viaje se concentran en 9, mayoritariamente en la capital y el este del país, aunque también hay destinos como Colonia o el Litoral Termal. En el caso de los destinos, también se encuentra la categoría “Tránsito”, que refiere a las personas que ingresan al país, pero debido a una conexión, siendo su destino final fuera de Uruguay. En ambas categorías se encuentra el grupo “Otros” que refiere a motivos o destinos diferentes a los de las categorías, pero que no se cuenta con suficientes observaciones como para generar una nueva, por lo que se agrupan.</p>
+<p>Para verificar si existen datos faltantes en ambas variables, se utilizó la función <em>sum</em> junto con <em>is.na</em> para, en caso de que existan, se genere un conteo de cuántas variables son en cada caso.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>df1 <span class="sc">|&gt;</span>   </span>
+<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>( </span>
+<span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">faltantes_motivo =</span> <span class="fu">sum</span>(<span class="fu">is.na</span>(Motivo)), </span>
+<span id="cb43-4"><a href="#cb43-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">faltantes_destino =</span> <span class="fu">sum</span>(<span class="fu">is.na</span>(Destino))</span>
+<span id="cb43-5"><a href="#cb43-5" aria-hidden="true" tabindex="-1"></a>    )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1 × 2
+  faltantes_motivo faltantes_destino
+             &lt;int&gt;             &lt;int&gt;
+1                0                 0</code></pre>
+</div>
+</div>
+<p>La salida de R indica que no existen datos faltantes para las categorías.</p>
+<p>Para un primer análisis exploratorio, se construyó una tabla de frecuencias relativas por motivo y destino del viaje, que permite identificar las principales combinaciones de variables y qué porcentaje dentro del total de las observaciones por destino corresponden a los distintos motivos.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a> <span class="co"># Frecuencias relativas de los motivos dentro de cada destino</span></span>
+<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a>tabla_destino_motivo <span class="ot">=</span> df1 <span class="sc">|&gt;</span> </span>
+<span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(Destino, Motivo, <span class="at">name =</span> <span class="st">"cantidad"</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb45-4"><a href="#cb45-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Destino)  <span class="sc">|&gt;</span>      </span>
+<span id="cb45-5"><a href="#cb45-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>( </span>
+<span id="cb45-6"><a href="#cb45-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">total_destino =</span> <span class="fu">sum</span>(cantidad), <span class="at">porcentaje =</span> cantidad <span class="sc">/</span> total_destino <span class="sc">*</span> <span class="dv">100</span> ) <span class="sc">|&gt;</span>   <span class="fu">ungroup</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb45-7"><a href="#cb45-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(Destino, <span class="fu">desc</span>(porcentaje)) </span>
+<span id="cb45-8"><a href="#cb45-8" aria-hidden="true" tabindex="-1"></a>tabla_destino_motivo</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 73 × 5
+   Destino Motivo                       cantidad total_destino porcentaje
+   &lt;chr&gt;   &lt;chr&gt;                           &lt;int&gt;         &lt;int&gt;      &lt;dbl&gt;
+ 1 Colonia Ocio y vacaciones                4822          6530    73.8   
+ 2 Colonia Visita a familiares y amigos     1121          6530    17.2   
+ 3 Colonia Trabajo / Profesional             302          6530     4.62  
+ 4 Colonia Segunda Residencia                153          6530     2.34  
+ 5 Colonia Otros                             100          6530     1.53  
+ 6 Colonia Estudios                           11          6530     0.168 
+ 7 Colonia Religioso                          10          6530     0.153 
+ 8 Colonia Salud / wellness                    8          6530     0.123 
+ 9 Colonia MICE                                2          6530     0.0306
+10 Colonia Compras                             1          6530     0.0153
+# ℹ 63 more rows</code></pre>
+</div>
+</div>
+<p>En primer lugar, en la columna “total_destino” podemos extraer información respecto de los principales destinos de viaje, que son Montevideo (con un total de 21.610 casos de las 65.333 observaciones, aproximadamente 1/3) y Punta del Este. Cabe destacar que las observaciones de Punta del Este son casi la mitad que las de Montevideo (11.924). A estos destinos les siguen el Litoral Termal, con 9.702 observaciones y Colonia, con 6.530 observaciones. Si bien estos destinos son los que atraen a la mayor parte de turistas, la proporción es considerablemente menor que en Montevideo.</p>
+<p>Por otro lado, el principal motivo de viaje en casi todos los destinos es “Ocio y vacaciones”, concentrando al menos la mitad de las observaciones en cada lugar, aunque en algunos destinos como Colonia, las Costas Oceánicas, Piriápolis y Punta del Este representan entre el 74% y el 84%, lo cual podemos observar a través de la columna “porcentaje”.</p>
+<p>La categoría “Visita a familiares y amigos” es la segunda en relevancia en la mayoría de los destinos, aunque en cuanto a la categoría de “Tránsito”, casi el 100% tiene este mismo motivo de viaje, lo cual no es relevante para el análisis, porque estos pasajeros no tienen a Uruguay como destino final.</p>
+<p>Para visualizar la composición e incidencia de los motivos del viaje en cada destino, se realizó un gráfico de barras apiladas. En este, cada barra representa un destino, y los diferentes colores el segmento de proporción correspondiente a cada motivo del viaje. Cabe aclarar, que cada barra suma 100% y no corresponden al porcentaje del total de observaciones, pero es la mejor manera de poder observar el motivo más frecuente dentro de cada destinto y comparar entre ellos. Para esto se utilizó el argumento position=“fill” dentro de geom_bar().</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a> <span class="co"># Gráfico de barras apiladas  </span></span>
+<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a>df1 <span class="sc">|&gt;</span>   </span>
+<span id="cb47-3"><a href="#cb47-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> Destino, <span class="at">fill =</span> Motivo)) <span class="sc">+</span>   </span>
+<span id="cb47-4"><a href="#cb47-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">position =</span> <span class="st">"fill"</span>) <span class="sc">+</span>   </span>
+<span id="cb47-5"><a href="#cb47-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_flip</span>() <span class="sc">+</span>   </span>
+<span id="cb47-6"><a href="#cb47-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">labels =</span> scales<span class="sc">::</span><span class="fu">percent_format</span>(<span class="at">accuracy =</span> <span class="dv">1</span>) )<span class="sc">+</span>  </span>
+<span id="cb47-7"><a href="#cb47-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_brewer</span>(<span class="at">palette=</span><span class="st">"Set3"</span>) <span class="sc">+</span>   </span>
+<span id="cb47-8"><a href="#cb47-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>( <span class="at">title =</span> <span class="st">"Motivos del viaje según el destino elegido"</span>, <span class="at">subtitle =</span> <span class="st">"Distribución porcentual de los motivos dentro de cada destino, 2016-2024"</span>, <span class="at">x =</span> <span class="st">"Destino"</span>, <span class="at">y =</span> <span class="st">"Porcentaje de visitantes"</span>, <span class="at">fill =</span> <span class="st">"Motivo del viaje"</span> ) <span class="sc">+</span></span>
+<span id="cb47-9"><a href="#cb47-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span>   </span>
+<span id="cb47-10"><a href="#cb47-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>( <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">face =</span> <span class="st">"bold"</span>, <span class="at">size =</span> <span class="dv">12</span>), <span class="at">legend.position =</span> <span class="st">"bottom"</span> )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Código-trabajo-final-Noseda-y-Santoro_files/figure-html/unnamed-chunk-27-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>El gráfico de barras apiladas permite observar lo analizado anteriormente. Sin embargo, no deja claras las cantidades absolutas respecto del total de observaciones. En este sentido, se agregó un complemento que grafica las cantidades absolutas, lo cual permite visualizar de manera simultánea los motivos y las diferencias en el número de observaciones por destino.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a> df1 <span class="sc">|&gt;</span> </span>
+<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a>   <span class="fu">count</span>(Destino, Motivo) <span class="sc">|&gt;</span> </span>
+<span id="cb48-3"><a href="#cb48-3" aria-hidden="true" tabindex="-1"></a>   <span class="fu">ggplot</span>( <span class="fu">aes</span>( <span class="at">x =</span> <span class="fu">reorder</span>(Destino, n, <span class="at">FUN =</span> sum), <span class="at">y =</span> n, <span class="at">fill =</span> Motivo ) ) <span class="sc">+</span></span>
+<span id="cb48-4"><a href="#cb48-4" aria-hidden="true" tabindex="-1"></a>   <span class="fu">geom_col</span>() <span class="sc">+</span> </span>
+<span id="cb48-5"><a href="#cb48-5" aria-hidden="true" tabindex="-1"></a>   <span class="fu">coord_flip</span>() <span class="sc">+</span> </span>
+<span id="cb48-6"><a href="#cb48-6" aria-hidden="true" tabindex="-1"></a>   <span class="fu">labs</span>( <span class="at">title =</span> <span class="st">"Cantidad de visitantes según destino y motivo del viaje"</span>, <span class="at">subtitle =</span> <span class="st">"Turismo receptivo en Uruguay, 2016-2024"</span>, <span class="at">x =</span> <span class="st">"Destino"</span>, <span class="at">y =</span> <span class="st">"Cantidad de observaciones"</span>, <span class="at">fill =</span> <span class="st">"Motivo del viaje"</span> ) <span class="sc">+</span> </span>
+<span id="cb48-7"><a href="#cb48-7" aria-hidden="true" tabindex="-1"></a>   <span class="fu">theme_minimal</span>() <span class="sc">+</span> </span>
+<span id="cb48-8"><a href="#cb48-8" aria-hidden="true" tabindex="-1"></a>   <span class="fu">theme</span>( <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">face =</span> <span class="st">"bold"</span>, <span class="at">size =</span> <span class="dv">12</span>), <span class="at">legend.position =</span> <span class="st">"bottom"</span> )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Código-trabajo-final-Noseda-y-Santoro_files/figure-html/unnamed-chunk-28-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>En conclusión, podemos afirmar que, a grandes rasgos, no existen diferencias significativas en los motivos del viaje según el destino.</p>
+<p>2.3 ¿Cómo varía el destino elegido según la región de residencia del visitante?</p>
+<p>Para responder esta pregunta, se utilizó principalmente la variable “Continente”, creada a partir del país o región de residencia y su relación con la variable “Destino”.</p>
+<p>En primer lugar, sabemos que la variable “Continente” tiene datos faltantes, por lo cual se usó “filter(!is.na())” para excluir estos datos del análisis.</p>
+<p>Al igual que en el caso anterior, construimos una tabla de frecuencias relativas, para conocer cómo se distribuyen las observaciones según las distintas combinaciones de continente y destino. Para esto, se agruparon las observaciones según la variable “Continente” y se creó la columna de “porcentaje”, para poder observar qué parte del total de las observaciones por continente corresponde a cada destino.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a>tabla_continente_destino <span class="ot">=</span> df1  <span class="sc">|&gt;</span> </span>
+<span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(Continente) )  <span class="sc">|&gt;</span>     </span>
+<span id="cb49-3"><a href="#cb49-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(Continente, Destino, <span class="at">name =</span> <span class="st">"cantidad"</span>)  <span class="sc">|&gt;</span>     </span>
+<span id="cb49-4"><a href="#cb49-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Continente)  <span class="sc">|&gt;</span> </span>
+<span id="cb49-5"><a href="#cb49-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>( </span>
+<span id="cb49-6"><a href="#cb49-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">total_continente =</span> <span class="fu">sum</span>(cantidad), </span>
+<span id="cb49-7"><a href="#cb49-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">porcentaje =</span> cantidad <span class="sc">/</span> total_continente <span class="sc">*</span> <span class="dv">100</span> )  <span class="sc">|&gt;</span> </span>
+<span id="cb49-8"><a href="#cb49-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>()  <span class="sc">|&gt;</span> </span>
+<span id="cb49-9"><a href="#cb49-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(Continente, <span class="fu">desc</span>(porcentaje)) </span>
+<span id="cb49-10"><a href="#cb49-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-11"><a href="#cb49-11" aria-hidden="true" tabindex="-1"></a>tabla_continente_destino</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 42 × 5
+   Continente                Destino        cantidad total_continente porcentaje
+   &lt;chr&gt;                     &lt;chr&gt;             &lt;int&gt;            &lt;int&gt;      &lt;dbl&gt;
+ 1 América del Norte         Montevideo         1127             1808     62.3  
+ 2 América del Norte         Colonia             328             1808     18.1  
+ 3 América del Norte         Punta del Este      187             1808     10.3  
+ 4 América del Norte         Costa de Oro         47             1808      2.60 
+ 5 América del Norte         Costas Oceani…       39             1808      2.16 
+ 6 América del Norte         Otros                39             1808      2.16 
+ 7 América del Norte         Piriapolis           26             1808      1.44 
+ 8 América del Norte         Litoral Termal        8             1808      0.442
+ 9 América del Norte         Transito              7             1808      0.387
+10 América del Sur y Central Montevideo        18814            60597     31.0  
+# ℹ 32 more rows</code></pre>
+</div>
+</div>
+<p>Como se puede observar, la gran mayoría de los turistas provienen de América del Sur y Central (93%), y el resto de los continentes componen el 7% de las observaciones. A grandes rasgos, podemos afirmar que el destino visitado en Uruguay no cambia sustancialmente según el continente de proveniencia: la mayoría visitan Montevideo y luego Colonia o Punta del Este.</p>
+<p>Para visualizar la distribución, se construyó un gráfico de barras apiladas al 100%, tal y como se realizó en el punto anterior:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb51"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Gráfico de barras apiladas al 100%  </span></span>
+<span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a>df1  <span class="sc">|&gt;</span> </span>
+<span id="cb51-3"><a href="#cb51-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>( <span class="sc">!</span><span class="fu">is.na</span>(Continente), <span class="sc">!</span><span class="fu">is.na</span>(Destino) )  <span class="sc">|&gt;</span> </span>
+<span id="cb51-4"><a href="#cb51-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> Continente, <span class="at">fill =</span> Destino))<span class="sc">+</span>   </span>
+<span id="cb51-5"><a href="#cb51-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">position =</span> <span class="st">"fill"</span>) <span class="sc">+</span> </span>
+<span id="cb51-6"><a href="#cb51-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_flip</span>() <span class="sc">+</span>   </span>
+<span id="cb51-7"><a href="#cb51-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>( <span class="at">labels =</span> scales<span class="sc">::</span><span class="fu">percent_format</span>(<span class="at">accuracy =</span> <span class="dv">1</span>) ) <span class="sc">+</span>   </span>
+<span id="cb51-8"><a href="#cb51-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>( <span class="at">title =</span> <span class="st">"Destino elegido según la región de residencia"</span>, <span class="at">subtitle =</span> <span class="st">"Distribución porcentual de los destinos dentro de cada región, 2016-2024"</span>, <span class="at">x =</span> <span class="st">"Región de residencia"</span>, <span class="at">y =</span> <span class="st">"Porcentaje de visitantes"</span>, <span class="at">fill =</span> <span class="st">"Destino"</span> ) <span class="sc">+</span>   </span>
+<span id="cb51-9"><a href="#cb51-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span>   </span>
+<span id="cb51-10"><a href="#cb51-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>( <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">face =</span> <span class="st">"bold"</span>, <span class="at">size =</span> <span class="dv">12</span>), <span class="at">legend.position =</span> <span class="st">"bottom"</span> )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Código-trabajo-final-Noseda-y-Santoro_files/figure-html/unnamed-chunk-30-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Lo observado en el gráfico coincide con el análisis: la amplia mayoría de turistas, independientemente de su proveniencia, viajan a Montevideo, y dependiendo del continente, el segundo lugar más visitado es Punta del Este (América del Sur y Central, África y Oceanía) o Colonia (Europa, Asia, América del Norte).</p>
+<ol start="3" type="1">
+<li><u>Estadía</u></li>
+</ol>
+<p>3.1 ¿Cómo se distribuye la duración de la estadía y cuál es su duración promedio?</p>
+<p>Para analizar la distribución de la duración de la estadía, se calcularon medidas de resumen como la media, la mediana, el desvío estándar,los cuartiles, el máximo y el mínimo, utilizando el verbo <em>summarise()</em>. Posteriormente, el análisis se complementó con visualizaciones que permiten estudiar la forma de la distribución y detectar posible presencia de valores atípicos.</p>
+<p>Dado que ya existe una variable llamada <em>Estadía</em> que corresponde a los días que permanecen los visitantes en nuestro país, las medidas de resumen se calcularon sobre dicha variable.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb52"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Caluclamos la distribución de la duración de la estadía </span></span>
+<span id="cb52-2"><a href="#cb52-2" aria-hidden="true" tabindex="-1"></a>dist_estadia <span class="ot">=</span> df1 <span class="sc">|&gt;</span>    </span>
+<span id="cb52-3"><a href="#cb52-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(     </span>
+<span id="cb52-4"><a href="#cb52-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">estadia_promedio=</span><span class="fu">mean</span>(Estadia, <span class="at">na.rm=</span><span class="cn">TRUE</span>),     </span>
+<span id="cb52-5"><a href="#cb52-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">mediana_estadia =</span> <span class="fu">median</span>(Estadia, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),     </span>
+<span id="cb52-6"><a href="#cb52-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">desvio_estadia=</span> <span class="fu">sd</span>(Estadia, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),     </span>
+<span id="cb52-7"><a href="#cb52-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">q1_estadia=</span> <span class="fu">quantile</span>(Estadia, <span class="fl">0.25</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),     </span>
+<span id="cb52-8"><a href="#cb52-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">q3_estadia=</span> <span class="fu">quantile</span>(Estadia, <span class="fl">0.75</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),     </span>
+<span id="cb52-9"><a href="#cb52-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">min_estadia=</span> <span class="fu">min</span>(Estadia, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),     </span>
+<span id="cb52-10"><a href="#cb52-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">max_estadia=</span> <span class="fu">max</span>(Estadia, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)   ) </span>
+<span id="cb52-11"><a href="#cb52-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb52-12"><a href="#cb52-12" aria-hidden="true" tabindex="-1"></a>dist_estadia</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1 × 7
+  estadia_promedio mediana_estadia desvio_estadia q1_estadia q3_estadia
+             &lt;dbl&gt;           &lt;dbl&gt;          &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;
+1             5.70               4           6.66          3          7
+# ℹ 2 more variables: min_estadia &lt;dbl&gt;, max_estadia &lt;dbl&gt;</code></pre>
+</div>
+</div>
+<p>Las medidas de resumen muestran que la estadía promedio de los visitantes es de 5,7 días mientras que la mediana es de 4 días. Asimismo, el 50% central de los visitantes permanece en el país entre 3 y 7 días de acuerdo con el primer y tercer cuartil. La estadía mínima registrada es de medio día y la máxima alcanza los 365 días.</p>
+<p>Por otra parte, la media es superior a la mediana, lo que indica una distribución con asimetría positiva. Esto sugiere un número reducido de visitantes con estadías considerablemente más largas que el resto, elevando el promedio.</p>
+<p>Para visualizar la distribuición de la duración de la estadía se construyó un gráfico de barras, donde cada barra represente el número de visitantes para cada número de días de permanencia. Sin embargo, el gráfico resulta poco informativo debido a la existencia de algunas estadías muy prolongadas que expanden la escala del eje horizontal y dificultan la visualización de la distribución para la mayoría de los visitantes:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb54"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a>  <span class="co">#Construimos gráfico de barras de la distribución de la estadía de los visitantes</span></span>
+<span id="cb54-2"><a href="#cb54-2" aria-hidden="true" tabindex="-1"></a>   df1 <span class="sc">|&gt;</span>    </span>
+<span id="cb54-3"><a href="#cb54-3" aria-hidden="true" tabindex="-1"></a>     <span class="fu">count</span>(Estadia) <span class="sc">|&gt;</span>    </span>
+<span id="cb54-4"><a href="#cb54-4" aria-hidden="true" tabindex="-1"></a>     <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x=</span><span class="fu">factor</span>(Estadia), <span class="at">y=</span>n))<span class="sc">+</span> </span>
+<span id="cb54-5"><a href="#cb54-5" aria-hidden="true" tabindex="-1"></a>     <span class="fu">geom_col</span>(<span class="at">fill=</span><span class="st">'steelblue'</span>)<span class="sc">+</span>   </span>
+<span id="cb54-6"><a href="#cb54-6" aria-hidden="true" tabindex="-1"></a>     <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">'Distribución de la estadía de los visitantes'</span>, <span class="at">x=</span><span class="st">'Días de estadía'</span>, <span class="at">y=</span><span class="st">'Cantidad de visitantes'</span>)<span class="sc">+</span> </span>
+<span id="cb54-7"><a href="#cb54-7" aria-hidden="true" tabindex="-1"></a>     <span class="fu">theme</span>(<span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">face=</span><span class="st">'bold'</span>, <span class="at">size=</span><span class="dv">12</span>), <span class="at">legend.position =</span> <span class="st">'bottom'</span>)<span class="sc">+</span> </span>
+<span id="cb54-8"><a href="#cb54-8" aria-hidden="true" tabindex="-1"></a>     <span class="fu">theme_minimal</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Código-trabajo-final-Noseda-y-Santoro_files/figure-html/unnamed-chunk-32-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Con el objetivo de facilitar la interpretación del gráfico, consideramos pertinente limitar la escala a un máximo de 20 días. Esta decisión no implica eliminar observaciones del análisis, sino únicamente restringir la escala del eje horizontal mediante <em>coord_cartesian().</em></p>
+<p>Antes de limitar la escala del gráfico se verificó que solamente un 1,7% de los visitantes permanecen en el país por un período mayor a 20 días sumando la cantidad de observaciones cuyo valor en la variable <em>Estadía</em> era mayor que 20 a través de la función <em>sum</em>, sin tomar en cuenta lo datos faltantes. Luego se calculó la proporción que representaban respecto al total de observaciones.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb55"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Proporción de visitantes con estadías mayores a 20 días </span></span>
+<span id="cb55-2"><a href="#cb55-2" aria-hidden="true" tabindex="-1"></a>df1 <span class="sc">|&gt;</span>    </span>
+<span id="cb55-3"><a href="#cb55-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(     </span>
+<span id="cb55-4"><a href="#cb55-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">total =</span> <span class="fu">sum</span>(<span class="sc">!</span><span class="fu">is.na</span>(Estadia)),     </span>
+<span id="cb55-5"><a href="#cb55-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">masde20 =</span> <span class="fu">sum</span>(Estadia <span class="sc">&gt;</span> <span class="dv">20</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),     </span>
+<span id="cb55-6"><a href="#cb55-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">prop_masde20 =</span> masde20 <span class="sc">/</span> total   </span>
+<span id="cb55-7"><a href="#cb55-7" aria-hidden="true" tabindex="-1"></a>    )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1 × 3
+  total masde20 prop_masde20
+  &lt;int&gt;   &lt;int&gt;        &lt;dbl&gt;
+1 65333    1092       0.0167</code></pre>
+</div>
+</div>
+<p>Por lo tanto el gráfico acotado representa aproximadamente el 98,3% de las observaciones y permite apreciar con mayor claridad la distribución de la variable.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb57"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Gráfico de la distribución de la duración de la estadía con escala acotada</span></span>
+<span id="cb57-2"><a href="#cb57-2" aria-hidden="true" tabindex="-1"></a>df1 <span class="sc">|&gt;</span>    </span>
+<span id="cb57-3"><a href="#cb57-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(Estadia) <span class="sc">|&gt;</span>    </span>
+<span id="cb57-4"><a href="#cb57-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x=</span><span class="fu">factor</span>(Estadia), <span class="at">y =</span>n))<span class="sc">+</span>    </span>
+<span id="cb57-5"><a href="#cb57-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="at">fill =</span> <span class="st">'steelblue'</span>)<span class="sc">+</span>   </span>
+<span id="cb57-6"><a href="#cb57-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_cartesian</span>(<span class="at">xlim =</span> <span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">20</span>))<span class="sc">+</span>   </span>
+<span id="cb57-7"><a href="#cb57-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">'Distribución de la duración de la estadía'</span>, <span class="at">x=</span><span class="st">'Días de estadía'</span>, <span class="at">y=</span><span class="st">'Cantidad de visitantes'</span>)<span class="sc">+</span> </span>
+<span id="cb57-8"><a href="#cb57-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">face=</span><span class="st">'bold'</span>, <span class="at">size=</span><span class="dv">12</span>), <span class="at">legend.position =</span><span class="st">'bottom'</span>)<span class="sc">+</span> </span>
+<span id="cb57-9"><a href="#cb57-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Código-trabajo-final-Noseda-y-Santoro_files/figure-html/unnamed-chunk-34-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Finalmente se presenta un diagrama de caja que resume la distribución de la duración de la estadía y permite identificar la presencia de valores atípicos, confirmando la existencia de algunas estadías significativamente superiores al resto de las observaciones. Para la construcción del Diagrama de caja, también se limitó la escala a una estadía menor a 20 días mediante <em>coord_cartesiano</em> para que sea más informatvo:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb58"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Diagrama de caja de la duración de la estadía</span></span>
+<span id="cb58-2"><a href="#cb58-2" aria-hidden="true" tabindex="-1"></a>df1 <span class="sc">|&gt;</span>    </span>
+<span id="cb58-3"><a href="#cb58-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">y=</span>Estadia))<span class="sc">+</span>    </span>
+<span id="cb58-4"><a href="#cb58-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>()<span class="sc">+</span>    </span>
+<span id="cb58-5"><a href="#cb58-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_cartesian</span>(<span class="at">ylim =</span> <span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">20</span>))<span class="sc">+</span>   </span>
+<span id="cb58-6"><a href="#cb58-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">'Diagrama de caja de la duración de la estadía'</span>, <span class="at">x=</span><span class="cn">NULL</span>, <span class="at">y=</span><span class="st">'Días de estadía'</span>)<span class="sc">+</span>    </span>
+<span id="cb58-7"><a href="#cb58-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()<span class="sc">+</span>   </span>
+<span id="cb58-8"><a href="#cb58-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">face=</span><span class="st">'bold'</span>, <span class="at">size=</span><span class="dv">12</span>), <span class="at">legend.position =</span> <span class="st">'bottom'</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Código-trabajo-final-Noseda-y-Santoro_files/figure-html/unnamed-chunk-35-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>En conclusión, el Diagrama de Caja reafirma las conclusiones previas. La mediana se ubica en 4 días y el 50% de los visitantes permanecen en el país entre 3 y 7 días. Por su parte, se confirma una asimetría positiva con numerosos valores atípicos por encima del bigote superior, alcanzando una estadía máxima de 365 días. En consecuencia, si bien la mayoría de los visitantes permanecen en el país unos pocos días, existe un grupo reducido con estadías considerablemente más prolongadas que elevan el promedio a 5,7 días.</p>
+<p>3.2 ¿La duración de la estadía varía según lel destion?</p>
+<p>Con el fin de analizar si varía la la duración de la estadía dependiendo del destino elegido por los visitantes, se calcularon las mismas medidas de resumen presentadas en la sección anterior agrupando las observaciones por destino mediante el verbo <em>group_by().</em> Luego los destinos se ordenaron de forma descendiente según la la duración promedio de la estadía .</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb59"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb59-1"><a href="#cb59-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Calculamos distribución de la estadía por destino </span></span>
+<span id="cb59-2"><a href="#cb59-2" aria-hidden="true" tabindex="-1"></a>df1 <span class="sc">|&gt;</span> </span>
+<span id="cb59-3"><a href="#cb59-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Destino) <span class="sc">|&gt;</span></span>
+<span id="cb59-4"><a href="#cb59-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(     </span>
+<span id="cb59-5"><a href="#cb59-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">estadia_promedio=</span><span class="fu">mean</span>(Estadia, <span class="at">na.rm=</span><span class="cn">TRUE</span>),    </span>
+<span id="cb59-6"><a href="#cb59-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">mediana_estadia =</span> <span class="fu">median</span>(Estadia, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),     </span>
+<span id="cb59-7"><a href="#cb59-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">desvio_estadia=</span> <span class="fu">sd</span>(Estadia, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),     </span>
+<span id="cb59-8"><a href="#cb59-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">q1_estadia=</span> <span class="fu">quantile</span>(Estadia, <span class="fl">0.25</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),     </span>
+<span id="cb59-9"><a href="#cb59-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">q3_estadia=</span> <span class="fu">quantile</span>(Estadia, <span class="fl">0.75</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),     </span>
+<span id="cb59-10"><a href="#cb59-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">min_estadia=</span> <span class="fu">min</span>(Estadia, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),     </span>
+<span id="cb59-11"><a href="#cb59-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">max_estadia=</span> <span class="fu">max</span>(Estadia, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)   ) <span class="sc">|&gt;</span>    </span>
+<span id="cb59-12"><a href="#cb59-12" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb59-13"><a href="#cb59-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(estadia_promedio))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 9 × 8
+  Destino  estadia_promedio mediana_estadia desvio_estadia q1_estadia q3_estadia
+  &lt;chr&gt;               &lt;dbl&gt;           &lt;dbl&gt;          &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;
+1 Costas …            8.91              8            7.30         5           11
+2 Piriapo…            8.49              8            4.84         5           10
+3 Punta d…            8.15              7            7.01         5           10
+4 Costa d…            7.72              7            6.11         5            9
+5 Montevi…            5.86              5            7.90         3            7
+6 Otros               5.12              4            6.40         3            6
+7 Litoral…            3.90              3            2.69         2            5
+8 Colonia             3.09              2            4.26         1            4
+9 Transito            0.697             0.5          0.431        0.5          1
+# ℹ 2 more variables: min_estadia &lt;dbl&gt;, max_estadia &lt;dbl&gt;</code></pre>
+</div>
+</div>
+<p>Las medidas de resumen muestran que la duración de la estadía varía según el destino elegido. En particular, los visitantes que tienen como destino las Costas Oceánicas, Piriápolis, Punta del Este y la Costa de Oro presentan las mayores estadías promedio, comprendidas entre 7,7 y 8,9 días. En contraste, Montevideo registra una estadía promedio de 5,8 días, mientras que Colonia y el Litoral Termal presentan permanencias considerablemente menores, de 3,1 y 3,9 días, respectivamente. Finalmente, los visitantes en tránsito permanecen en el país menos de un día en promedio, lo cual resulta consistente con la naturaleza de este tipo de viaje..</p>
+<p>Los cuartiles muestran que la dispersión también difiere entre destinos. En las Costas Oceánicas, Piriápolis, Punta del Este y la Costa de Oro, el 50% central de las estadías se ubica aproximadamente entre 5 y 9-11 días. En Montevideo, dicho intervalo se reduce a entre 3 y 7 días, mientras que en Colonia y el Litoral Termal las estadías son aún más cortas.</p>
+<p>En todos los destinos la media supera a la mediana, lo que indica una distribución con asimetría positiva. Esto sugiere la existencia de algunas estadías con duración considerablemente más prolongada que la mayoría, las cuales incrementan el valor del promedio.</p>
+<p>Estas interpretaciones también se pueden visualizar en un diagrama de caja:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb61"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb61-1"><a href="#cb61-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Diagrama de caja duración de la estadía según el destino</span></span>
+<span id="cb61-2"><a href="#cb61-2" aria-hidden="true" tabindex="-1"></a> df1 <span class="sc">|&gt;</span>    </span>
+<span id="cb61-3"><a href="#cb61-3" aria-hidden="true" tabindex="-1"></a>   <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x=</span>Destino, <span class="at">y=</span>Estadia))<span class="sc">+</span>    </span>
+<span id="cb61-4"><a href="#cb61-4" aria-hidden="true" tabindex="-1"></a>   <span class="fu">geom_boxplot</span>()<span class="sc">+</span>     </span>
+<span id="cb61-5"><a href="#cb61-5" aria-hidden="true" tabindex="-1"></a>   <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">'Diagrama de caja de la duración de la estadía según el destino'</span>, <span class="at">x=</span><span class="st">'Destino'</span>, <span class="at">y=</span><span class="st">'Días de estadía'</span>)<span class="sc">+</span> </span>
+<span id="cb61-6"><a href="#cb61-6" aria-hidden="true" tabindex="-1"></a>   <span class="fu">theme</span>(<span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">face=</span><span class="st">'bold'</span>, <span class="at">size=</span><span class="dv">12</span>), <span class="at">legend.position =</span> <span class="st">'bottom'</span>)<span class="sc">+</span> </span>
+<span id="cb61-7"><a href="#cb61-7" aria-hidden="true" tabindex="-1"></a>   <span class="fu">theme_minimal</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Código-trabajo-final-Noseda-y-Santoro_files/figure-html/unnamed-chunk-37-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Dado que sucede lo mismo que en la sección anterior, limitamos la escala a una estadía menor a 20 días:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb62"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb62-1"><a href="#cb62-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Diagrama de caja de la duración de la estadía por Destino </span></span>
+<span id="cb62-2"><a href="#cb62-2" aria-hidden="true" tabindex="-1"></a>df1 <span class="sc">|&gt;</span>    </span>
+<span id="cb62-3"><a href="#cb62-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x=</span>Destino, <span class="at">y=</span>Estadia, <span class="at">fill=</span>Destino))<span class="sc">+</span>    </span>
+<span id="cb62-4"><a href="#cb62-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>()<span class="sc">+</span>     <span class="fu">coord_cartesian</span>(<span class="at">ylim =</span> <span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">20</span>))<span class="sc">+</span>   </span>
+<span id="cb62-5"><a href="#cb62-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">'Diagrama de caja de la duración de la estadía según el destino'</span>, <span class="at">x=</span><span class="st">'Destino'</span>, <span class="at">y=</span><span class="st">'Días de estadía'</span>)<span class="sc">+</span>    </span>
+<span id="cb62-6"><a href="#cb62-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()<span class="sc">+</span>   </span>
+<span id="cb62-7"><a href="#cb62-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(     </span>
+<span id="cb62-8"><a href="#cb62-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">face=</span><span class="st">'bold'</span>, <span class="at">size=</span><span class="dv">12</span>),      </span>
+<span id="cb62-9"><a href="#cb62-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">45</span>, <span class="at">hjust =</span> <span class="dv">1</span>),     </span>
+<span id="cb62-10"><a href="#cb62-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">legend.position =</span> <span class="st">'none'</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Código-trabajo-final-Noseda-y-Santoro_files/figure-html/unnamed-chunk-38-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>El diagrama de caja confirma estas conclusiones. Se observa que los destinos con mayor duración promedio también presentan medianas más elevadas y una mayor dispersión en la duración de la estadía. Asimismo, en todos los destinos se identifican valores atípicos correspondientes a estadías prolongadas, lo que resulta consistente con la asimetría positiva observada en las medidas de resumen.</p>
+<p>En conclusión, las medidas de resumen y el diagrama de caja muestran que la duración de la estadía varía según el destino elegido. Los destinos Costas Oceánicas, Piriápolis, Punta del Este y Costa de Oro presentan las mayores duraciones promedio de estadía y, especialmente, los visitantes en tránsito registran estadías considerablemente menores. Asimismo, en todos los destinos se observa una distribución asimétrica hacia la derecha, consistente con la existencia de algunas estadías excepcionalmente largas.</p>
+<p>3.3 ¿La duración de la estadía varía según el motivo del viaje?</p>
+<p>Con el fin de analizar si varía la la duración de la estadía dependiendo del motivo del viaje, se calcularon las mismas medidas de resumen presentadas en la sección anterior agrupando las observaciones por motivo mediante el verbo <em>group_by().</em> Luego la tabla de resultados se ordenó de forma descendiente según la la duración promedio de la estadía .</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb63"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb63-1"><a href="#cb63-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Calculamos distribución de la estadía según el motivo </span></span>
+<span id="cb63-2"><a href="#cb63-2" aria-hidden="true" tabindex="-1"></a>df1 <span class="sc">|&gt;</span> </span>
+<span id="cb63-3"><a href="#cb63-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Motivo) <span class="sc">|&gt;</span>    </span>
+<span id="cb63-4"><a href="#cb63-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(     </span>
+<span id="cb63-5"><a href="#cb63-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">estadia_promedio=</span><span class="fu">mean</span>(Estadia, <span class="at">na.rm=</span><span class="cn">TRUE</span>),     </span>
+<span id="cb63-6"><a href="#cb63-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">mediana_estadia =</span> <span class="fu">median</span>(Estadia, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),     </span>
+<span id="cb63-7"><a href="#cb63-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">desvio_estadia=</span> <span class="fu">sd</span>(Estadia, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),     </span>
+<span id="cb63-8"><a href="#cb63-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">q1_estadia=</span> <span class="fu">quantile</span>(Estadia, <span class="fl">0.25</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),     </span>
+<span id="cb63-9"><a href="#cb63-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">q3_estadia=</span> <span class="fu">quantile</span>(Estadia, <span class="fl">0.75</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),     </span>
+<span id="cb63-10"><a href="#cb63-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">min_estadia=</span> <span class="fu">min</span>(Estadia, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),     </span>
+<span id="cb63-11"><a href="#cb63-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">max_estadia=</span> <span class="fu">max</span>(Estadia, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)   ) <span class="sc">|&gt;</span>    </span>
+<span id="cb63-12"><a href="#cb63-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(estadia_promedio))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 11 × 8
+   Motivo  estadia_promedio mediana_estadia desvio_estadia q1_estadia q3_estadia
+   &lt;chr&gt;              &lt;dbl&gt;           &lt;dbl&gt;          &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;
+ 1 Estudi…           17.6               6           33.0          3         15.2
+ 2 Segund…           10.2               8           10.9          4         13  
+ 3 Ocio y…            6.16              5            5.23         3          8  
+ 4 Visita…            5.86              4            6.91         3          7  
+ 5 Religi…            5.48              3           19.9          2          5  
+ 6 MICE               5.12              5            2.89         3          6  
+ 7 Salud …            3.92              3            7.78         1          4  
+ 8 Trabaj…            3.87              3            6.70         2          4  
+ 9 Otros              2.60              2            3.65         1          3  
+10 Compras            1.50              1            0.896        1          2  
+11 Transi…            0.691             0.5          0.345        0.5        1  
+# ℹ 2 more variables: min_estadia &lt;dbl&gt;, max_estadia &lt;dbl&gt;</code></pre>
+</div>
+</div>
+<p>Al agrupar las observaciones según el motivo del viaje, se observa que la duración promedio de la estadía difiere considerablemente entre categorías. Los visitantes cuyo motivo del viaje son estudios presentan la mayor estadía promedio, con 17,6 días, seguidos por quienes viajan por segunda residencia, con una permanencia promedio de 10,2 días. Estos resultados son esperables, ya que este tipo de viajes suele implicar estadías prolongadas.</p>
+<p>En un segundo grupo se ubican los viajes por ocio y vacaciones, visita a familiares y amigos, motivos religiosos y MICE, cuyas estadías promedio oscilan entre 5 y 6 días. Estas categorías presentan duraciones similares y cercanas al promedio general observado anteriormente</p>
+<p>Por el contrario, los viajes por compras registran la menor duración promedio (1,5 días), seguidos por la categoría Otros y por los viajes de trabajo o profesionales, con estadías promedio inferiores a cuatro días. Esto resulta consistente con la naturaleza de estos viajes, que generalmente requieren una permanencia más breve.</p>
+<p>Cabe destacar que, en la categoría Estudios, la media (17,6 días) es considerablemente superior a la mediana (6 días),. Esto indica la existencia de algunos visitantes con estadías excepcionalmente largas que incrementan significativamente el promedio.</p>
+<p>Se presenta a continuación un Diagrama de Cajas de la duración de la estadía dependiendo del motivo, al igual que en las secciones anteriores, se limitó la escala a 20 días de estadía.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb65"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb65-1"><a href="#cb65-1" aria-hidden="true" tabindex="-1"></a> <span class="co">#Diagrama de caja de la duración de la estadía por Destino </span></span>
+<span id="cb65-2"><a href="#cb65-2" aria-hidden="true" tabindex="-1"></a>df1 <span class="sc">|&gt;</span>    </span>
+<span id="cb65-3"><a href="#cb65-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x=</span>Motivo, <span class="at">y=</span>Estadia, <span class="at">fill=</span>Motivo))<span class="sc">+</span>    </span>
+<span id="cb65-4"><a href="#cb65-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>()<span class="sc">+</span>     </span>
+<span id="cb65-5"><a href="#cb65-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_cartesian</span>(<span class="at">ylim =</span> <span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">20</span>))<span class="sc">+</span>   </span>
+<span id="cb65-6"><a href="#cb65-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">'Diagrama de caja de la duración de la estadía según el Motivo'</span>, <span class="at">x=</span><span class="st">'Motivo del viaje'</span>, <span class="at">y=</span><span class="st">'Días de estadía'</span>)<span class="sc">+</span>    </span>
+<span id="cb65-7"><a href="#cb65-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()<span class="sc">+</span>   </span>
+<span id="cb65-8"><a href="#cb65-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(     </span>
+<span id="cb65-9"><a href="#cb65-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">face=</span><span class="st">'bold'</span>, <span class="at">size=</span><span class="dv">12</span>),      </span>
+<span id="cb65-10"><a href="#cb65-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">45</span>, <span class="at">hjust =</span> <span class="dv">1</span>),     </span>
+<span id="cb65-11"><a href="#cb65-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">legend.position =</span> <span class="st">'none'</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Código-trabajo-final-Noseda-y-Santoro_files/figure-html/unnamed-chunk-40-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<ol start="4" type="1">
+<li><u>Gastos turísticos</u></li>
+</ol>
+<p>4.1 ¿Cuál es el gasto promedio diario de los visitantes?</p>
+<p>Para analizar el gasto diario, se creó un nuevo objeto “df_gasto” que contenga las columnas del gasto diario y de los días de estadía, y se le agrega una tercer columna, que es el gasto promedio por día, llamado “GastoDiario”. En esta parte se excluyeron del análisis las otras variables, que no son necesarias.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb66"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb66-1"><a href="#cb66-1" aria-hidden="true" tabindex="-1"></a> df_gasto <span class="ot">&lt;-</span> df1 <span class="sc">|&gt;</span> </span>
+<span id="cb66-2"><a href="#cb66-2" aria-hidden="true" tabindex="-1"></a>   <span class="fu">transmute</span>(GastoTotal, Estadia)<span class="sc">|&gt;</span> </span>
+<span id="cb66-3"><a href="#cb66-3" aria-hidden="true" tabindex="-1"></a>   <span class="fu">mutate</span>(<span class="at">GastoDiario=</span>GastoTotal<span class="sc">/</span>Estadia) </span>
+<span id="cb66-4"><a href="#cb66-4" aria-hidden="true" tabindex="-1"></a> df_gasto</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 65,333 × 3
+   GastoTotal Estadia GastoDiario
+        &lt;dbl&gt;   &lt;dbl&gt;       &lt;dbl&gt;
+ 1      3213        9        357 
+ 2      2016        4        504 
+ 3      3846        8        481.
+ 4      3696        8        462 
+ 5      6686       15        446.
+ 6       290.       2        145.
+ 7      1922        7        275.
+ 8       700        2        350 
+ 9      2156        6        359.
+10      1384        4        346 
+# ℹ 65,323 more rows</code></pre>
+</div>
+</div>
+<p>El promedio diario de gasto por turista es de aproximadamente USD 240.</p>
+<p>4.2 ¿Qué rubros concentran la mayor parte del gasto?</p>
+<p>En primer lugar, se creó un objeto que conserva los componentes desagregados del gasto y excluye GastoTotal</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb68"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb68-1"><a href="#cb68-1" aria-hidden="true" tabindex="-1"></a> rubros_gasto <span class="ot">&lt;-</span> df1  <span class="sc">|&gt;</span> </span>
+<span id="cb68-2"><a href="#cb68-2" aria-hidden="true" tabindex="-1"></a>   <span class="fu">select</span>(<span class="fu">starts_with</span>(<span class="st">"Gasto"</span>), <span class="sc">-</span>GastoTotal) </span>
+<span id="cb68-3"><a href="#cb68-3" aria-hidden="true" tabindex="-1"></a> rubros_gasto</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 65,333 × 7
+   GastoAlojamiento GastoAlimentacion GastoTransporte GastoCultural GastoTours
+              &lt;dbl&gt;             &lt;dbl&gt;           &lt;dbl&gt;         &lt;dbl&gt;      &lt;dbl&gt;
+ 1            1566               1134             0               0          0
+ 2             784                376            72             384          0
+ 3            1568                752           160               0          0
+ 4            2352               1128           216               0          0
+ 5            2940               1410           270               0          0
+ 6             158.               104            15.8             0          0
+ 7             320                658           378               0          0
+ 8             400                200           100               0          0
+ 9             500                564           108             384          0
+10             750                564            70               0          0
+# ℹ 65,323 more rows
+# ℹ 2 more variables: GastoCompras &lt;dbl&gt;, GastoOtros &lt;dbl&gt;</code></pre>
+</div>
+</div>
+<p>Como los rubros están distribuidos en distintas columnas, conviene transformar la base de ancho a largo. Esto lo hacemos mediante pivot_longer(). En esta tabla tenemos dos columnas: “Rubro”, que identifica el componente del gasto y “Gasto” que indica el valor registrado para ese rubro.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb70"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb70-1"><a href="#cb70-1" aria-hidden="true" tabindex="-1"></a>tabla_rubros <span class="ot">&lt;-</span> rubros_gasto <span class="sc">|&gt;</span> </span>
+<span id="cb70-2"><a href="#cb70-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(     </span>
+<span id="cb70-3"><a href="#cb70-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">cols =</span> <span class="fu">everything</span>(),     </span>
+<span id="cb70-4"><a href="#cb70-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">names_to =</span> <span class="st">"Rubro"</span>,    </span>
+<span id="cb70-5"><a href="#cb70-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">values_to =</span> <span class="st">"Gasto"</span>   </span>
+<span id="cb70-6"><a href="#cb70-6" aria-hidden="true" tabindex="-1"></a>  ) </span>
+<span id="cb70-7"><a href="#cb70-7" aria-hidden="true" tabindex="-1"></a>tabla_rubros</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 457,331 × 2
+   Rubro             Gasto
+   &lt;chr&gt;             &lt;dbl&gt;
+ 1 GastoAlojamiento   1566
+ 2 GastoAlimentacion  1134
+ 3 GastoTransporte       0
+ 4 GastoCultural         0
+ 5 GastoTours            0
+ 6 GastoCompras          0
+ 7 GastoOtros          513
+ 8 GastoAlojamiento    784
+ 9 GastoAlimentacion   376
+10 GastoTransporte      72
+# ℹ 457,321 more rows</code></pre>
+</div>
+</div>
+<p>En segundo lugar, se sumó el total correspondiente a cada rubro, para luego poder calcular la participación porcentual. Se creó una nueva variable llamada “GastoAcumulado” que representa la suma total de los gastos registrados en cada rubro. La variable “Porcentaje” indica qué proporción del gasto total desagregado corresponde a cada uno.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb72"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb72-1"><a href="#cb72-1" aria-hidden="true" tabindex="-1"></a>resumen_rubros <span class="ot">&lt;-</span> </span>
+<span id="cb72-2"><a href="#cb72-2" aria-hidden="true" tabindex="-1"></a>  tabla_rubros  <span class="sc">|&gt;</span> </span>
+<span id="cb72-3"><a href="#cb72-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Rubro)  <span class="sc">|&gt;</span> </span>
+<span id="cb72-4"><a href="#cb72-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(     </span>
+<span id="cb72-5"><a href="#cb72-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">GastoAcumulado =</span> <span class="fu">sum</span>(Gasto),</span>
+<span id="cb72-6"><a href="#cb72-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">groups =</span> <span class="st">"drop"</span>)  <span class="sc">|&gt;</span> </span>
+<span id="cb72-7"><a href="#cb72-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(     </span>
+<span id="cb72-8"><a href="#cb72-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">Porcentaje =</span> GastoAcumulado <span class="sc">/</span> <span class="fu">sum</span>(GastoAcumulado) <span class="sc">*</span> <span class="dv">100</span>   ) <span class="sc">|&gt;</span> </span>
+<span id="cb72-9"><a href="#cb72-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(GastoAcumulado))  </span>
+<span id="cb72-10"><a href="#cb72-10" aria-hidden="true" tabindex="-1"></a>resumen_rubros</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 7 × 4
+  Rubro             GastoAcumulado groups Porcentaje
+  &lt;chr&gt;                      &lt;dbl&gt; &lt;chr&gt;       &lt;dbl&gt;
+1 GastoAlojamiento       28630999. drop       32.0  
+2 GastoAlimentacion      24512587. drop       27.4  
+3 GastoCompras           12224107. drop       13.7  
+4 GastoCultural           9827746. drop       11.0  
+5 GastoTransporte         7328881. drop        8.20 
+6 GastoOtros              6635517. drop        7.42 
+7 GastoTours               269410. drop        0.301</code></pre>
+</div>
+</div>
+<p>El dataframe creado permite observar que casi un 60% del gasto se reparte entre alojamiento (32%) y alimentación (27,4%). Si además consideramos el gasto asociado a compras y temas culturales, el porcentaje asciende al 84% del total. Por tanto, puede afirmarse que el gasto turístico se encuentra principalmente orientado hacia estas categorías, mientras que los rubros restantes presentan una participación menor.</p>
+<p>Para visualizar este resultado, creamos un gráfico de barras, en donde se ordenan los rubros de mayor a menor, según su participación porcentual en el gasto.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb74"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb74-1"><a href="#cb74-1" aria-hidden="true" tabindex="-1"></a> resumen_rubros  <span class="sc">|&gt;</span> </span>
+<span id="cb74-2"><a href="#cb74-2" aria-hidden="true" tabindex="-1"></a>   <span class="fu">ggplot</span>(<span class="fu">aes</span>(      </span>
+<span id="cb74-3"><a href="#cb74-3" aria-hidden="true" tabindex="-1"></a>     <span class="at">x =</span> <span class="fu">reorder</span>(Rubro, Porcentaje),       </span>
+<span id="cb74-4"><a href="#cb74-4" aria-hidden="true" tabindex="-1"></a>     <span class="at">y =</span> Porcentaje </span>
+<span id="cb74-5"><a href="#cb74-5" aria-hidden="true" tabindex="-1"></a>     )) <span class="sc">+</span>   </span>
+<span id="cb74-6"><a href="#cb74-6" aria-hidden="true" tabindex="-1"></a>   <span class="fu">geom_col</span>(<span class="at">fill =</span> <span class="st">"steelblue"</span>) <span class="sc">+</span>   </span>
+<span id="cb74-7"><a href="#cb74-7" aria-hidden="true" tabindex="-1"></a>   <span class="fu">coord_flip</span>() <span class="sc">+</span>   </span>
+<span id="cb74-8"><a href="#cb74-8" aria-hidden="true" tabindex="-1"></a>   <span class="fu">scale_y_continuous</span>(     </span>
+<span id="cb74-9"><a href="#cb74-9" aria-hidden="true" tabindex="-1"></a>     <span class="at">labels =</span> scales<span class="sc">::</span><span class="fu">label_percent</span>(       </span>
+<span id="cb74-10"><a href="#cb74-10" aria-hidden="true" tabindex="-1"></a>       <span class="at">scale =</span> <span class="dv">1</span>,       </span>
+<span id="cb74-11"><a href="#cb74-11" aria-hidden="true" tabindex="-1"></a>       <span class="at">accuracy =</span> <span class="fl">0.1</span>,       </span>
+<span id="cb74-12"><a href="#cb74-12" aria-hidden="true" tabindex="-1"></a>       <span class="at">decimal.mark =</span> <span class="st">","</span>    </span>
+<span id="cb74-13"><a href="#cb74-13" aria-hidden="true" tabindex="-1"></a>       )  </span>
+<span id="cb74-14"><a href="#cb74-14" aria-hidden="true" tabindex="-1"></a>     ) <span class="sc">+</span>   </span>
+<span id="cb74-15"><a href="#cb74-15" aria-hidden="true" tabindex="-1"></a>   <span class="fu">labs</span>(     </span>
+<span id="cb74-16"><a href="#cb74-16" aria-hidden="true" tabindex="-1"></a>     <span class="at">title =</span> <span class="st">"Participación de cada rubro en el gasto turístico"</span>,     </span>
+<span id="cb74-17"><a href="#cb74-17" aria-hidden="true" tabindex="-1"></a>     <span class="at">subtitle =</span> <span class="st">"Porcentaje sobre el gasto total desagregado, 2016-2024"</span>,     </span>
+<span id="cb74-18"><a href="#cb74-18" aria-hidden="true" tabindex="-1"></a>     <span class="at">x =</span> <span class="st">"Rubro"</span>,     </span>
+<span id="cb74-19"><a href="#cb74-19" aria-hidden="true" tabindex="-1"></a>     <span class="at">y =</span> <span class="st">"Participación en el gasto total"</span>   </span>
+<span id="cb74-20"><a href="#cb74-20" aria-hidden="true" tabindex="-1"></a>     ) <span class="sc">+</span>   </span>
+<span id="cb74-21"><a href="#cb74-21" aria-hidden="true" tabindex="-1"></a>   <span class="fu">theme_minimal</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Código-trabajo-final-Noseda-y-Santoro_files/figure-html/unnamed-chunk-45-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>4.3 ¿El gasto diario varía según destino o motivo del viaje?</p>
+<p>En primer lugar, se creó un nuevo dataframe con las variables de interés para el análisis, y además se creó la variable de gasto diario, que es igual a la usada anteriormente.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb75"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb75-1"><a href="#cb75-1" aria-hidden="true" tabindex="-1"></a>df_gasto_destino_motivo <span class="ot">&lt;-</span> df1  <span class="sc">|&gt;</span> </span>
+<span id="cb75-2"><a href="#cb75-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">transmute</span>(     </span>
+<span id="cb75-3"><a href="#cb75-3" aria-hidden="true" tabindex="-1"></a>    Destino,     </span>
+<span id="cb75-4"><a href="#cb75-4" aria-hidden="true" tabindex="-1"></a>    Motivo,     </span>
+<span id="cb75-5"><a href="#cb75-5" aria-hidden="true" tabindex="-1"></a>    GastoTotal,     </span>
+<span id="cb75-6"><a href="#cb75-6" aria-hidden="true" tabindex="-1"></a>    Estadia,     </span>
+<span id="cb75-7"><a href="#cb75-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">GastoDiario =</span> GastoTotal <span class="sc">/</span> Estadia   </span>
+<span id="cb75-8"><a href="#cb75-8" aria-hidden="true" tabindex="-1"></a>    )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Luego, procedimos al análisis del gasto diario según destino, para lo cual se calculó el promedio de gasto por destino y la cantidad de observaciones por destino.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb76"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb76-1"><a href="#cb76-1" aria-hidden="true" tabindex="-1"></a>gasto_por_destino <span class="ot">&lt;-</span></span>
+<span id="cb76-2"><a href="#cb76-2" aria-hidden="true" tabindex="-1"></a>  df_gasto_destino_motivo  <span class="sc">|&gt;</span> </span>
+<span id="cb76-3"><a href="#cb76-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Destino)  <span class="sc">|&gt;</span> </span>
+<span id="cb76-4"><a href="#cb76-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(     </span>
+<span id="cb76-5"><a href="#cb76-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">observaciones =</span> <span class="fu">n</span>(),     </span>
+<span id="cb76-6"><a href="#cb76-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">gasto_promedio_diario =</span> <span class="fu">mean</span>(GastoDiario))  <span class="sc">|&gt;</span> </span>
+<span id="cb76-7"><a href="#cb76-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(gasto_promedio_diario))  </span>
+<span id="cb76-8"><a href="#cb76-8" aria-hidden="true" tabindex="-1"></a>gasto_por_destino</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 9 × 3
+  Destino          observaciones gasto_promedio_diario
+  &lt;chr&gt;                    &lt;int&gt;                 &lt;dbl&gt;
+1 Punta del Este           11924                  427.
+2 Piriapolis                2454                  297.
+3 Costas Oceanicas          2386                  229.
+4 Transito                  3116                  225.
+5 Montevideo               21610                  215.
+6 Colonia                   6530                  200.
+7 Litoral Termal            9702                  161.
+8 Costa de Oro              2882                  147.
+9 Otros                     4729                  139.</code></pre>
+</div>
+</div>
+<p>Podemos observar que la variación de presupuestos entre destinos es sustancial: mientras en Punta del Este el gasto promedio diario por día es de 427 dólares, en la Costa de Oro es de 147. Podemos considerar que el dato de Punta del Este es atípico, ya que el segundo destino en el que más gastan los turistas por día es Pirápolis, con USD 297 dólares, es decir, 130 dólares menos que en Punta del Este. Esto tiene sentido desde un punto de vista económico, ya que es un destino más costoso que el resto.</p>
+<p>Para poder visualizarlo gráficamente, se utilizó la herramienta del gráfico de barras:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb78"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb78-1"><a href="#cb78-1" aria-hidden="true" tabindex="-1"></a>gasto_por_destino  <span class="sc">|&gt;</span> </span>
+<span id="cb78-2"><a href="#cb78-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(     </span>
+<span id="cb78-3"><a href="#cb78-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">aes</span>(      </span>
+<span id="cb78-4"><a href="#cb78-4" aria-hidden="true" tabindex="-1"></a>      <span class="at">x =</span> <span class="fu">reorder</span>(Destino, gasto_promedio_diario),       </span>
+<span id="cb78-5"><a href="#cb78-5" aria-hidden="true" tabindex="-1"></a>      <span class="at">y =</span> gasto_promedio_diario    </span>
+<span id="cb78-6"><a href="#cb78-6" aria-hidden="true" tabindex="-1"></a>      )   </span>
+<span id="cb78-7"><a href="#cb78-7" aria-hidden="true" tabindex="-1"></a>    ) <span class="sc">+</span>   </span>
+<span id="cb78-8"><a href="#cb78-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="at">fill =</span> <span class="st">"steelblue"</span>) <span class="sc">+</span>   </span>
+<span id="cb78-9"><a href="#cb78-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_flip</span>() <span class="sc">+</span>   </span>
+<span id="cb78-10"><a href="#cb78-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(     </span>
+<span id="cb78-11"><a href="#cb78-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Gasto diario promedio según el destino"</span>,     </span>
+<span id="cb78-12"><a href="#cb78-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="st">"Turismo receptivo en Uruguay, 2016-2024"</span>,     </span>
+<span id="cb78-13"><a href="#cb78-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Destino"</span>,     </span>
+<span id="cb78-14"><a href="#cb78-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Gasto diario promedio"</span>   ) <span class="sc">+</span>   </span>
+<span id="cb78-15"><a href="#cb78-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Código-trabajo-final-Noseda-y-Santoro_files/figure-html/unnamed-chunk-48-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Para analizar el gasto diario por motivo de viaje, se utilizó la misma metodología y recursos que para el caso del destino:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb79"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb79-1"><a href="#cb79-1" aria-hidden="true" tabindex="-1"></a>gasto_por_motivo <span class="ot">&lt;-</span> </span>
+<span id="cb79-2"><a href="#cb79-2" aria-hidden="true" tabindex="-1"></a>  df_gasto_destino_motivo  <span class="sc">|&gt;</span> </span>
+<span id="cb79-3"><a href="#cb79-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Motivo)  <span class="sc">|&gt;</span> </span>
+<span id="cb79-4"><a href="#cb79-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(     </span>
+<span id="cb79-5"><a href="#cb79-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">observaciones =</span> <span class="fu">n</span>(),     </span>
+<span id="cb79-6"><a href="#cb79-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">gasto_promedio_diario =</span> <span class="fu">mean</span>(GastoDiario),  </span>
+<span id="cb79-7"><a href="#cb79-7" aria-hidden="true" tabindex="-1"></a>    )  <span class="sc">|&gt;</span> </span>
+<span id="cb79-8"><a href="#cb79-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(gasto_promedio_diario))  </span>
+<span id="cb79-9"><a href="#cb79-9" aria-hidden="true" tabindex="-1"></a>gasto_por_motivo</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 11 × 3
+   Motivo                       observaciones gasto_promedio_diario
+   &lt;chr&gt;                                &lt;int&gt;                 &lt;dbl&gt;
+ 1 Compras                                249                 426. 
+ 2 Ocio y vacaciones                    36248                 304. 
+ 3 Segunda Residencia                    2161                 298. 
+ 4 MICE                                   101                 258. 
+ 5 Transito                              3111                 225. 
+ 6 Salud / wellness                       277                 171. 
+ 7 Trabajo / Profesional                 6397                 169. 
+ 8 Otros                                 1022                 160. 
+ 9 Estudios                               292                 137. 
+10 Visita a familiares y amigos         15282                 118. 
+11 Religioso                              193                  88.7</code></pre>
+</div>
+</div>
+<p>El motivo de viaje en el cual el gasto diario es mayor es “Compras” lo cual tiene sentido, ya que los turistas afirman que el gasto será el elemento central de su viaje. Al igual que en el caso de los destinos, este valor está muy por encima del resto. En segundo lugar, el gasto diario en turistas que viajan por ocio y vacaciones y aquellos que tienen a Uruguay como segunda residencia es similar, en torno a los USD 300. Resulta interesante también destacar que el motivo de viaje en el cual el gasto promedio diario es menor es el religioso, con un gasto de 89 USD.</p>
+<p>Gráficamente, también lo visualizamos a partir de un gráfico de barras:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb81"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb81-1"><a href="#cb81-1" aria-hidden="true" tabindex="-1"></a>gasto_por_motivo  <span class="sc">|&gt;</span> </span>
+<span id="cb81-2"><a href="#cb81-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(     </span>
+<span id="cb81-3"><a href="#cb81-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">aes</span>(       </span>
+<span id="cb81-4"><a href="#cb81-4" aria-hidden="true" tabindex="-1"></a>      <span class="at">x =</span> <span class="fu">reorder</span>(Motivo, gasto_promedio_diario),       </span>
+<span id="cb81-5"><a href="#cb81-5" aria-hidden="true" tabindex="-1"></a>      <span class="at">y =</span> gasto_promedio_diario     </span>
+<span id="cb81-6"><a href="#cb81-6" aria-hidden="true" tabindex="-1"></a>      )) <span class="sc">+</span></span>
+<span id="cb81-7"><a href="#cb81-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="at">fill =</span> <span class="st">"steelblue"</span>) <span class="sc">+</span>   </span>
+<span id="cb81-8"><a href="#cb81-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_flip</span>() <span class="sc">+</span>   </span>
+<span id="cb81-9"><a href="#cb81-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(     </span>
+<span id="cb81-10"><a href="#cb81-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Gasto diario promedio según el motivo del viaje"</span>,     </span>
+<span id="cb81-11"><a href="#cb81-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="st">"Turismo receptivo en Uruguay, 2016-2024"</span>,     </span>
+<span id="cb81-12"><a href="#cb81-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Motivo del viaje"</span>,     </span>
+<span id="cb81-13"><a href="#cb81-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Gasto diario promedio"</span>   ) <span class="sc">+</span>   </span>
+<span id="cb81-14"><a href="#cb81-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Código-trabajo-final-Noseda-y-Santoro_files/figure-html/unnamed-chunk-50-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>4.4 ¿Cómo evoluciona el gasto diario promedio por trimestre y por año?</p>
+<p>En primer lugar, lo que se debió hacer fue extraer de cada observación, el año y el trimestre de la visita. Para esto, se crearon dos nuevas variables: Año y Trimestre.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb82"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb82-1"><a href="#cb82-1" aria-hidden="true" tabindex="-1"></a>df_evolucion_gasto <span class="ot">&lt;-</span> df1 <span class="sc">%&gt;%</span> </span>
+<span id="cb82-2"><a href="#cb82-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">transmute</span>(</span>
+<span id="cb82-3"><a href="#cb82-3" aria-hidden="true" tabindex="-1"></a>    FechaIngreso,</span>
+<span id="cb82-4"><a href="#cb82-4" aria-hidden="true" tabindex="-1"></a>    GastoTotal,</span>
+<span id="cb82-5"><a href="#cb82-5" aria-hidden="true" tabindex="-1"></a>    Estadia,</span>
+<span id="cb82-6"><a href="#cb82-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">GastoDiario =</span> GastoTotal <span class="sc">/</span> Estadia,</span>
+<span id="cb82-7"><a href="#cb82-7" aria-hidden="true" tabindex="-1"></a>    Año <span class="ot">=</span> <span class="fu">year</span>(FechaIngreso),</span>
+<span id="cb82-8"><a href="#cb82-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">Trimestre =</span> <span class="fu">quarter</span>(FechaIngreso)</span>
+<span id="cb82-9"><a href="#cb82-9" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb82-10"><a href="#cb82-10" aria-hidden="true" tabindex="-1"></a>df_evolucion_gasto</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 65,333 × 6
+   FechaIngreso        GastoTotal Estadia GastoDiario   Año Trimestre
+   &lt;dttm&gt;                   &lt;dbl&gt;   &lt;dbl&gt;       &lt;dbl&gt; &lt;dbl&gt;     &lt;int&gt;
+ 1 2017-02-22 00:00:00      3213        9        357   2017         1
+ 2 2017-01-05 00:00:00      2016        4        504   2017         1
+ 3 2017-01-04 00:00:00      3846        8        481.  2017         1
+ 4 2017-01-18 00:00:00      3696        8        462   2017         1
+ 5 2017-01-02 00:00:00      6686       15        446.  2017         1
+ 6 2017-01-09 00:00:00       290.       2        145.  2017         1
+ 7 2017-01-20 00:00:00      1922        7        275.  2017         1
+ 8 2017-01-14 00:00:00       700        2        350   2017         1
+ 9 2017-01-20 00:00:00      2156        6        359.  2017         1
+10 2017-01-26 00:00:00      1384        4        346   2017         1
+# ℹ 65,323 more rows</code></pre>
+</div>
+</div>
+<p>En primer lugar, se calculó el promedio de gasto diario por persona por año. Para esto agrupamos las observaciones por año y creamos la variable “gasto_promedio_diario”.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb84"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb84-1"><a href="#cb84-1" aria-hidden="true" tabindex="-1"></a>gasto_anual <span class="ot">&lt;-</span> df_evolucion_gasto <span class="sc">%&gt;%</span></span>
+<span id="cb84-2"><a href="#cb84-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Año) <span class="sc">%&gt;%</span></span>
+<span id="cb84-3"><a href="#cb84-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
+<span id="cb84-4"><a href="#cb84-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">observaciones =</span> <span class="fu">n</span>(),</span>
+<span id="cb84-5"><a href="#cb84-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">gasto_promedio_diario =</span> <span class="fu">mean</span>(GastoDiario))</span>
+<span id="cb84-6"><a href="#cb84-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb84-7"><a href="#cb84-7" aria-hidden="true" tabindex="-1"></a>gasto_anual</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 10 × 3
+     Año observaciones gasto_promedio_diario
+   &lt;dbl&gt;         &lt;int&gt;                 &lt;dbl&gt;
+ 1  2011             1                  313.
+ 2  2016           383                  354.
+ 3  2017         14284                  247.
+ 4  2018         10565                  254.
+ 5  2019         10944                  247.
+ 6  2020          2685                  246.
+ 7  2021           183                  228.
+ 8  2022          6136                  230.
+ 9  2023         11305                  220.
+10  2024          8847                  227.</code></pre>
+</div>
+</div>
+<p>Podemos observar que tanto las observaciones (cantidad de personas que visitaron al país por año) como el gasto promedio diario varía bastante entre períodos. En cuanto al gasto, se observa una tendencia general descendente, con algunas fluctuaciones. En 2016 se registra el valor más elevado, con un gasto promedio diario de USD 353,85, mientras que en 2024 se observa un gasto de USD 226 por persona. Entre medio, los valores fluctúan, pero la tendencia general es a la baja. En cuanto a la cantidad de observaciones (visitantes por año) hay grandes diferencias: en 2016 se registran 383 observaciones, pero esto se puede explicar porque las observaciones correspondientes a este año abarcan únicamente el último trimestre. Entre 2017 y 2019 las observaciones son similares, pero entre 2020 y 2021 los números son mucho más bajos, debido a que el turismo fue absolutamente golpeado por la pandemia mundial. A partir de 2022 se denota una leve recuperación.</p>
+<p>Para analizar el gasto por trimestre se procedió de la misma manera:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb86"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb86-1"><a href="#cb86-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Gasto por trimestre</span></span>
+<span id="cb86-2"><a href="#cb86-2" aria-hidden="true" tabindex="-1"></a>gasto_trimestre <span class="ot">&lt;-</span> df_evolucion_gasto <span class="sc">%&gt;%</span></span>
+<span id="cb86-3"><a href="#cb86-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Año, Trimestre) <span class="sc">%&gt;%</span></span>
+<span id="cb86-4"><a href="#cb86-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
+<span id="cb86-5"><a href="#cb86-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">observaciones =</span> <span class="fu">n</span>(),</span>
+<span id="cb86-6"><a href="#cb86-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">gasto_promedio_diario =</span> <span class="fu">mean</span>(GastoDiario))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>`summarise()` has regrouped the output.
+ℹ Summaries were computed grouped by Año and Trimestre.
+ℹ Output is grouped by Año.
+ℹ Use `summarise(.groups = "drop_last")` to silence this message.
+ℹ Use `summarise(.by = c(Año, Trimestre))` for per-operation grouping
+  (`?dplyr::dplyr_by`) instead.</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb88"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb88-1"><a href="#cb88-1" aria-hidden="true" tabindex="-1"></a>gasto_trimestre</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 27 × 4
+# Groups:   Año [10]
+     Año Trimestre observaciones gasto_promedio_diario
+   &lt;dbl&gt;     &lt;int&gt;         &lt;int&gt;                 &lt;dbl&gt;
+ 1  2011         4             1                  313.
+ 2  2016         4           383                  354.
+ 3  2017         1          5102                  267.
+ 4  2017         2          2615                  224.
+ 5  2017         3          2885                  221.
+ 6  2017         4          3682                  254.
+ 7  2018         1          3530                  274.
+ 8  2018         2          2047                  233.
+ 9  2018         3          2209                  240.
+10  2018         4          2779                  255.
+# ℹ 17 more rows</code></pre>
+</div>
+</div>
+<p>En cuanto al gasto, se observa un patrón bastante claro: el gasto promedio suele ser más alto en el primer trimestre y en el cuarto, y más bajo en el segundo y tercer trimestre. Esto puede asociarse a la temporada dalta de verano, donde los turistas tienen mayor disposición a pagar y se concentran en destinos y actividades turísticas de mayor valor. Si observamos</p>
+<p><strong>Aplicación Shiny</strong></p>
+<p>Una vez que realizado el análisis exploratorio, se desarrolló una apliacación Shiny que permite comunicar de forma interactiva los aspectos más relevantes del análisis exploratorio.</p>
+<p>Antes de comenzar con la aplicación, se debió guardar el dataset final df1 para así usar el mismo proyecto con las variables creadas y transformaciones realizadas:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb90"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb90-1"><a href="#cb90-1" aria-hidden="true" tabindex="-1"></a><span class="fu">saveRDS</span>(df1, <span class="st">"df1.rds"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>A través de la aplicación Shiny se buscó interpretar las diversas características de los visitantes de Uruguay analizadas en las secciones anteriores. La aplicación fue desarrollada con el objetico de facilitar la exploración interactiva del conjunto de datos trabajado, que los usuarios puedan acceder a la información analizada de forma atractiva e interactiva, logrando comunicar lo explorado de manera interesante para el lector.</p>
+<p>A diferencia del informe, que presenta resultados estáticos, la aplicación permite al usuario analizar dinámicamente las principales características de los visitantes, sus viajes, la duración de las estadías y los gastos turísticos mediante distintos filtros y visualizaciones.</p>
+<p>En cuanto al diseño de la aplicación, la misma está estructurada en cuatro pestañas, cada una aborda una dimensión distinta del análisis. En la primera trata acerca de las características de los visitantes, la segunda sobre las características de los viajes, la tercera sobre la duración de la estadía y la cuarte acerca de los gastos turísticos. Los nombres de las distintas pestañas son: “Origen y estacionalidad”, “Motivo y destino”, “Estadía” y por último “Gasto”.</p>
+<p>En la parte superior se presentan indicadores resumen y, posteriormente, distintos gráficos que sintetizan la información correspondiente a cada temática que se actualizan automáticamente según los filtros seleccionados por el usuario. Los filtros interactivos se presentan en la parte izquierda de la aplicación y hay cuatro filtros posibles: el Año, el país o región de residencia, motivos del viaje y el destino. En este sentido, los filtros permiten al usuario explorar distintos perfiles de visitantes y comparar cómo varían las características del turismo receptivo según el período, el origen de los visitantes, el motivo del viaje y el destino elegido.</p>
+<p>La aplicación complementa el análisis exploratorio realizado en el informe al permitir una exploración dinámica de los datos sin necesidad de modificar el código. Al ser interactivo, permite a los usuarios filtrar los datos en base a su conveniencia, permitiendo decidir y observar desde aspectos más generales hasta aspectos más particulares. A su vez, facilita la identificación de patrones y diferencias entre distintos grupos de visitantes, mejorando la comunicación e interpretación de los principales resultados obtenidos.</p>
+<p>La aplicación se puede visualizar mediante el siguiente enlace: <a href="http://127.0.0.1:4601" class="uri">http://127.0.0.1:4601</a></p>
+<p><strong>Comentarios finales</strong></p>
+<p>Una vez realizado el análisis exploratorio y desarrollado la aplicación, fue posible analizar las distintas caracerísticas de los visitantes del país durante el período 2016-2024 y analizar sus gastos y diversas características del viaje como los destinos elegidos.</p>
+<p>Como fue mencionado previamente, la mayoría de lso visitantes provienen de América del Sur y Central, sobretodo de Argentina y viajan principalmente por ocio y vacaciones aunque un gran número ingresa al país para visitar a familiares y amigos. En los meses de Diciembre, Enero y Febrero, el flujo de visitantes es mayor y el resto del año es más constante. Por otra parte, la estadía promedio varía dependiendo del destino y aún más dependiendo del motivo. Los visitantes cuyo destino es Punta del Este permanecen en el país por un período mayor mientras que los que van a Colonia o el Litoral Termal permanecen menos días en el país. En la misma línea, aquellas personas que ingrean al país por Estudios son quienes permanecen más días en Uruguay con un promedio de 17 días, mientras que aquellos que ingresan por compras y tránsito se quedan en promedio un período menor.</p>
+<p>En cuanto al gasto, el promedio diario es de USD 240, pero ciertos rubros concentran una parte mayor del mismo. Casi un 60% del gasto se reparte entre alojamiento (32%) y alimentación (27,4%). Por otra parte, el gasto diario también varía notoriamente dependiendo del destino y motivo del viaje, donde los viajes por motivo de Compras tiene un gasto mayor que el resto. Como se mencionó, la variación de presupuestos entre destinos es sustancial: mientras en Punta del Este el gasto promedio diario por día es de 427 dólares, en la Costa de Oro es de 147.</p>
+<p>A su vez, al procesar los datos de la base de datos elegida, la información obtenida puede ser de utilidad para economistas y creadores de proyectos o políticas públicas así como también para que emprendedores puedan analizar en qué lugares, y diversos aspectos es conveniente invertir a la hora de considerar el turismo. Una posible línea de trabajo futura podría ser incorporar modelos predictivos que permitan predecir variables de interés como el gasto esperado futuro de los visitantes. También se podría incorporar información complementaria de otras fuentes de datos como indicadores económicos, tipo de cambio o inflación que puedan influir en el flujo de los visitantes y sus patrones de gasto.</p>
+<p>A modo de cierre, el grupo considera que este trabajo fue de gran utilidad dado que nos permitió incorporar los distintos conocimientos aprendidos en el curso y aplicarlos en un análisis exploratorio donde debimos enfrentarnos a diversos desafíos.</p>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
