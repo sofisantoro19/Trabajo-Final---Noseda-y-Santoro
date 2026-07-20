@@ -32,8 +32,6 @@ library(tidyverse)
 library(lubridate)
 ```
 
-`{r} #Estructura del df df |> glimpse()}`
-
 ```{r}
  #Estructura del df 
 df |> glimpse()
@@ -48,7 +46,7 @@ sapply(df, class)
 
 A partir de la función glimpse() y del tipo de dato asignado por R, se observa que le conjunto de datos contiene variables de distinta naturaleza. Entre las variables cualitativas se encuentra se encuentran la nacionalidad de quién ingresó, el lugar de residencia, el destino, el departamento y la zona de destino, la ocupación, el nivel educativo, el motivo del viaje, el tipo de alojamiento, el destino y el medio de transporte utilizado (para ingresar, para salir y durante la estadía). Por su parte, entre las variables cuantitativas se encuentran la estadía, la cantidad de personas del grupo encuestado, el gasto total y los distintos componentes del gasto desagregados. Finalmente, también se dispone de variables correspondiente a fechas de ingreso y egreso al país
 
-Con el objetivo de conocer la composición del conjunto de datos, se contabilizó la cantidad de variables según el tipo de dato reconocido por R: 'numeric' para variables numéricas, 'character' para variables categórica y 'POSIXct' 'POSIXt' para variables que corresponden a fechas. Para ello usamos le asignamos un nombre a cada uno de los tres tipos de variables clasificados y usamos la función *sum.*
+Con el objetivo de conocer la composición del conjunto de datos, se contabilizó la cantidad de variables según el tipo de dato reconocido por R: 'numeric' para variables numéricas, 'character' para variables categórica y 'POSIXct' 'POSIXt' para variables que corresponden a fechas. Para ello, le asignamos un nombre a cada uno de los tres tipos de variables clasificados y usamos la función *sum.*
 
 ```{r}
 data.frame(   
@@ -85,9 +83,9 @@ df1 |>
   summarise(across(everything(), ~sum(is.na(.))))
 ```
 
-Es posible afirmar que las variabels que presentan datos faltantes son una minoría de cuatro: estudio, localidad, departamento, otro departamento y otra localidad. No obstante,es un buen indicio debido a que para las variables de mayor interés en nuestro análisis exploratorio no incide de forma significativa la falta de estos datos.
+Es posible afirmar que las variables que presentan datos faltantes son una minoría de cuatro: estudio, localidad, departamento, otro departamento y otra localidad. No obstante,es un buen indicio debido a que para las variables de mayor interés en nuestro análisis exploratorio no incide de forma significativa la falta de estos datos.
 
-Una vez realizado un análisis descriprivo del conjunto de los datos, donde se examinó la cantidad de observaciones y variables, el tipo de variables y la presencia de datos faltantes es posible continuar al análisis exploratorio con resumenes estadísticos y visualizaciones para explorar los datos.
+Una vez realizado un análisis descriptivo del conjunto de los datos, donde se examinó la cantidad de observaciones y variables, el tipo de variables y la presencia de datos faltantes es posible continuar al análisis exploratorio con resumenes estadísticos y visualizaciones para explorar los datos.
 
 **Análisis exploratorio**
 
@@ -131,7 +129,7 @@ En esta línea, resulta pertinente plantear una serie de preguntas secundarias q
 
 1.1 ¿Cuáles son los principales países o regiones de residencia de los visitantes?
 
-La variable *Pais* corresponde a la nacionalidad de quién ingresó y no necesariamente a su lugar de residencia habitual. Al explorar esta variable se observa que una proporción importante de los visitantes posee nacionalidad uruguaya. Sin embargo, esto no implica que residan en Uruguay, ya que una persona puede de nacionalidad uruguaya puede vivir en el exterior y ser considerada visitante al ingresar al país. Esto puede observarse mediante una tabla de frecuencias absolutas y relativas de la variable *Pais*, donde se aprecia que el 15,9% de los visitantes tienen nacionalidad uruguaya.
+La variable *Pais* corresponde a la nacionalidad de quién ingresó y no necesariamente a su lugar de residencia habitual. Al explorar esta variable se observa que una proporción importante de los visitantes posee nacionalidad uruguaya. Sin embargo, esto no implica que residan en Uruguay, ya que una persona de nacionalidad uruguaya puede vivir en el exterior y ser considerada visitante al ingresar al país. Esto puede observarse mediante una tabla de frecuencias absolutas y relativas de la variable *Pais*, donde se aprecia que el 15,9% de los visitantes tienen nacionalidad uruguaya.
 
 ```{r}
 df1 |>    
@@ -148,6 +146,8 @@ unique(df1$Residencia)
 Se observó que, mientras la mayoría de las categorías refieren a países o regiones, en los casos de Argentina y Brasil, la información se encuentra desagregada por ciudades, provincias y estados. Por lo tanto, se utilizó la función *case_when* para agrupar dichs categorías bajo un mismo país. En el resto de los casos se conservó el valor original mediante la condición *TRUE \~ Residencia.*
 
 Por otra parte, se observa una categoría denominada 'Sin datos', por lo tanto converitemos esa variable en na para facilitar el trabajo posterior al filtrar las obervaciones exclyendo los datos faltantes con la función *filter(!is.na())*.
+
+Sumado a esto, se observó un error tipográfico en el dataset en el país Alemania, el cual fue corregido en esta sección.
 
 ```{r}
 #Creamos la varible Pais_residencia 
@@ -168,7 +168,7 @@ df1 = df1 |>
       TRUE ~ Residencia   ))
 ```
 
-Una vez que fue creada la variable País residencia, será posible analizar cuáles son los principales países o regiones de residencia de los visitantes a través del comando *count.* Se crea una nueva columna con el valor expresado en porcentaje para facilitar la visualización.
+Una vez que fue creada la variable *País_residencia*, será posible analizar cuáles son los principales países o regiones de residencia de los visitantes a través del comando *count.* Se creó una nueva columna con el valor expresado en porcentaje para facilitar la visualización.
 
 ```{r}
 #Tabla de frecuencia de la variable Pais_residencia 
@@ -200,7 +200,7 @@ df1 |>
 
 Los pasos para resolver esta pregunta son similares al caso anterior. En primer lugar se debe crear una nueva variable *Continente* donde se agruparán los países por continente. Al igual que en el caso previo, se utiliza la función *case_when* para agrupar los países en la categoría corespondiente: Europa, Asia, América del Sur, América del Norte, América Central, Oceanía, Africa.
 
-En primer lugar, visualizamos los valores únicos de la variable Pais_residencia mediante la función *unique,* con el fin de identificar las categorías presentes y definir los agrupamientos necesarios.
+En primer lugar, visualizamos los valores únicos de la variable *Pais_residencia* mediante la función *unique,* con el fin de identificar las categorías presentes y definir los agrupamientos necesarios.
 
 ```{r}
 #Valores únicos de las categorías presentes en variable Pais_residencia 
@@ -226,7 +226,7 @@ df1 = df1 |>
     )
 ```
 
-Una vez que fue creada la variable Continente, será posible analizar de qué continente provienen la mayoría de los visitantes a través del comando *count.* Se crea una nueva columna con el valor expresado en porcentaje para facilitar la visualización.
+Una vez que fue creada la variable Continente, es posible analizar de qué continente provienen la mayoría de los visitantes a través del comando *count.* Se creó una nueva columna con el valor expresado en porcentaje para facilitar la visualización.
 
 ```{r}
  #Tabla de frecuencia de variable Continente 
@@ -255,7 +255,7 @@ df1 |>
 
 1.3 Durante 2016 a 2024, ¿en qué meses del año ingresaron más turistas?
 
-Teniendo en cuenta que se pretende analizar los meses del año en los que ingresan más turistas, se deberá trabajar con la variable *FechaIngreso* que refiere a la fecha de Ingreso al país. Como fue mencionado en la sección anterio, la informacion está expresada en formato fecha, por lo que no es necesario convertir la variable y se puede extraer el mes directamente. Para extraer el mes de la fecha, se creará una nueva variable con los meses: 12 niveles con sus respectivos nombres (labels). Previo a ello, es necesario convertir la variable a factor.
+Teniendo en cuenta que se pretende analizar los meses del año en los que ingresan más turistas, se deberá trabajar con la variable *FechaIngreso* que refiere a la fecha de Ingreso al país. Como fue mencionado en la sección anterioe, la informacion está expresada en formato fecha, por lo que no es necesario convertir la variable y se puede extraer el mes directamente. Para extraer el mes de la fecha, se creó una nueva variable con los meses: 12 niveles con sus respectivos nombres (labels). Previo a ello, fue necesario convertir la variable a factor.
 
 ```{r}
 #Creamos variable Meses 
@@ -270,7 +270,7 @@ df1 = df1 |>
     )
 ```
 
-Una vez que fue creada la nueva variable *Mes*, es posible analizar el flujo de visitantes que ingresaron al país durante 2016-2024, dependiendo del mes, a través del comando *count.* Se crea una nueva columna con el valor expresado en porcentaje para facilitar la visualización.
+Una vez que fue creada la nueva variable *Mes*, es posible analizar el flujo de visitantes que ingresaron al país durante 2016-2024, dependiendo del mes, a través del comando *count.* Se creó una nueva columna con el valor expresado en porcentaje para facilitar la visualización.
 
 ```{r}
  #Cantidad de visitantes que Ingresan al país por mes  
@@ -295,7 +295,7 @@ df1 |>
 
 Al observar la tabla de frecuencias absoluta y relativa y el gráfico de barras referido a la cantidad de visitantes que ingresaron al país desagregado por mes, es posible extraer ciertas conclusiones. Durante el período 2016-2024, la mayoría de los visitantes ingresaron al país durante el verano, es decir: Diciembre, Enero y Febrero. Los mayores ingresos se concentran en Enero mientras que Mayo y Octubre fueron los meses con menor entrada de visitantes al Uruguay. Mientras que el mes de Diciembre y el primer trimestre del año concentran el mayor flujo de entradas, el resto del año es relativamente constante.
 
-Por su parte, si se quiere analizar si existe un mismo patron en el flujo de entrada de los visitantes a lo largo de los años 2016-2024, se puede desagregar por año. Para ello primero debemos crear una variable Año extrayendo el año de la variable *FechaIngreso.*
+Por su parte, si se quiere analizar si existe un mismo patron en el flujo de entrada de los visitantes a lo largo de los años 2016-2024, se puede desagregar por año. Para ello primero se debe crear una variable Año extrayendo el año de la variable *FechaIngreso.*
 
 ```{r}
 #Creamos la variable año 
@@ -305,7 +305,7 @@ df1 = df1 |>
     )
 ```
 
-Una vez que se creó la variable año, será posible realizar un gráfico de líneas por cada año para visualizar cómo varía la entrada de visitantes al país por mes dependiendo de cada año. Para ello utilizaremos la función *geom_point* y *geom_line* ya que es una variable continua.
+Una vez que se creó la variable año, es posible realizar un gráfico de líneas por cada año para visualizar cómo varía la entrada de visitantes al país por mes dependiendo de cada año. Para ello se utilizó la función *geom_point* y *geom_line* ya que es una variable continua.
 
 ```{r}
 #Visualización de la entrada de visitantes al país durante cada año del 2016-
@@ -345,13 +345,13 @@ df1 |>    count(Motivo, sort = TRUE) |>
   theme_minimal()
 ```
 
-Al observar los resultados, es posible concluir que el principal motivo del viaje es por ocio y vacaciones y más de la mitad de los visitantes han ingresado al país por este motivo. Por su parte, la visita a familiares y amigos es el segundo motivo más importante, lo cual tiene lógica porque comose vio anteriormente, una gran proporcion de los visitantes son de nacionalidad uruguaya. Seguido a esto pero en una menor proporción, el trabajo es un motivo recurrente entre los visitantes dado que mas de 9% de los visitantes entran al país por dicho motivo. Finalmente, una mínima, proporción de visitantes (menor al 0.5% en cada caso) ingresan por estudios, compras, por motivos de salud, religiosos o de MICE (Meetings, Incentives, Conferences and Exhibitions).
+Al observar los resultados, es posible concluir que el principal motivo del viaje es por ocio y vacaciones y más de la mitad de los visitantes han ingresado al país por este motivo. Por su parte, la visita a familiares y amigos es el segundo motivo más importante, lo cual tiene lógica porque comose vio anteriormente, una gran proporción de los visitantes son de nacionalidad uruguaya. Seguido a esto pero en una menor proporción, el trabajo es un motivo recurrente entre los visitantes dado que mas de 9% de los visitantes entran al país por dicho motivo. Finalmente, una mínima, proporción de visitantes (menor al 0.5% en cada caso) ingresan por estudios, compras, por motivos de salud, religiosos o de MICE (Meetings, Incentives, Conferences and Exhibitions).
 
 2.2 ¿Cómo varía el motivo del viaje según el destino elegido?
 
-Para responder esta pregunta, se estudiará conjuntamente la variable "Motivo" que indica la razón principal del viaje y la variable "Destino", que identifica el principal destino visitado durante la estadía.
+Para responder esta pregunta, se estudió conjuntamente la variable "Motivo" que indica la razón principal del viaje y la variable "Destino", que identifica el principal destino visitado durante la estadía.
 
-En primer lugar, se analizarán las categorías existentes en ambas variables mediante la función "unique" para reconocerlas.
+En primer lugar, se analizaron las categorías existentes en ambas variables mediante la función *unique* para reconocerlas.
 
 ```{r}
  unique(df1$Motivo) 
@@ -360,7 +360,7 @@ En primer lugar, se analizarán las categorías existentes en ambas variables me
 
 Podemos observar que las categorías de motivos de viaje son 11, mientras que los destinos de viaje se concentran en 9, mayoritariamente en la capital y el este del país, aunque también hay destinos como Colonia o el Litoral Termal. En el caso de los destinos, también se encuentra la categoría "Tránsito", que refiere a las personas que ingresan al país, pero debido a una conexión, siendo su destino final fuera de Uruguay. En ambas categorías se encuentra el grupo "Otros" que refiere a motivos o destinos diferentes a los de las categorías, pero que no se cuenta con suficientes observaciones como para generar una nueva, por lo que se agrupan.
 
-Para verificar si existen datos faltantes en ambas variables, se utiliza la función "sum" junto con "is.na" para, en caso de que existan, se genere un conteo de cuántas variables son en cada caso.
+Para verificar si existen datos faltantes en ambas variables, se utilizó la función *sum* junto con *is.na* para, en caso de que existan, se genere un conteo de cuántas variables son en cada caso.
 
 ```{r}
 df1 |>   
@@ -389,7 +389,7 @@ En primer lugar, en la columna "total_destino" podemos extraer información resp
 
 Por otro lado, el principal motivo de viaje en casi todos los destinos es "Ocio y vacaciones", concentrando al menos la mitad de las observaciones en cada lugar, aunque en algunos destinos como Colonia, las Costas Oceánicas, Piriápolis y Punta del Este representan entre el 74% y el 84%, lo cual podemos observar a través de la columna "porcentaje".
 
-La categoría "Visita a familiares y amigos" es la segunda en relevancia en la mayoría de los destinos, aunque en En cuanto a la categoría de "Tránsito", casi el 100% tiene este mismo motivo de viaje, lo cual no es relevante para el análisis, porque estos pasajeros no tienen a Uruguay como destino final.
+La categoría "Visita a familiares y amigos" es la segunda en relevancia en la mayoría de los destinos, aunque en cuanto a la categoría de "Tránsito", casi el 100% tiene este mismo motivo de viaje, lo cual no es relevante para el análisis, porque estos pasajeros no tienen a Uruguay como destino final.
 
 Para visualizar la composición e incidencia de los motivos del viaje en cada destino, se realizó un gráfico de barras apiladas. En este, cada barra representa un destino, y los diferentes colores el segmento de proporción correspondiente a cada motivo del viaje. Cabe aclarar, que cada barra suma 100% y no corresponden al porcentaje del total de observaciones, pero es la mejor manera de poder observar el motivo más frecuente dentro de cada destinto y comparar entre ellos. Para esto se utilizó el argumento position="fill" dentro de geom_bar().
 
@@ -406,7 +406,7 @@ df1 |>
   theme( plot.title = element_text(face = "bold", size = 12), legend.position = "bottom" )
 ```
 
-El gráfico de barras apiladas permite observar lo analizado anteriormente. Sin embargo, no deja claras las cantidades absolutas respecto del total de observaciones. En este sentido, se agrega un complemento que grafica las cantidades absolutas, lo cual permite visualizar de manera simultánea los motivos y las diferencias en el número de observaciones por destino.
+El gráfico de barras apiladas permite observar lo analizado anteriormente. Sin embargo, no deja claras las cantidades absolutas respecto del total de observaciones. En este sentido, se agregó un complemento que grafica las cantidades absolutas, lo cual permite visualizar de manera simultánea los motivos y las diferencias en el número de observaciones por destino.
 
 ```{r}
  df1 |> 
@@ -423,9 +423,9 @@ En conclusión, podemos afirmar que, a grandes rasgos, no existen diferencias si
 
 2.3 ¿Cómo varía el destino elegido según la región de residencia del visitante?
 
-Para responder esta pregunta, se utilizará principalmente la variable "Continente", creada a partir del país o región de residencia y su relación con la variable "Destino".
+Para responder esta pregunta, se utilizó principalmente la variable "Continente", creada a partir del país o región de residencia y su relación con la variable "Destino".
 
-En primer lugar, sabemos que la variable "Continente" tiene datos faltantes, por lo cual usaremos "filter(!is.na())" para excluir estos datos del análisis.
+En primer lugar, sabemos que la variable "Continente" tiene datos faltantes, por lo cual se usó "filter(!is.na())" para excluir estos datos del análisis.
 
 Al igual que en el caso anterior, construimos una tabla de frecuencias relativas, para conocer cómo se distribuyen las observaciones según las distintas combinaciones de continente y destino. Para esto, se agruparon las observaciones según la variable "Continente" y se creó la columna de "porcentaje", para poder observar qué parte del total de las observaciones por continente corresponde a cada destino.
 
@@ -466,7 +466,7 @@ Lo observado en el gráfico coincide con el análisis: la amplia mayoría de tur
 
 3.1 ¿Cómo se distribuye la duración de la estadía y cuál es su duración promedio?
 
-Para analizar la distribución de la duración de la estadía, se calcularán medidas de resumen como la media, la mediana, el desvío estándar,los cuartiles, el máximo y el mínimo, utilizando el verbo *summarise()*. Posteriormente, el análisis se complementará con visualizaciones que permitan estudiar la forma de la distribución y detectar posible presencia de valores atípicos.
+Para analizar la distribución de la duración de la estadía, se calcularon medidas de resumen como la media, la mediana, el desvío estándar,los cuartiles, el máximo y el mínimo, utilizando el verbo *summarise()*. Posteriormente, el análisis se complementó con visualizaciones que permiten estudiar la forma de la distribución y detectar posible presencia de valores atípicos.
 
 Dado que ya existe una variable llamada *Estadía* que corresponde a los días que permanecen los visitantes en nuestro país, las medidas de resumen se calcularon sobre dicha variable.
 
@@ -489,7 +489,7 @@ Las medidas de resumen muestran que la estadía promedio de los visitantes es de
 
 Por otra parte, la media es superior a la mediana, lo que indica una distribución con asimetría positiva. Esto sugiere un número reducido de visitantes con estadías considerablemente más largas que el resto, elevando el promedio.
 
-Para visualizar la distribuición de la duración de la estadía se construye un gráfico de barras, donde cada barra represente el número de visitantes para cada número de días de permanencia. Sin embargo, el gráfico resulta poco informativo debido a la existencia de algunas estadías muy prolongadas que expanden la escala del eje horizontal y dificultan la visualización de la distribución para la mayoría de los visitantes:
+Para visualizar la distribuición de la duración de la estadía se construyó un gráfico de barras, donde cada barra represente el número de visitantes para cada número de días de permanencia. Sin embargo, el gráfico resulta poco informativo debido a la existencia de algunas estadías muy prolongadas que expanden la escala del eje horizontal y dificultan la visualización de la distribución para la mayoría de los visitantes:
 
 ```{r}
   #Construimos gráfico de barras de la distribución de la estadía de los visitantes
@@ -504,7 +504,7 @@ Para visualizar la distribuición de la duración de la estadía se construye un
 
 Con el objetivo de facilitar la interpretación del gráfico, consideramos pertinente limitar la escala a un máximo de 20 días. Esta decisión no implica eliminar observaciones del análisis, sino únicamente restringir la escala del eje horizontal mediante *coord_cartesian().*
 
-Antes de limitar la escala del gráfico se verificó que solamente un 1,7% de los visitantes permanecen en el país por un período mayor a 20 días.
+Antes de limitar la escala del gráfico se verificó que solamente un 1,7% de los visitantes permanecen en el país por un período mayor a 20 días sumando la cantidad de observaciones cuyo valor en la variable *Estadía* era mayor que 20 a través de la función *sum*, sin tomar en cuenta lo datos faltantes. Luego se calculó la proporción que representaban respecto al total de observaciones.
 
 ```{r}
 #Proporción de visitantes con estadías mayores a 20 días 
@@ -547,7 +547,7 @@ En conclusión, el Diagrama de Caja reafirma las conclusiones previas. La median
 
 3.2 ¿La duración de la estadía varía según lel destion?
 
-Con el fin de analizar si varía la la duración de la estadía dependiendo del destino elegido por los visitantes, se calculan las mismas medidas de resumen presentadas en la sección anterior agrupando las observaciones por destino mediante el verbo *group_by().* Luego los destinos se ordenan de forma descendiente según la la duración promedio de la estadía .
+Con el fin de analizar si varía la la duración de la estadía dependiendo del destino elegido por los visitantes, se calcularon las mismas medidas de resumen presentadas en la sección anterior agrupando las observaciones por destino mediante el verbo *group_by().* Luego los destinos se ordenaron de forma descendiente según la la duración promedio de la estadía .
 
 ```{r}
 #Calculamos distribución de la estadía por destino 
@@ -583,7 +583,7 @@ Estas interpretaciones también se pueden visualizar en un diagrama de caja:
    theme_minimal()
 ```
 
-Dado que sucede lo msimo que en la sección anterior, limitamos la escala a una estadía menor a 20 días:
+Dado que sucede lo mismo que en la sección anterior, limitamos la escala a una estadía menor a 20 días:
 
 ```{r}
 #Diagrama de caja de la duración de la estadía por Destino 
@@ -604,7 +604,7 @@ En conclusión, las medidas de resumen y el diagrama de caja muestran que la dur
 
 3.3 ¿La duración de la estadía varía según el motivo del viaje?
 
-Con el fin de analizar si varía la la duración de la estadía dependiendo del motivo del viaje, se calculan las mismas medidas de resumen presentadas en la sección anterior agrupando las observaciones por motivo mediante el verbo *group_by().* Luego la tabla de resultados se ordena de forma descendiente según la la duración promedio de la estadía .
+Con el fin de analizar si varía la la duración de la estadía dependiendo del motivo del viaje, se calcularon las mismas medidas de resumen presentadas en la sección anterior agrupando las observaciones por motivo mediante el verbo *group_by().* Luego la tabla de resultados se ordenó de forma descendiente según la la duración promedio de la estadía .
 
 ```{r}
 #Calculamos distribución de la estadía según el motivo 
@@ -649,7 +649,7 @@ df1 |>
 
 4.1 ¿Cuál es el gasto promedio diario de los visitantes?
 
-Para analizar el gasto diario, creamos un nuevo objeto "df_gasto" que contenga las columnas del gasto diario y de los días de estadía, y se le agrega una tercer columna, que es el gasto promedio por día, llamado "GastoDiario". En esta parte se excluyen del análisis las otras variables, que no son necesarias.
+Para analizar el gasto diario, se creó un nuevo objeto "df_gasto" que contenga las columnas del gasto diario y de los días de estadía, y se le agrega una tercer columna, que es el gasto promedio por día, llamado "GastoDiario". En esta parte se excluyeron del análisis las otras variables, que no son necesarias.
 
 ```{r}
  df_gasto <- df1 |> 
@@ -662,7 +662,7 @@ El promedio diario de gasto por turista es de aproximadamente USD 240.
 
 4.2 ¿Qué rubros concentran la mayor parte del gasto?
 
-En primer lugar, creamos un objeto que conserva los componentes desagregados del gasto y excluye GastoTotal
+En primer lugar, se creó un objeto que conserva los componentes desagregados del gasto y excluye GastoTotal
 
 ```{r}
  rubros_gasto <- df1  |> 
@@ -682,7 +682,7 @@ tabla_rubros <- rubros_gasto |>
 tabla_rubros
 ```
 
-En segundo lugar, se suma el total correspondiente a cada rubro, para luego poder calcular la participación porcentual. Se crea una nueva variable llamada "GastoAcumulado" que representa la suma total de los gastos registrados en cada rubro. La variable "Porcentaje" indica qué proporción del gasto total desagregado corresponde a cada uno.
+En segundo lugar, se sumó el total correspondiente a cada rubro, para luego poder calcular la participación porcentual. Se creó una nueva variable llamada "GastoAcumulado" que representa la suma total de los gastos registrados en cada rubro. La variable "Porcentaje" indica qué proporción del gasto total desagregado corresponde a cada uno.
 
 ```{r}
 resumen_rubros <- 
@@ -727,7 +727,7 @@ Para visualizar este resultado, creamos un gráfico de barras, en donde se orden
 
 4.3 ¿El gasto diario varía según destino o motivo del viaje?
 
-En primer lugar, se crea un nuevo dataframe con las variables de interés para el análisis, y además se crea la variable de gasto diario, que es igual a la usada anteriormente.
+En primer lugar, se creó un nuevo dataframe con las variables de interés para el análisis, y además se creó la variable de gasto diario, que es igual a la usada anteriormente.
 
 ```{r}
 df_gasto_destino_motivo <- df1  |> 
@@ -740,7 +740,7 @@ df_gasto_destino_motivo <- df1  |>
     )
 ```
 
-Luego, se procede al análisis del gasto diario según destino, para lo cual se calcula el promedio de gasto por destino y la cantidad de observaciones por destino.
+Luego, procedimos al análisis del gasto diario según destino, para lo cual se calculó el promedio de gasto por destino y la cantidad de observaciones por destino.
 
 ```{r}
 gasto_por_destino <-
@@ -755,7 +755,7 @@ gasto_por_destino
 
 Podemos observar que la variación de presupuestos entre destinos es sustancial: mientras en Punta del Este el gasto promedio diario por día es de 427 dólares, en la Costa de Oro es de 147. Podemos considerar que el dato de Punta del Este es atípico, ya que el segundo destino en el que más gastan los turistas por día es Pirápolis, con USD 297 dólares, es decir, 130 dólares menos que en Punta del Este. Esto tiene sentido desde un punto de vista económico, ya que es un destino más costoso que el resto.
 
-Para poder visualizarlo gráficamente, utilizamos la herramienta del gráfico de barras:
+Para poder visualizarlo gráficamente, se utilizó la herramienta del gráfico de barras:
 
 ```{r}
 gasto_por_destino  |> 
@@ -775,7 +775,7 @@ gasto_por_destino  |>
   theme_minimal()
 ```
 
-Para analizar el gasto diario por motivo de viaje, utilizamos la misma metodología y recursos que para el caso del destino:
+Para analizar el gasto diario por motivo de viaje, se utilizó la misma metodología y recursos que para el caso del destino:
 
 ```{r}
 gasto_por_motivo <- 
@@ -810,9 +810,9 @@ gasto_por_motivo  |>
   theme_minimal()
 ```
 
-4.4 ¿¿Cómo evoluciona el gasto diario promedio por trimestre y por año?
+4.4 ¿Cómo evoluciona el gasto diario promedio por trimestre y por año?
 
-En primer lugar, lo que debemos hacer es extraer de cada observación, el año y el trimestre de la visita. Para esto, creamos dos nuevas variables: Año y Trimestre.
+En primer lugar, lo que se debió hacer fue extraer de cada observación, el año y el trimestre de la visita. Para esto, se crearon dos nuevas variables: Año y Trimestre.
 
 ```{r}
 df_evolucion_gasto <- df1 %>% 
@@ -827,7 +827,7 @@ df_evolucion_gasto <- df1 %>%
 df_evolucion_gasto
 ```
 
-En primer lugar, calculamos el promedio de gasto diario por persona por año. Para esto agrupamos las observaciones por año y creamos la variable "gasto_promedio_diario".
+En primer lugar, se calculó el promedio de gasto diario por persona por año. Para esto agrupamos las observaciones por año y creamos la variable "gasto_promedio_diario".
 
 ```{r}
 gasto_anual <- df_evolucion_gasto %>%
@@ -844,6 +844,7 @@ Podemos observar que tanto las observaciones (cantidad de personas que visitaron
 Para analizar el gasto por trimestre se procedió de la misma manera:
 
 ```{r}
+#Gasto por trimestre
 gasto_trimestre <- df_evolucion_gasto %>%
   group_by(Año, Trimestre) %>%
   summarise(
@@ -857,10 +858,34 @@ En cuanto al gasto, se observa un patrón bastante claro: el gasto promedio suel
 
 **Aplicación Shiny**
 
-Una vez que fue realizado el análisis exploratorio, se desarrollará una apliacación Shiny que permita comunicar de forma interactiva los aspectos más relevantes del análisis exploratorio.
+Una vez que realizado el análisis exploratorio, se desarrolló una apliacación Shiny que permite comunicar de forma interactiva los aspectos más relevantes del análisis exploratorio.
 
-Antes de comenzar con la aplicación, se deberá guardar el dataset final df1 para así usar el mismo proyecto con las variables creadas y transformaciones realizadas.
+Antes de comenzar con la aplicación, se debió guardar el dataset final df1 para así usar el mismo proyecto con las variables creadas y transformaciones realizadas:
 
 ```{r}
 saveRDS(df1, "df1.rds")
 ```
+
+A través de la aplicación Shiny se buscó interpretar las diversas características de los visitantes de Uruguay analizadas en las secciones anteriores. La aplicación fue desarrollada con el objetico de facilitar la exploración interactiva del conjunto de datos trabajado, que los usuarios puedan acceder a la información analizada de forma atractiva e interactiva, logrando comunicar lo explorado de manera interesante para el lector.
+
+A diferencia del informe, que presenta resultados estáticos, la aplicación permite al usuario analizar dinámicamente las principales características de los visitantes, sus viajes, la duración de las estadías y los gastos turísticos mediante distintos filtros y visualizaciones.
+
+En cuanto al diseño de la aplicación, la misma está estructurada en cuatro pestañas, cada una aborda una dimensión distinta del análisis. En la primera trata acerca de las características de los visitantes, la segunda sobre las características de los viajes, la tercera sobre la duración de la estadía y la cuarte acerca de los gastos turísticos. Los nombres de las distintas pestañas son: "Origen y estacionalidad", "Motivo y destino", "Estadía" y por último "Gasto".
+
+En la parte superior se presentan indicadores resumen y, posteriormente, distintos gráficos que sintetizan la información correspondiente a cada temática que se actualizan automáticamente según los filtros seleccionados por el usuario. Los filtros interactivos se presentan en la parte izquierda de la aplicación y hay cuatro filtros posibles: el Año, el país o región de residencia, motivos del viaje y el destino. En este sentido, los filtros permiten al usuario explorar distintos perfiles de visitantes y comparar cómo varían las características del turismo receptivo según el período, el origen de los visitantes, el motivo del viaje y el destino elegido.
+
+La aplicación complementa el análisis exploratorio realizado en el informe al permitir una exploración dinámica de los datos sin necesidad de modificar el código. Al ser interactivo, permite a los usuarios filtrar los datos en base a su conveniencia, permitiendo decidir y observar desde aspectos más generales hasta aspectos más particulares. A su vez, facilita la identificación de patrones y diferencias entre distintos grupos de visitantes, mejorando la comunicación e interpretación de los principales resultados obtenidos.
+
+La aplicación se puede visualizar mediante el siguiente enlace: <http://127.0.0.1:4601>
+
+**Comentarios finales**
+
+Una vez realizado el análisis exploratorio y desarrollado la aplicación, fue posible analizar las distintas caracerísticas de los visitantes del país durante el período 2016-2024 y analizar sus gastos y diversas características del viaje como los destinos elegidos.
+
+Como fue mencionado previamente, la mayoría de lso visitantes provienen de América del Sur y Central, sobretodo de Argentina y viajan principalmente por ocio y vacaciones aunque un gran número ingresa al país para visitar a familiares y amigos. En los meses de Diciembre, Enero y Febrero, el flujo de visitantes es mayor y el resto del año es más constante. Por otra parte, la estadía promedio varía dependiendo del destino y aún más dependiendo del motivo. Los visitantes cuyo destino es Punta del Este permanecen en el país por un período mayor mientras que los que van a Colonia o el Litoral Termal permanecen menos días en el país. En la misma línea, aquellas personas que ingrean al país por Estudios son quienes permanecen más días en Uruguay con un promedio de 17 días, mientras que aquellos que ingresan por compras y tránsito se quedan en promedio un período menor.
+
+En cuanto al gasto, el promedio diario es de USD 240, pero ciertos rubros concentran una parte mayor del mismo. Casi un 60% del gasto se reparte entre alojamiento (32%) y alimentación (27,4%). Por otra parte, el gasto diario también varía notoriamente dependiendo del destino y motivo del viaje, donde los viajes por motivo de Compras tiene un gasto mayor que el resto. Como se mencionó, la variación de presupuestos entre destinos es sustancial: mientras en Punta del Este el gasto promedio diario por día es de 427 dólares, en la Costa de Oro es de 147.
+
+A su vez, al procesar los datos de la base de datos elegida, la información obtenida puede ser de utilidad para economistas y creadores de proyectos o políticas públicas así como también para que emprendedores puedan analizar en qué lugares, y diversos aspectos es conveniente invertir a la hora de considerar el turismo. Una posible línea de trabajo futura podría ser incorporar modelos predictivos que permitan predecir variables de interés como el gasto esperado futuro de los visitantes. También se podría incorporar información complementaria de otras fuentes de datos como indicadores económicos, tipo de cambio o inflación que puedan influir en el flujo de los visitantes y sus patrones de gasto.
+
+A modo de cierre, el grupo considera que este trabajo fue de gran utilidad dado que nos permitió incorporar los distintos conocimientos aprendidos en el curso y aplicarlos en un análisis exploratorio donde debimos enfrentarnos a diversos desafíos.
